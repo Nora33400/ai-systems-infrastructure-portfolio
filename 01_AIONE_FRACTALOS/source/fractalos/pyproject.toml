@@ -7,7 +7,9 @@ name = "fractalos"
 version = "0.1.0"
 description = "Fused FractalOS platform with TileMindFS, OmegaRAM, builder and UEFI boot source"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+  "psutil>=5.9",
+]
 
 [tool.setuptools]
 packages = [

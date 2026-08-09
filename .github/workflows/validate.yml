@@ -21,6 +21,10 @@ jobs:
           node-version: "24"
       - name: Install Python test runner
         run: python -m pip install pytest
+
+      - name: Install FractalOS Python dependencies
+        working-directory: 01_AIONE_FRACTALOS/source/fractalos
+        run: python -m pip install -e .
       - name: Validate repository layout, Python syntax, links, and privacy markers
         run: python tools/validate_portfolio.py
       - name: Run AIONE Python suite
