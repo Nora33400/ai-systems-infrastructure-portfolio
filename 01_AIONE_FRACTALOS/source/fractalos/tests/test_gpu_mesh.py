@@ -357,9 +357,6 @@ class GpuMeshTests(unittest.TestCase):
         self.assertIsNone(routed["migration"])
         self.assertEqual(routed["stop_reason"], "completed")
 
-    # Known portfolio defect: inherited completed jobs are not merged yet.
-    # Keep the assertion executable and visible as an expected failure in CI.
-    @unittest.expectedFailure
     def test_mesh_adopt_import_merges_inherited_completed_jobs(self) -> None:
         other_tmp = tempfile.TemporaryDirectory()
         target_workspace = Path(other_tmp.name)
@@ -379,7 +376,16 @@ class GpuMeshTests(unittest.TestCase):
                     transfer_context={"completed_jobs": ["embed"], "cutover_wave_id": "wave-002"},
                 )
         mesh_import_bundle(target_workspace, Path(exported["export_path"]), auto_accept=True)
-        adopted = mesh_adopt_import(target_workspace, "handoff123")
+        deterministic_execution = {
+            "mission_snapshots": [{"completed_jobs": ["serve"]}],
+            "stop_reason": "completed",
+            "executed_waves": [{"wave_id": "wave-001"}],
+        }
+        with patch(
+            "omega_tile_os.core.mesh_federation.execute_future_plan",
+            return_value=deterministic_execution,
+        ):
+            adopted = mesh_adopt_import(target_workspace, "handoff123")
         self.assertIn("embed", adopted["completed_jobs"])
         self.assertIn("serve", adopted["completed_jobs"])
         other_tmp.cleanup()
