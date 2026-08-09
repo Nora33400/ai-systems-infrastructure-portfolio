@@ -1,0 +1,63 @@
+{
+  "receipt_id": "RCP-569c326c-77f6-4a96-bc58-fd2b6db18525",
+  "task_id": "WQ-0044",
+  "execution_id": "EXE-03a81aa1-6f3a-4e55-96b7-ee9d9afb81c1",
+  "timestamp": "2026-07-18T01:16:08.299Z",
+  "actor": "CODEX_LOCAL",
+  "action": "phase_3_post_smoke_review",
+  "inputs_hash": "8abf7e936956a20ea5b7ba380435e0bf6661a38a2fd9117f3cda8ad39e0199f1",
+  "outputs_hash": "6480f8fe251d7fa8ceca31e6b440236521b1d197c8f79c3622c427e8a4ccec6f",
+  "files_read": [
+    "SYSTEM_CONSTITUTION.md",
+    "docs/autonomy-planning/kernel-reuse-map.md",
+    "docs/autonomy-planning/phase-3-ollama-readonly-report.md",
+    "tests/autonomy/ollama-readonly.test.ts",
+    "WORK_QUEUE.yaml"
+  ],
+  "files_modified": [],
+  "commands": [
+    "scripts/build-autonomy.ps1",
+    "scripts/test-all.ps1",
+    "scripts/invoke-autonomy.ps1 validate-docs -NoBuild",
+    "scripts/invoke-autonomy.ps1 check-ollama -NoBuild",
+    "scripts/invoke-autonomy.ps1 ollama-readonly -Task WQ-0044 -NoBuild"
+  ],
+  "tests": [
+    {
+      "suite": "autonomy",
+      "passed": 29,
+      "skipped": 1,
+      "failed": 0
+    },
+    {
+      "suite": "cognitive",
+      "passed": 12,
+      "skipped": 1,
+      "failed": 0
+    },
+    {
+      "suite": "constitution",
+      "passed": 20,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "smoke": "WQ-0044",
+      "report_id": "ORR-770f3dd9-ff51-430d-81bb-5fc3ec9118ab",
+      "passed": true
+    }
+  ],
+  "decision": "VERIFIED",
+  "result": {
+    "next_task": "WQ-0052",
+    "limitations": [
+      "no_patch_ollama",
+      "no_git_baseline",
+      "no_trello",
+      "no_litellm",
+      "no_gpu_control",
+      "no_automatic_external_supervisor"
+    ]
+  },
+  "parent_receipt": "RCP-a23c6e95-7dc6-4157-80c0-1520808cfd8e"
+}

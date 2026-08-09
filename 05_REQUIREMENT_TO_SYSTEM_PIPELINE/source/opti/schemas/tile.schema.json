@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/tile.schema.json",
+  "title": "Provenance-preserving cognitive tile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "tile_id", "tile_type", "subject", "source_id", "atom_ids", "claims", "epistemic_status", "provenance", "confidence", "version", "created_at"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "tile_id": {"type": "string", "pattern": "^TILE-[A-F0-9]{16}$"},
+    "tile_type": {"enum": ["source_excerpt", "architectural_requirement", "negative_constraint", "open_definition"]},
+    "subject": {"type": "string", "minLength": 1},
+    "source_id": {"type": "string", "pattern": "^SRC-[0-9]{4}$"},
+    "atom_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^ATM-"}},
+    "claims": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/claim"}},
+    "epistemic_status": {"enum": ["source_explicit", "reconstructed", "inferred", "hypothetical", "normative"]},
+    "provenance": {
+      "type": "object", "additionalProperties": false, "required": ["source_ids", "atom_ids", "method"],
+      "properties": {"source_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "atom_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "method": {"type": "string"}}
+    },
+    "confidence": {
+      "type": "object", "additionalProperties": false, "required": ["level", "basis"],
+      "properties": {"level": {"enum": ["low", "medium", "high"]}, "basis": {"type": "string"}}
+    },
+    "version": {"type": "integer", "minimum": 1},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "claim": {
+      "type": "object", "additionalProperties": false,
+      "required": ["claim_id", "content", "epistemic_status", "atom_ids", "source_refs"],
+      "properties": {
+        "claim_id": {"type": "string", "pattern": "^CLM-[A-F0-9]{16}$"},
+        "content": {"type": "string", "minLength": 1},
+        "epistemic_status": {"enum": ["source_explicit", "reconstructed", "inferred", "hypothetical", "normative"]},
+        "atom_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "source_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    }
+  }
+}

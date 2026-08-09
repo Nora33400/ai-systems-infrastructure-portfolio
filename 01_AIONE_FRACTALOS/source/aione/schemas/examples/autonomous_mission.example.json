@@ -1,0 +1,47 @@
+{
+  "id": "AMISSION-0001",
+  "parent_mission_id": "MISSION-0001",
+  "title": "Cycle autonome controle AIONE",
+  "objective": "Run a controlled mission cycle through agents, gates, verification and memory.",
+  "constraints": [
+    "contract_gate_required",
+    "proposal_only_until_sandbox_exists",
+    "append_only_memory"
+  ],
+  "candidate_agents": [
+    "AGENT-PLANNER-0001",
+    "AGENT-VERIFIER-0001",
+    "AGENT-MEMORY-CURATOR-0001"
+  ],
+  "required_gates": [
+    "ContractGateOperator",
+    "TruthGateOperator"
+  ],
+  "budget": {
+    "max_cycles": 3,
+    "cost_class": "low",
+    "mutation_allowed": false
+  },
+  "status": "ready",
+  "stop_conditions": [
+    "contract_gate_blocked",
+    "stop_file_present",
+    "budget_exceeded"
+  ],
+  "resume_conditions": [
+    "contract_gate_passed",
+    "human_supervisor_allows_resume"
+  ],
+  "expected_proof": {
+    "required_artifacts": [
+      "ProofCapsule",
+      "PatchLedger",
+      "AgentDecision"
+    ],
+    "minimum_confidence": 0.75
+  },
+  "max_cycles": 3,
+  "current_cycle": 0,
+  "created_at": "2026-05-25T00:00:00Z",
+  "updated_at": "2026-05-25T00:00:00Z"
+}

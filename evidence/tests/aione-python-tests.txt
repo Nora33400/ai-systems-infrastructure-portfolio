@@ -1,0 +1,11 @@
+Suite: AIONE Python (sanitized portfolio copy)
+UTC: 
+2026-08-09T12:33:13.0391542Z
+Command: PYTHONPATH=<portfolio-copy>; pytest tests -q -p no:cacheprovider
+Runtime: pytest on Python 3.14
+Scope: final copied tree after identifier redaction; no dependency installation and no source-project write.
+........................................................................ [ 69%]
+...............................                                          [100%]
+103 passed in 78.51s (0:01:18)
+
+Exit code: 0

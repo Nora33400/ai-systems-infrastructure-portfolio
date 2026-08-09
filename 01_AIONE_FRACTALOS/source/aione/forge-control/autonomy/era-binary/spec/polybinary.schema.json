@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/polybinary.schema.json",
+  "title": "PolyBinary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "program", "intent", "cirHash", "morphologies", "securityPolicy", "fallbackTree", "verification", "manifestHash"],
+  "properties": {
+    "schema": {"const": "aione.polybinary.v1"},
+    "program": {"type": "string"},
+    "intent": {"type": "string"},
+    "cirHash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "manifestHash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "morphologies": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["id", "requiresGpuCount", "maxTemperatureCelsius"]}},
+    "securityPolicy": {"type": "object"},
+    "fallbackTree": {"type": "array", "items": {"type": "string"}},
+    "verification": {"type": "array", "items": {"type": "string"}}
+  }
+}

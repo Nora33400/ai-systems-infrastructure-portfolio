@@ -1,0 +1,55 @@
+schema_version: 1
+id: calcontexte
+name: "CalContexte"
+classification: core_candidate
+status: PARTIALLY_DEFINED
+purpose:
+  status: PARTIAL
+  text: "Cerveau contextuel candidat qui transforme le contexte en objet combinant histoire, objectif, émotion, temps, projets, priorités, identité, ressources, coût et intensité."
+  source_refs: [SRC-0001, SRC-0002, SRC-0003, SRC-0004]
+boundaries:
+  must_do:
+    - status: PARTIAL
+      text: "Cerveau contextuel candidat qui transforme le contexte en objet combinant histoire, objectif, émotion, temps, projets, priorités, identité, ressources, coût et intensité."
+      source_refs: [SRC-0001, SRC-0002, SRC-0003, SRC-0004]
+  must_not_do:
+    - status: PARTIAL
+      text: "Ne pas réduire le contexte à une simple suite de tokens."
+      source_refs: [SRC-0001, SRC-0002, SRC-0003, SRC-0004]
+inputs: []
+outputs: []
+dependencies: []
+interactions:
+  - {target: cognitive-constitution, relation: SELECTION_BOUNDED_BY, certainty: EXPLICIT, source_refs: [SRC-0009:L513-L549]}
+state_model:
+  status: UNKNOWN
+  states: []
+maturity:
+  concept: 30
+  documentation: 15
+  architecture: 10
+  api: 0
+  implementation: 10
+  tests: 10
+  dependencies: 0
+  ready_for_next_phase: false
+tested_slices:
+  - id: cognitive_vertical_v1
+    status: TESTED
+    scope: "Projection minimale de sélection explicable à sous-scores et budget; ne constitue pas le contrat complet de CalContexte."
+    implementation: [src/cognitive/calcontexte.ts]
+    execution_id: COG-EXE-242CFBBC-9F9E-49F6-8D27-EBBDA67A3AF0
+    source_refs: [SRC-0008:L347-L379]
+  - id: workmesh_calcontexte_minimal_v1
+    status: TESTED
+    scope: "Contrat externe borné : contexte-objet sourcé/absent, sélection lexicale de tuiles, exclusions, budget, dépendances, contradictions et compilation intègre. N'implémente pas le service CalContexte global."
+    implementation:
+      - "C:/Dev/AIONE_WORKMESH/AIONE_WORKMESH_FORGE_v0.1/10_RUNTIME/workmesh/calcontexte_contracts.py"
+      - "C:/Dev/AIONE_WORKMESH/AIONE_WORKMESH_FORGE_v0.1/10_RUNTIME/tests/test_calcontexte_contracts.py"
+    receipt_id: RCP-20260718-TSK-P1-016
+    report_id: workmesh-commit-34b3e0e15445060c260b0474f04cb53eef0db5c9
+    source_refs: [SRC-0008:L347-L379]
+source_refs: [SRC-0001, SRC-0002, SRC-0003, SRC-0004, SRC-0008, SRC-0009]
+open_questions:
+  - "Valider le statut et la définition historique complète de CalContexte."
+  - "Décider sémantique, autorité des sources, poids, seuils, politiques multi-horizons et adaptation aux formats opti."

@@ -1,0 +1,9 @@
+Suite: AIONE Python release-blocker rerun
+Date: 2026-08-09
+Working directory: 01_AIONE_FRACTALOS/source/aione
+Command: py -3.14 -m pytest tests -q -p no:cacheprovider
+Environment: Windows 11; Python 3.14; no PYTHONPATH override
+Exit code: 0
+........................................................................ [ 69%]
+...............................                                          [100%]
+103 passed in 62.24s (0:01:02)

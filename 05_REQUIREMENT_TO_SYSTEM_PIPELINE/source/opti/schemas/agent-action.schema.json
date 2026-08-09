@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/agent-action.schema.json",
+  "title": "Autonomy agent action",
+  "oneOf": [
+    {"type":"object","properties":{"action":{"const":"list_directory"},"path":{"type":"string"},"recursive":{"type":"boolean"}},"required":["action","path"],"additionalProperties":false},
+    {"type":"object","properties":{"action":{"const":"read_file"},"path":{"type":"string"}},"required":["action","path"],"additionalProperties":false},
+    {"type":"object","properties":{"action":{"const":"read_file_range"},"path":{"type":"string"},"start_line":{"type":"integer","minimum":1},"end_line":{"type":"integer","minimum":1}},"required":["action","path","start_line","end_line"],"additionalProperties":false},
+    {"type":"object","properties":{"action":{"const":"search_text"},"query":{"type":"string","minLength":1},"path":{"type":"string"},"max_results":{"type":"integer","minimum":1,"maximum":200}},"required":["action","query","path"],"additionalProperties":false},
+    {"type":"object","properties":{"action":{"const":"inspect_git_diff"}},"required":["action"],"additionalProperties":false},
+    {"type":"object","properties":{"action":{"const":"apply_patch"},"patch":{"type":"string","minLength":1}},"required":["action","patch"],"additionalProperties":false},
+    {"type":"object","properties":{"action":{"const":"create_file"},"path":{"type":"string"},"content":{"type":"string"},"overwrite":{"type":"boolean"}},"required":["action","path","content"],"additionalProperties":false},
+    {"type":"object","properties":{"action":{"const":"delete_file"},"path":{"type":"string"},"reason":{"type":"string","minLength":10}},"required":["action","path","reason"],"additionalProperties":false},
+    {"type":"object","properties":{"action":{"const":"run_command"},"command":{"type":"string","minLength":1},"cwd":{"type":"string"},"timeout_ms":{"type":"integer","minimum":100,"maximum":600000}},"required":["action","command"],"additionalProperties":false},
+    {"type":"object","properties":{"action":{"const":"run_tests"},"command":{"type":"string","minLength":1},"cwd":{"type":"string"}},"required":["action","command"],"additionalProperties":false},
+    {"type":"object","properties":{"action":{"const":"report_blocker"},"facts":{"type":"array","items":{"type":"string"},"minItems":1},"files":{"type":"array","items":{"type":"string"}},"commands":{"type":"array","items":{"type":"string"}},"errors":{"type":"array","items":{"type":"string"}},"attempts":{"type":"array","items":{"type":"string"}},"human_information_needed":{"type":"string"},"independent_tasks_can_continue":{"type":"boolean"}},"required":["action","facts","errors","attempts","human_information_needed","independent_tasks_can_continue"],"additionalProperties":false},
+    {"type":"object","properties":{"action":{"const":"finish_task"},"summary":{"type":"string","minLength":1}},"required":["action","summary"],"additionalProperties":false}
+  ]
+}

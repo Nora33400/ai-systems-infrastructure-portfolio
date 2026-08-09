@@ -1,0 +1,24 @@
+{
+  "schema": "aione.reflective-network-access.v1",
+  "enabled": true,
+  "offlineComplete": true,
+  "defaultLevel": "N0",
+  "necessityThreshold": 0.68,
+  "levels": {
+    "N0": {"description": "Aucun accès", "requiresAuthorization": false, "reversible": true},
+    "N1": {"description": "Liste blanche", "requiresAuthorization": true, "reversible": true},
+    "N2": {"description": "Recherche publique", "requiresAuthorization": true, "reversible": true},
+    "N3": {"description": "API approuvées", "requiresAuthorization": true, "reversible": true},
+    "N4": {"description": "Téléchargements contrôlés", "requiresAuthorization": true, "reversible": true},
+    "N5": {"description": "Accès exceptionnel validé", "requiresAuthorization": true, "reversible": true}
+  },
+  "allowlistedHosts": ["arxiv.org", "export.arxiv.org", "wikipedia.org", "wikimedia.org", "openalex.org"],
+  "approvedApiHosts": [],
+  "automaticLevels": [],
+  "weights": {"benefit": 0.38, "confidenceGain": 0.22, "freshness": 0.2, "urgency": 0.1, "risk": -0.28, "localAlternative": -0.25},
+  "ledgerPath": "S:\\AI_LAB\\Runtime\\NetworkAccess\\access-ledger.jsonl",
+  "localCacheRoot": "S:\\AI_LAB\\Runtime\\NetworkAccess\\cache",
+  "copyUsefulKnowledgeLocally": true,
+  "neverSend": ["secrets", "credentials", "private-memory", "source-code", "personal-data"],
+  "fundamentalRules": ["law", "system-policy", "owner-policy", "offline-continuity", "audit"]
+}

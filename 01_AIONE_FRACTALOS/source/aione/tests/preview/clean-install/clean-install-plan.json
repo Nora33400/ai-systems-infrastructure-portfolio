@@ -1,0 +1,20 @@
+{
+  "format": "aione-clean-install-plan",
+  "version": "0.1.0",
+  "status": "not-run",
+  "requires_human_approval_for_dependency_downloads": true,
+  "steps": [
+    "prepare clean Windows profile or disposable folder",
+    "copy or clone repository",
+    "inspect git status",
+    "install dependencies only after approval",
+    "run typecheck",
+    "run forge test",
+    "build Windows HUD",
+    "start AIONE",
+    "open Forge and HUD",
+    "record evidence",
+    "stop AIONE",
+    "test rollback on disposable copy"
+  ]
+}

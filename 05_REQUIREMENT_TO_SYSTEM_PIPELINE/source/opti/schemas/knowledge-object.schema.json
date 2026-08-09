@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gpt-cognitive-constitution.local/schemas/knowledge-object.schema.json",
+  "title": "Knowledge object",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "type", "name", "statement", "modality", "status", "source_refs", "relations", "open_questions"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^KO-[0-9]{4,}$"},
+    "type": {"enum": ["concept", "module", "submodule", "component", "algorithm", "dependency", "interface", "protocol", "format", "hypothesis", "problem", "paradox", "improvement", "architecture", "question", "example", "counterexample", "roadmap_item"]},
+    "name": {"type": "string", "minLength": 1},
+    "statement": {"type": "string", "minLength": 1},
+    "modality": {"enum": ["ASSERTED", "ACCEPTED_DECISION", "PROPOSED", "EXAMPLE_ONLY", "NEGATIVE_CONSTRAINT", "QUESTION", "INFERRED"]},
+    "status": {"enum": ["MENTIONED", "DEFINED", "PARTIALLY_DEFINED", "HYPOTHETICAL", "REQUIRES_RESEARCH", "FORMALIZED", "SIMULATED", "PROTOTYPED", "TESTED", "STABILIZED"]},
+    "source_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "relations": {"type": "array", "items": {"type": "object", "required": ["predicate", "target"], "properties": {"predicate": {"type": "string"}, "target": {"type": "string"}}, "additionalProperties": false}},
+    "open_questions": {"type": "array", "items": {"type": "string"}}
+  }
+}

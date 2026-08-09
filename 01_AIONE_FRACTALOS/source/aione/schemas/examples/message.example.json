@@ -1,0 +1,21 @@
+{
+  "id": "MSG-0001",
+  "mission_id": "MISSION-0001",
+  "source": "mission_parser",
+  "destination": "planning_operator",
+  "bus": "mission_bus",
+  "type": "task",
+  "payload": {
+    "task_id": "TASK-0001-001"
+  },
+  "priority": "high",
+  "confidence": 0.82,
+  "cost_estimate": {
+    "class": "low"
+  },
+  "verification_status": "pending",
+  "trace": [
+    "MISSION-0001"
+  ],
+  "created_at": "2026-05-24T00:00:00Z"
+}

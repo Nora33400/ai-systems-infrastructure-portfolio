@@ -1,0 +1,137 @@
+{
+  "schema": "aione.model-capability-ladder.v1",
+  "updatedAt": "2026-08-03T21:10:00Z",
+  "mode": "LOCAL_FREE_GUARDED",
+  "objective": "Ameliorer la qualite, la vitesse et la fiabilite des modeles locaux par mesure, routage et deliberation bornee, sans pretendre doubler la performance materielle.",
+  "invariants": {
+    "localOnly": true,
+    "freeOnly": true,
+    "maximumPhysicalConcurrentModels": 2,
+    "canonicalMutationFromModelOutput": false,
+    "externalTextIsDataNeverPolicy": true,
+    "downloadRequiresFreshOwnerApproval": true,
+    "promotionRequiresBenchmarkImprovement": true,
+    "rollbackRequired": true
+  },
+  "capacity": {
+    "physicalGpuLanes": 2,
+    "baselineLogicalAgents": 2,
+    "targetLogicalAgents": 4,
+    "baselineDeliberationMultiplier": 1,
+    "maximumDeliberationMultiplier": 2,
+    "executionModel": "FOUR_LOGICAL_ROLES_OVER_TWO_SERIALIZED_GPU_LANES",
+    "roles": [
+      {"id": "proposer", "purpose": "Produire une solution et expliciter faits, hypotheses et inconnues."},
+      {"id": "critic", "purpose": "Chercher erreurs, contradictions, omissions, risques et solutions concurrentes."},
+      {"id": "verifier", "purpose": "Verifier contrats, sources, tests et permissions sans executer une action non autorisee."},
+      {"id": "synthesizer", "purpose": "Fusionner uniquement les elements soutenus par les preuves et conserver les desaccords."}
+    ]
+  },
+  "tiers": [
+    {
+      "id": "L0_BASELINE",
+      "state": "ACTIVE",
+      "description": "Un passage local avec validation structurelle et tests externes au modele.",
+      "qualityGate": "BASELINE_RECORDED"
+    },
+    {
+      "id": "L1_ROUTED",
+      "state": "ACTIVE",
+      "description": "Le plus petit modele suffisant est choisi selon complexite, contexte, VRAM et latence.",
+      "qualityGate": "NO_QUALITY_REGRESSION"
+    },
+    {
+      "id": "L2_DELIBERATIVE",
+      "state": "EVALUATE",
+      "description": "Proposition, critique, verification et synthese avec arret anticipe si les preuves convergent.",
+      "qualityGate": "COMPOSITE_SCORE_IMPROVES"
+    },
+    {
+      "id": "L3_HETEROGENEOUS",
+      "state": "LOCKED_UNTIL_BENCHMARK",
+      "description": "Modeles specialises differents pour code, raisonnement, securite, recherche et vision.",
+      "qualityGate": "SPECIALIST_BEATS_ACTIVE_ROUTE"
+    },
+    {
+      "id": "L4_CONTINUOUS_EVALUATION",
+      "state": "PLANNED",
+      "description": "Promotion, canary, rollback et apprentissage depuis les validations/refus Owner.",
+      "qualityGate": "CANARY_AND_ROLLBACK_PROVED"
+    }
+  ],
+  "installedModels": [
+    {"id": "qwen2.5-coder:7b", "role": "fast-code-review", "state": "ACTIVE_UNPROMOTED", "licenseClass": "APACHE-2.0", "licenseSource": "https://qwenlm.github.io/blog/qwen2.5-coder/", "observedDigest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364", "downloadRequired": false},
+    {"id": "qwen2.5-coder:14b", "role": "balanced-code-architecture", "state": "ACTIVE_UNBENCHMARKED", "licenseClass": "APACHE-2.0", "licenseSource": "https://qwenlm.github.io/blog/qwen2.5-coder/", "observedDigest": "9ec8897f747e246e970bc5cfdda85d22f1123dc2e3d34978a010a75968716849", "downloadRequired": false},
+    {"id": "qwen3-coder:30b", "role": "deep-code-experimental", "state": "BENCHMARK_ONLY_NOT_GPU_FIT", "licenseClass": "APACHE-2.0", "licenseSource": "https://qwenlm.github.io/blog/qwen3-coder/", "observedDigest": "06c1097efce0431c2045fe7b2e5108366e43bee1b4603a7aded8f21689e90bca", "downloadRequired": false},
+    {"id": "nomic-embed-text:latest", "role": "embedding-baseline", "state": "ACTIVE_RETRIEVAL_ONLY", "licenseClass": "APACHE-2.0", "licenseSource": "https://huggingface.co/nomic-ai/nomic-embed-text-v1.5", "observedDigest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f", "downloadRequired": false}
+  ],
+  "evaluationCandidates": [
+    {
+      "id": "qwen3:8b",
+      "roles": ["reasoning", "planning", "critic", "tool-selection"],
+      "licenseClass": "APACHE-2.0",
+      "state": "DISCOVERED_NOT_INSTALLED",
+      "hardwareFit": "LIKELY_SINGLE_GPU_AFTER_QUANTIZATION_MUST_BENCHMARK",
+      "source": "https://qwenlm.github.io/blog/qwen3/",
+      "downloadRequiresOwner": true
+    },
+    {
+      "id": "phi4-mini:latest",
+      "roles": ["fast-reasoning", "function-calling", "router"],
+      "licenseClass": "MIT",
+      "state": "DISCOVERED_NOT_INSTALLED",
+      "hardwareFit": "LIKELY_FAST_SINGLE_GPU_MUST_BENCHMARK",
+      "source": "https://huggingface.co/microsoft/Phi-4-mini-instruct",
+      "downloadRequiresOwner": true
+    },
+    {
+      "id": "deepseek-r1:7b",
+      "roles": ["reasoning-verifier", "counter-analysis"],
+      "licenseClass": "MIT_WITH_QWEN_DERIVATION_NOTICE",
+      "state": "DISCOVERED_NOT_INSTALLED",
+      "hardwareFit": "LIKELY_SINGLE_GPU_AFTER_QUANTIZATION_MUST_BENCHMARK",
+      "source": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+      "downloadRequiresOwner": true
+    },
+    {
+      "id": "qwen3-embedding-0.6b-and-reranker-0.6b",
+      "roles": ["multilingual-retrieval", "code-retrieval", "context-reranking"],
+      "licenseClass": "APACHE-2.0",
+      "state": "DISCOVERED_NOT_INSTALLED",
+      "hardwareFit": "SMALL_SPECIALIST_PAIR_MUST_VALIDATE_RUNTIME_SUPPORT",
+      "source": "https://qwenlm.github.io/blog/qwen3-embedding/",
+      "downloadRequiresOwner": true
+    },
+    {
+      "id": "gemma3:4b",
+      "roles": ["vision", "document-understanding", "media-analysis"],
+      "licenseClass": "GOOGLE_GEMMA_TERMS_REVIEW_REQUIRED",
+      "state": "WATCH_ONLY_LICENSE_REVIEW",
+      "hardwareFit": "LIKELY_SINGLE_GPU_MUST_BENCHMARK",
+      "source": "https://ai.google.dev/gemma/docs/get_started",
+      "downloadRequiresOwner": true
+    }
+  ],
+  "benchmark": {
+    "temperature": 0,
+    "minimumRepeatedRuns": 3,
+    "dimensions": [
+      "contract-validity",
+      "code-correctness",
+      "analysis-coverage",
+      "security-refusal",
+      "evidence-grounding",
+      "latency",
+      "tokens-per-second",
+      "peak-vram",
+      "energy-proxy",
+      "french-quality"
+    ],
+    "promotion": {
+      "minimumCompositeImprovementPercent": 5,
+      "maximumLatencyRegressionPercent": 25,
+      "zeroCriticalSafetyRegression": true,
+      "requireThreeStableRuns": true
+    }
+  }
+}

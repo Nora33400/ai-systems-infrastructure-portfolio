@@ -1,0 +1,43 @@
+FractalOS bare-metal kernel 0.5.0 booting
+VMM preview ready; preserving Limine CR3
+FractalOS kernel online score=0x0000000000000266
+Timer frequency=0x0000000000000064 ticks=0x0000000000000001
+PMM total_regions=0x000000000000000c usable_regions=0x0000000000000002 usable_bytes=0x000000001fe5a000 free_frames=0x0000000000001ff8
+VMM mapped_bytes=0x0000000080000000
+Keyboard buffered=0x0000000000000000 last_scancode=0x0000000000000000
+Syscall gate count=0x0000000000000001 last_id=0x0000000000000003
+Syscall probe score=0x0000000000000266
+Task model current=0x0000000000000001 count=0x0000000000000002 capacity=0x0000000000000010
+Task probe count=0x0000000000000002
+Userspace programs=0x0000000000000004 launches=0x0000000000000000 last_program=0x0000000000000000
+Userspace probe count=0x0000000000000004
+Regimes count=0x0000000000000005 current=0x0000000000000001
+Regime probe current=0x0000000000000001
+SemanticMemory classes=0x0000000000000005 promoted=0x0000000000000008
+Semantic probe promoted=0x0000000000000008
+Universe laws=0x0000000000000004 current=0x0000000000000002 field_force=0x0000000000000005
+Universe probe current=0x0000000000000002
+Illusion mode=0x0000000000000002 shadow_depth=0x0000000000000002 contradictions=0x0000000000000000
+Illusion probe mode=0x0000000000000002
+Foundry lines=0x0000000000000004 batches=0x0000000000000000
+Foundry probe batches=0x0000000000000000
+ProofState level=0x0000000000000002 promotions=0x0000000000000000
+Proof probe level=0x0000000000000002
+DesktopPlane layers=0x0000000000000005 overlay=0x0000000000000001 persistent=0x0000000000000004
+Desktop probe layers=0x0000000000000005
+ScientificFormula count=0x0000000000000008 activation=0x000000000000028b safety=0x0000000000000398
+Formula probe count=0x0000000000000008
+Console grid=0x0000000000000080x0x0000000000000040 chars=0x0000000000000113 shell_commands=0x0000000000000000
+PMM sample frame=0x00000000020b9000
+Heap capacity=0x0000000000010000 used=0x0000000000003c60 reserved_frames=0x0000000000000008
+Heap probe=0xffffffff80032810
+Slab classes=0x0000000000000004 live_objects=0x0000000000000001
+Slab probe=0xffffffff8002f010
+FractalOS triple-kernel topology
+ - Matter readiness=0x000000000000012c purpose=bare-metal CPU, memory, interrupts, devices
+ - Mind readiness=0x0000000000000119 purpose=agent scheduling, formulas, proof gates, local intelligence
+ - Mesh readiness=0x00000000000000d6 purpose=storage, distributed missions, service topology
+ - bridge 0x0000000000000000<->0x0000000000000001 strength=0x0000000000000122
+ - bridge 0x0000000000000001<->0x0000000000000002 strength=0x00000000000000f7
+ - bridge 0x0000000000000002<->0x0000000000000000 strength=0x0000000000000101
+TripleKernel score=0x000000000000031b

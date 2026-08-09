@@ -1,0 +1,9 @@
+program CounterfactualExecution {
+  context task source=input.user_request scope=TASK memory=RAM.ActiveContextSpace
+  represent task as state_transition_graph target=state_graph
+  simulate failure_path if=dependency_unavailable
+  model planner role=counterfactual_planner device=GPU fallback=CPU
+  hypothesis robust_path from planner context=state_graph
+  verify robust_path with=constraints,rollback,side_effects target=verification
+  select decision from=robust_path strategy=maximum_verified_score
+}

@@ -1,0 +1,116 @@
+Suite: Curated Opti TypeScript release gate
+UTC: 
+2026-08-09T13:31:08.9544875Z
+Command: npm test (tsc -p tsconfig.json; node ../../../tools/run_opti_tests.mjs)
+Environment: Windows 11; Node 
+v24.13.0
+; npm 
+11.6.2
+Dependencies: clean local npm install; npm audit reports 0 vulnerabilities.
+Result: 71 tests; 68 passed; 0 failed; 3 skipped
+Expected skips: two real Ollama integrations and one pre-redaction receipt hash assertion.
+Exit code: 0
+Wall duration seconds: 32.661
+
+> portfolio-requirement-system-slice@1.0.0 test
+> npm run build && node ../../../tools/run_opti_tests.mjs
+
+
+> portfolio-requirement-system-slice@1.0.0 build
+> tsc -p tsconfig.json
+
+(node:10020) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ Directions Registry - Create and Retrieve (664.6153ms)
+✔ Directions Registry - Persistence after close and reopen (489.8267ms)
+✔ Directions Registry - List active directions with ordering (604.6237ms)
+✔ Directions Registry - Update priority (606.2522ms)
+✔ Directions Registry - PAUSED directions not in listActive (450.5931ms)
+✔ Directions Registry - CANCELLED directions not usable (190.3315ms)
+✔ Directions Registry - Expired directions (252.3978ms)
+✔ Directions Registry - SATISFIED directions (236.7825ms)
+✔ refuses a repository without a valid HEAD (594.3756ms)
+✔ creates a detached worktree from the exact canonical HEAD (1580.5417ms)
+✔ writes occur only in the isolated worktree (1101.5375ms)
+✔ canonical HEAD, branch and status remain unchanged after an isolated mutation (1443.8893ms)
+✔ produces a non-empty deterministic binary-capable patch (2434.1508ms)
+✔ includes a newly created allowed file in the patch (1746.3387ms)
+✔ rejects a touched file outside allowed_paths (1524.666ms)
+✔ rejects .env and .git paths (1859.8594ms)
+✔ rejects unsafe task and execution identifiers (830.7355ms)
+✔ refuses creation when the canonical repository is dirty (1178.8986ms)
+✔ cleanup removes a captured isolated worktree (2172.5538ms)
+✔ cleanup is idempotent (2426.2749ms)
+✔ cleanup refuses to discard an uncaptured modification (2566.0126ms)
+✔ recovery refreshes an interrupted allowed patch and then cleans (2636.326ms)
+✔ recovery prunes a missing interrupted worktree idempotently (1310.4361ms)
+✔ never changes master or creates a remote while producing and cleaning a patch (2207.1005ms)
+✔ verifies patch integrity and rejects a modified artifact (1636.1922ms)
+(node:17192) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ structured parser accepts only raw JSON or one exact JSON fence (2.8032ms)
+✔ the canonical WQ-0044 Codex review receipt keeps its schema and runtime hash (77.0004ms)
+✔ read-only package is bounded, preserves canonical acceptance criteria and exposes no action capability (523.1211ms)
+✔ read-only worker falls back after timeout, persists hashes and never changes task or repository files (641.8254ms)
+✔ unknown evidence and patch-like output are rejected with a failure receipt (738.9807ms)
+✔ missing Ollama models fail locally without blocking the persistent kernel (578.9967ms)
+✔ read-only report verification detects database tampering (408.9612ms)
+﹣ real Ollama endpoint returns schema-valid structured JSON (1.1186ms) # SKIP
+(node:32352) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ planning state machine allows the validated path and rejects invalid completion (1.5493ms)
+✔ state store enforces planning transitions and survives reopen (556.6983ms)
+✔ policy validates from schema and blocks sensitive, deep and external tasks (66.8924ms)
+✔ receipt registry is immutable and detects database tampering (754.4557ms)
+﹣ the canonical WQ-0042 receipt projection keeps its pre-redaction runtime hash (0.1685ms) # SKIP
+✔ command parser preserves arguments and executor runs without a shell (138.9852ms)
+✔ phase 1 run-once completes a safe local task without external services (946.119ms)
+(node:36108) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ dependency analysis reports missing definitions and deterministic cycles (2.8183ms)
+✔ scheduler continues independent branches while cycles, missing dependencies and path conflicts stay blocked (615.4341ms)
+✔ resource locks are atomic across store instances and detect parent-child path conflicts (648.4827ms)
+✔ scheduler respects retry delay without blocking another ready task (521.4649ms)
+✔ recursion guard enforces depth, child count, ancestry and new evidence (56.9259ms)
+✔ resource planner is dry-run, prioritizes the owner and selects bounded dual-GPU modes (27.977ms)
+✔ nvidia-smi observer parses a read-only inventory through an injected runner (0.5264ms)
+✔ the canonical WQ-0049 review receipt keeps its schema and runtime hash (19.6523ms)
+✔ the stop sentinel is persistent until an explicit clear (106.5615ms)
+✔ AUTONOMY_DISABLED uses the same fail-closed guard (12.8526ms)
+✔ planning run-once fails closed before importing or mutating tasks (23.7356ms)
+✔ legacy execution entrypoints fail closed without clearing the sentinel (23.2627ms)
+✔ security policy accepts scoped paths and rejects escapes, secrets, protected files, and dangerous commands (85.4608ms)
+(node:35836) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ state survives reopen and interrupted tasks are recovered (646.5599ms)
+✔ scheduler enforces completed dependencies and deterministic priority (564.8122ms)
+✔ terminal status imported from the work queue overrides stale runtime state (702.6973ms)
+✔ a non-running planning task follows the canonical WORK_QUEUE status (591.1367ms)
+✔ writer mutates atomically and recovery restores changed and newly-created files (93.1978ms)
+✔ CalContexte exposes every sub-score and authority alone cannot select an irrelevant tile (5.6876ms)
+✔ Cohérental distinguishes contradiction, definition gaps and a structured no-single-score policy (1.811ms)
+✔ answer provenance verifier rejects unsupported or non-verbatim assertions (0.477ms)
+✔ Markdown atomization preserves structure, Unicode, exact content and line positions (3.7582ms)
+✔ stable ids survive identical input and unaffected atoms survive a partial change (2.4943ms)
+✔ invalid YAML is rejected explicitly (12.7166ms)
+✔ an unavailable Ollama endpoint fails after configured retries (33.1751ms)
+(node:36320) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+﹣ real Ollama proposal is schema-gated, atom-bounded and auditable (0.7807ms) # SKIP
+(node:29644) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ vertical source-to-answer pipeline resumes after interruption and preserves ids without duplication (1749.4206ms)
+✔ pipeline rejects absent and empty sources (482.9332ms)
+(node:33108) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ SQLite ingestion is idempotent, persistent and rejects orphan provenance (630.8428ms)
+✔ provenance graph stores valid endpoints and rejects unauthorized dependency cycles (528.6842ms)
+✔ a locked database fails explicitly instead of hiding persistence errors (768.3661ms)
+ℹ tests 71
+ℹ suites 0
+ℹ pass 68
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 3
+ℹ todo 0
+ℹ duration_ms 29400.279

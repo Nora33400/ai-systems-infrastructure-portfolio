@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gpt-cognitive-constitution.local/schemas/constitutional-receipt.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "task_id", "constitution_version", "inputs", "files_read", "files_created", "files_modified", "files_migrated", "rules_added", "commands_executed", "test_results", "tests_skipped", "limitations", "decisions", "state_before", "state_after", "errors", "status", "created_at"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "receipt_id": {"type": "string", "pattern": "^RCP-CONST-WQ-[0-9]{4}$"},
+    "task_id": {"type": "string", "pattern": "^WQ-[0-9]{4}$"},
+    "constitution_version": {"const": "0.1.0"},
+    "inputs": {"type": "object"},
+    "files_read": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "files_created": {"type": "array", "items": {"type": "string"}},
+    "files_modified": {"type": "array", "items": {"type": "string"}},
+    "files_migrated": {"type": "array", "items": {"type": "string"}},
+    "rules_added": {"type": "array", "items": {"type": "string"}},
+    "commands_executed": {"type": "array", "items": {"type": "string"}},
+    "test_results": {"type": "array", "items": {"type": "object", "required": ["command", "passed", "summary"]}},
+    "tests_skipped": {"type": "array", "items": {"type": "object", "required": ["test", "reason"]}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "decisions": {"type": "array", "items": {"type": "string"}},
+    "state_before": {"type": "string"}, "state_after": {"type": "string"},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "status": {"const": "COMPLETED"}, "created_at": {"type": "string"}
+  }
+}

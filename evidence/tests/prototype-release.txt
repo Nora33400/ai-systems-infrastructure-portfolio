@@ -1,0 +1,13 @@
+Suite: Selected prototype release gate
+UTC: 
+2026-08-09T13:30:18.5151746Z
+Command: Python AST parse of every 07_SELECTED_PROTOTYPES/*.py plus five executable smoke cases
+Environment: Windows 11; Python 3.14
+AST: 41 files parsed; exit 0
+Smoke: 5/5 passed
+
+Smoke local_model_router\router.py: exit 0
+Smoke public_innovations\adaptive-process-governor\main.py: exit 0
+Smoke public_innovations\contextualizer-decompose-kit\main.py: exit 0
+Smoke public_innovations\derived-xconcept-autorepair\main.py: exit 0
+Smoke public_innovations\xconcept-error-engine\main.py: exit 0

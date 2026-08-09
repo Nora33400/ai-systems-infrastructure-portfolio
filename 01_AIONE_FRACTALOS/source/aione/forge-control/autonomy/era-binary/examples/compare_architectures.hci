@@ -1,0 +1,10 @@
+program CompareArchitectures {
+  context problem source=input.user_request scope=TASK memory=RAM.ActiveContextSpace
+  represent problem as constraint_graph target=architecture_graph
+  model architect role=propose_architecture device=GPU fallback=CPU
+  model critic role=challenge_architecture device=GPU fallback=CPU
+  hypothesis architecture_a from architect context=architecture_graph
+  hypothesis architecture_b from critic context=architecture_graph
+  verify architecture_a,architecture_b with=constraints,cost,risk,reversibility target=verification
+  select recommended_architecture from=architecture_a,architecture_b strategy=maximum_verified_score
+}

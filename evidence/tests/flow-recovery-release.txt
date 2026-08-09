@@ -1,0 +1,25 @@
+Suite: Flow/recovery integration post-sanitation release gate
+UTC: 2026-08-09T13:41:17.8768952Z
+Command: node --test 03_FLOW_RECOVERY_SYSTEM/flow_recovery_demo.test.mjs
+Environment: Windows 11; Python 3.14 where applicable; Node v24.13.0 where applicable
+Exit code: 0
+Wall duration seconds: 0.208
+
+✔ logical flow detects, bounds, restores, validates, and returns (13.7019ms)
+
+ℹ tests 1
+
+ℹ suites 0
+
+ℹ pass 1
+
+ℹ fail 0
+
+ℹ cancelled 0
+
+ℹ skipped 0
+
+ℹ todo 0
+
+ℹ duration_ms 115.7854
+

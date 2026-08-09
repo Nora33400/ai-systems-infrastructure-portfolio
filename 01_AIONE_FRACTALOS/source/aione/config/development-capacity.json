@@ -1,0 +1,91 @@
+{
+  "schema": "aione.development-capacity.v1",
+  "updatedAt": "2026-07-26T12:00:00+02:00",
+  "enabled": true,
+  "weeklyTargetAgentHours": 336,
+  "logicalDeliberationTarget": {
+    "baselineRolesPerComplexPackage": 2,
+    "targetRolesPerComplexPackage": 4,
+    "maximumTimeBudgetMultiplier": 2,
+    "nominalLogicalRoleHoursAtFullUse": 672,
+    "physicalGpuHoursRemain": 336,
+    "claimPolicy": "NEVER_REPORT_LOGICAL_ROLE_HOURS_AS_EXTRA_WALL_CLOCK_OR_GPU_CAPACITY"
+  },
+  "measurement": {
+    "unit": "NOMINAL_AGENT_HOUR",
+    "actualWallClockTrackedSeparately": true,
+    "neverClaimNominalAsWallClock": true,
+    "weekStartsOn": "MO"
+  },
+  "allocation": [
+    {"focus": "code", "agentHours": 118},
+    {"focus": "diagnostic", "agentHours": 50},
+    {"focus": "tests", "agentHours": 67},
+    {"focus": "correction", "agentHours": 50},
+    {"focus": "validation", "agentHours": 34},
+    {"focus": "documentation", "agentHours": 17}
+  ],
+  "workPackages": {
+    "nominalHours": 2,
+    "minimumIntervalMinutes": 1,
+    "maximumPerDay": 96,
+    "oneAtATime": false,
+    "runAtNightOnlyWhenReadinessAllows": true,
+    "currentExecutionMode": "CONTINUOUS_DUAL_GPU_FOUR_ROLE_DELIBERATION_24_7",
+    "isolatedCodeRunnerRequiredForFileMutation": true
+  },
+  "modelRouting": {
+    "whileUserActive": "qwen2.5-coder:7b",
+    "whileUserAbsent": "qwen2.5-coder:14b",
+    "deepCouncilOnlyWhenCapacityProven": "qwen3-coder:30b",
+    "reason": "Keep one useful local agent active without competing with the owner; reserve larger models for measured idle capacity."
+  },
+  "backlogSources": [
+    "FORGE_P0_COGNITIVE_SECURITY_DIRECTIVE.md",
+    "config/agentic-development-continuity.json",
+    "config/week-soak-production.json",
+    "config/fractal-context-thermal.json",
+    "config/bounded-adaptive-evolution.json",
+    "config/daily-intelligence-journal.json",
+    "S:\\AI_LAB\\Runtime\\OwnerReview\\approved-backlog.md",
+    "config/ecosystem-domains.json",
+    "Trello: Autorisé — développement autonome",
+    "PRIORITY.md",
+    "TASK.md",
+    "KANBAN.md",
+    "docs/IMPLEMENTATION_BACKLOG.md",
+    "docs/UNFINISHED_FEATURES_AUDIT.md",
+    "config/project-portfolio.json",
+    "projects/fractal-formula-corpus/BACKLOG.md"
+  ],
+  "antiEmptyQueue": [
+    "approved-product-work",
+    "repository-diagnostic",
+    "test-gap-audit",
+    "regression-hunt",
+    "security-debt-audit",
+    "documentation-code-drift",
+    "fractal-formula-corpus-structuring",
+    "plugin-bus-contract-tests",
+    "branch-laboratory-preparation"
+  ],
+  "priorityProjects": [
+    "aione-fractalos",
+    "fractal-formula-corpus",
+    "fractal-core-docker-test",
+    "workmesh",
+    "opti"
+  ],
+  "safety": {
+    "respectUserActivity": false,
+    "respectThermals": true,
+    "maximumConcurrentModels": 2,
+    "maximumLogicalAgentsPerComplexPackage": 4,
+    "backpressureRequiredAbovePhysicalLaneCount": true,
+    "noDependencyInstall": true,
+    "noModelDownload": true,
+    "noGitCommitPushMerge": true,
+    "noProtectedPathWrite": true,
+    "protectedPath": "S:\\AI_LAB\\Validation"
+  }
+}

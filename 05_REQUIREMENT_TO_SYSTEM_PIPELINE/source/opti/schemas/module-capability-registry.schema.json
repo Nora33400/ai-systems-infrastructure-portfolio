@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gpt-cognitive-constitution.local/schemas/module-capability-registry.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "registry_id", "constitution_version", "status", "grant_policy", "capability_definitions", "globally_forbidden_capabilities", "incompatibilities", "default_participant_capabilities", "default_forbidden_capabilities", "modules", "source_refs"],
+  "properties": {
+    "schema_version": {"const": 1}, "registry_id": {"type": "string"}, "constitution_version": {"const": "0.1.0"}, "status": {"const": "FORMALIZED"}, "grant_policy": {"const": "explicit_evidence_and_scope_only"},
+    "capability_definitions": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["id", "risk", "requirements"], "properties": {"id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"}, "risk": {"enum": ["low", "medium", "high"]}, "requirements": {"type": "array", "items": {"type": "string"}}}}},
+    "globally_forbidden_capabilities": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "incompatibilities": {"type": "array", "items": {"type": "object", "required": ["id", "capabilities", "scope", "rule"]}},
+    "default_participant_capabilities": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "default_forbidden_capabilities": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "modules": {"type": "array", "minItems": 38, "items": {"$ref": "#/$defs/module"}},
+    "source_refs": {"type": "array", "minItems": 1}
+  },
+  "$defs": {
+    "module": {"type": "object", "additionalProperties": false, "required": ["module_id", "contract_ref", "active_capabilities", "bounded_capabilities", "proposed_capabilities", "forbidden_capabilities", "evidence_refs"], "properties": {"module_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"}, "contract_ref": {"type": "string", "pattern": "^modules/.+/contract\\.yaml$"}, "active_capabilities": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}, "bounded_capabilities": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["capability", "scope", "status", "evidence_refs"], "properties": {"capability": {"type": "string"}, "scope": {"type": "string"}, "status": {"const": "TESTED"}, "evidence_refs": {"type": "array", "minItems": 1}}}}, "proposed_capabilities": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}, "forbidden_capabilities": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}, "evidence_refs": {"type": "array", "minItems": 1}}}
+  }
+}

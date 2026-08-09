@@ -1,0 +1,39 @@
+schema_version: 1
+id: immune
+name: "IMMUNE — Integrated Modular Monitoring, Uncertainty and Error Network"
+classification: core_candidate
+status: PARTIALLY_DEFINED
+purpose:
+  status: PARTIAL
+  text: "Système immunitaire distribué des erreurs couvrant détection, diagnostic, confinement, simulation, réparation, validation, mémoire de l'erreur et prévention."
+  source_refs: [SRC-0001, SRC-0005]
+boundaries:
+  must_do:
+    - status: PARTIAL
+      text: "Système immunitaire distribué des erreurs couvrant détection, diagnostic, confinement, simulation, réparation, validation, mémoire de l'erreur et prévention."
+      source_refs: [SRC-0001, SRC-0005]
+  must_not_do:
+    - status: PARTIAL
+      text: "Ne pas réduire IMMUNE à un unique outil de diagnostic centralisé."
+      source_refs: [SRC-0001, SRC-0005]
+inputs: []
+outputs: []
+dependencies: []
+interactions: []
+state_model:
+  status: UNKNOWN
+  states: []
+maturity:
+  concept: 30
+  documentation: 15
+  architecture: 10
+  api: 0
+  implementation: 0
+  tests: 0
+  dependencies: 0
+  ready_for_next_phase: false
+source_refs: [SRC-0001, SRC-0005]
+open_questions:
+  - "Valider le statut et la définition de IMMUNE — Integrated Modular Monitoring, Uncertainty and Error Network."
+  - "Formaliser entrées, sorties, invariants et dépendances."
+

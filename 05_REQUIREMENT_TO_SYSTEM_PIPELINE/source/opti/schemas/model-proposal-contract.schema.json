@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gpt-cognitive-constitution.local/schemas/model-proposal-contract.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "contract_id", "constitution_version", "status", "model_is_governor", "stages", "rules", "test_providers", "historical_model_run", "source_refs"],
+  "properties": {
+    "schema_version": {"const": 1}, "contract_id": {"type": "string"}, "constitution_version": {"const": "0.1.0"}, "status": {"const": "FORMALIZED"}, "model_is_governor": {"const": false},
+    "stages": {"type": "array", "minItems": 8, "items": {"type": "object", "required": ["id", "persistence"]}}, "rules": {"type": "array", "minItems": 4, "items": {"type": "object", "required": ["id", "statement"]}},
+    "test_providers": {"type": "object", "required": ["standard", "real"], "properties": {"standard": {"const": "deterministic_fake_provider"}, "real": {"const": "dedicated_isolated_ollama_test"}}},
+    "historical_model_run": {"type": "object", "required": ["model_run_id", "model", "constitutional_status", "qualification"], "properties": {"constitutional_status": {"const": "PROPOSED"}}}, "source_refs": {"type": "array", "minItems": 1}
+  }
+}

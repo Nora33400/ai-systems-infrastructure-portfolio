@@ -1,0 +1,115 @@
+{
+  "schema": "aione.fractal-context-thermal.v1",
+  "enabled": true,
+  "catalogRoot": "S:\\",
+  "currentProjectBranch": "S:\\AI_LAB\\Ecosystem",
+  "runtimeRoot": "S:\\AI_LAB\\Runtime\\FractalContext",
+  "catalogRuntimeRoot": "S:\\AI_LAB\\Runtime\\FractalCatalog",
+  "categorization": {
+    "firstLevelFoldersAreCategories": true,
+    "identity": "DETERMINISTIC_PATH_HASH",
+    "requireLocalCoherence": true,
+    "requireGlobalCoherence": true,
+    "allowCrossCategoryAnchors": true,
+    "neverMoveRenameOrDeleteDuringCatalog": true,
+    "excludedRoots": [
+      "S:\\$RECYCLE.BIN",
+      "S:\\System Volume Information"
+    ],
+    "contentReadDefault": "METADATA_ONLY",
+    "contentReadAllowlist": [
+      "S:\\AI_LAB\\Ecosystem",
+      "S:\\AI_LAB\\Runtime"
+    ],
+    "deepScanTopLevelAllowlist": [
+      "AIONE"
+    ],
+    "maximumContentBytesPerFile": 262144,
+    "maximumFilesPerCycle": 5000
+  },
+  "tileFamilies": [
+    "tile",
+    "utile",
+    "ntile",
+    "itile",
+    "unitile",
+    "nutile",
+    "iutile",
+    "inutile",
+    "uiutile",
+    "iuitile"
+  ],
+  "fractalLevels": [
+    "tile",
+    "unitile",
+    "kilotile",
+    "megatile",
+    "gigatile"
+  ],
+  "perspectives": [
+    "subjective-machine",
+    "objective-user-from-machine",
+    "dual"
+  ],
+  "temperatures": {
+    "COLD": {
+      "minimumScore": 0,
+      "maximumScoreExclusive": 0.25,
+      "target": "latent-reference"
+    },
+    "WARM": {
+      "minimumScore": 0.25,
+      "maximumScoreExclusive": 0.5,
+      "target": "documentation-operational"
+    },
+    "HOT": {
+      "minimumScore": 0.5,
+      "maximumScoreExclusive": 0.78,
+      "target": "operational-context"
+    },
+    "BURNING": {
+      "minimumScore": 0.78,
+      "maximumScoreExclusive": 1.01,
+      "target": "immediate-reflexive-context"
+    }
+  },
+  "heatWeights": {
+    "recency": 0.25,
+    "useFrequency": 0.2,
+    "userImportance": 0.25,
+    "taskRelevance": 0.2,
+    "confidence": 0.1
+  },
+  "hysteresis": {
+    "promotionMargin": 0.03,
+    "demotionMargin": 0.08,
+    "minimumStableMinutes": 15
+  },
+  "logicalZipModes": [
+    "latent-reference",
+    "documentation-operational",
+    "operational-context",
+    "deep-documentation",
+    "reflexive-context"
+  ],
+  "reconstruction": {
+    "preserveSourceReferences": true,
+    "preserveProvenanceHash": true,
+    "maximumCharacters": {
+      "fast": 12000,
+      "operational": 48000,
+      "deep": 160000,
+      "reflexive": 96000
+    },
+    "deduplicateByContentHash": true,
+    "overlayByAnchorAndPerspective": true
+  },
+  "security": {
+    "network": "DENY",
+    "secrets": "REDACT",
+    "symlinkEscape": "DENY",
+    "outOfRoot": "DENY",
+    "sourceDeletion": "DENY",
+    "canonicalMutation": "DENY"
+  }
+}

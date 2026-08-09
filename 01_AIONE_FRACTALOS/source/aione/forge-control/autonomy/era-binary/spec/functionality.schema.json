@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/functionality.schema.json",
+  "title": "PolymorphicFunctionality",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["nominalName", "interpretedIntent", "acceptedInputs", "producedOutputs", "preconditions", "postconditions", "implementations", "permissions", "executionCost", "confidence", "sideEffects", "reversibility", "observability", "timeoutMs", "fallback", "validationMethod"],
+  "properties": {
+    "nominalName": {"type": "string"},
+    "interpretedIntent": {"type": "string"},
+    "acceptedInputs": {"type": "array", "items": {"type": "object"}},
+    "producedOutputs": {"type": "array", "items": {"type": "object"}},
+    "preconditions": {"type": "array", "items": {"type": "string"}},
+    "postconditions": {"type": "array", "items": {"type": "string"}},
+    "implementations": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["id", "domain", "cost", "verification"]}},
+    "permissions": {"type": "array", "items": {"type": "string"}},
+    "executionCost": {"type": "object"},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "sideEffects": {"type": "array", "items": {"type": "string"}},
+    "reversibility": {"enum": ["FULL", "COMPENSATABLE", "NONE"]},
+    "observability": {"type": "array", "items": {"type": "string"}},
+    "timeoutMs": {"type": "integer", "minimum": 1},
+    "fallback": {"type": "array", "items": {"type": "string"}},
+    "validationMethod": {"type": "array", "items": {"type": "string"}}
+  }
+}

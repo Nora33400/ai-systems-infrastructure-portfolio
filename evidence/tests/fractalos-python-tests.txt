@@ -1,0 +1,44 @@
+Suite: FractalOS Python
+Started: 2026-08-09T14:10:22.2861543+02:00
+Command: $env:PYTHONPATH=<portfolio-copy>; pytest tests -q -p no:cacheprovider
+Runtime: pytest launcher (Python 3.14 environment)
+Working directory: 01_AIONE_FRACTALOS/source/fractalos
+
+........................................................................ [ 48%]
+..F..................................................................... [ 96%]
+......                                                                   [100%]
+================================== FAILURES ===================================
+_____ GpuMeshTests.test_mesh_adopt_import_merges_inherited_completed_jobs _____
+
+self = <test_gpu_mesh.GpuMeshTests testMethod=test_mesh_adopt_import_merges_inherited_completed_jobs>
+
+    def test_mesh_adopt_import_merges_inherited_completed_jobs(self) -> None:
+        other_tmp = tempfile.TemporaryDirectory()
+        target_workspace = Path(other_tmp.name)
+        ensure_workspace(target_workspace)
+        fake_checkpoint = {"mission_id": "handoff123", "snapshot": {"completed_jobs": ["embed"]}}
+        fake_mission = {"graph": {"nodes": [{"job_id": "embed"}, {"job_id": "serve"}], "edges": []}}
+        jobs = [
+            {"job_id": "embed", "resource_estimate": 1.0, "complexity": 0.5, "risk": 0.1},
+            {"job_id": "serve", "resource_estimate": 0.3, "complexity": 0.2, "risk": 0.05},
+        ]
+        with patch("omega_tile_os.core.mesh_federation.checkpoint_mission", return_value=fake_checkpoint):
+            with patch("omega_tile_os.core.mesh_federation.compile_mission_graph", return_value=fake_mission):
+                exported = mesh_export_mission(
+                    self.workspace,
+                    jobs,
+                    "node-a",
+                    transfer_context={"completed_jobs": ["embed"], "cutover_wave_id": "wave-002"},
+                )
+        mesh_import_bundle(target_workspace, Path(exported["export_path"]), auto_accept=True)
+        adopted = mesh_adopt_import(target_workspace, "handoff123")
+        self.assertIn("embed", adopted["completed_jobs"])
+>       self.assertIn("serve", adopted["completed_jobs"])
+E       AssertionError: 'serve' not found in ['embed']
+
+tests\test_gpu_mesh.py:381: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_gpu_mesh.py::GpuMeshTests::test_mesh_adopt_import_merges_inherited_completed_jobs
+1 failed, 149 passed in 52.27s
+
+Exit code: 1

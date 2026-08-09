@@ -1,0 +1,13 @@
+Selected prototype smoke validation
+UTC: 2026-08-09T12:29:13.8986011Z
+Scope: copied prototype files only; no network and no source-project writes.
+
+AST parse: 41 Python files passed
+Smoke: local_model_router\router.py — exit 0
+Smoke: public_innovations\adaptive-process-governor\main.py — exit 0
+Smoke: public_innovations\contextualizer-decompose-kit\main.py — exit 0
+Smoke: public_innovations\derived-xconcept-autorepair\main.py — exit 0
+Smoke: public_innovations\xconcept-error-engine\main.py — exit 0
+
+Copy-only repair: restored the intended Orchestrator.step block indentation in TimeWarp; original source remains untouched.
+Result: AST exit 0; executable smoke cases 5/5 passed.

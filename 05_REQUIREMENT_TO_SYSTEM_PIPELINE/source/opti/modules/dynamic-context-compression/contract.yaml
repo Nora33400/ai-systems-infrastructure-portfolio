@@ -1,0 +1,39 @@
+schema_version: 1
+id: dynamic-context-compression
+name: "Dynamic Context Compression"
+classification: core_candidate
+status: PARTIALLY_DEFINED
+purpose:
+  status: PARTIAL
+  text: "Compression structurelle de relations, intentions, dépendances, deltas et historique permettant une reconstruction par seed et delta plutôt qu'un rechargement intégral."
+  source_refs: [SRC-0003]
+boundaries:
+  must_do:
+    - status: PARTIAL
+      text: "Compression structurelle de relations, intentions, dépendances, deltas et historique permettant une reconstruction par seed et delta plutôt qu'un rechargement intégral."
+      source_refs: [SRC-0003]
+  must_not_do:
+    - status: PARTIAL
+      text: "Ne pas réduire la compression à un résumé textuel irréversible."
+      source_refs: [SRC-0003]
+inputs: []
+outputs: []
+dependencies: []
+interactions: []
+state_model:
+  status: UNKNOWN
+  states: []
+maturity:
+  concept: 30
+  documentation: 15
+  architecture: 10
+  api: 0
+  implementation: 0
+  tests: 0
+  dependencies: 0
+  ready_for_next_phase: false
+source_refs: [SRC-0003]
+open_questions:
+  - "Valider le statut et la définition de Dynamic Context Compression."
+  - "Formaliser entrées, sorties, invariants et dépendances."
+

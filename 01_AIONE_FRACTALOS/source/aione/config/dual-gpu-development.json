@@ -1,0 +1,177 @@
+{
+  "schema": "aione.dual-gpu-development.v1",
+  "enabled": true,
+  "mode": "CONTINUOUS_24_7",
+  "workspace": "S:\\AI_LAB\\Ecosystem",
+  "runtimeDir": "S:\\AI_LAB\\Runtime\\DualGpuDevelopment",
+  "ollamaModelsDir": "S:\\AI_LAB\\Models\\Ollama\\models",
+  "reflectiveAutonomyPolicy": "config/reflective-autonomy.json",
+  "contextAuthorityPolicy": "config/context-authority.json",
+  "schedule": {
+    "timezone": "Europe/Paris",
+    "partitionMinutes": 60,
+    "workerIdleSeconds": 2,
+    "backlogIdleSeconds": 300,
+    "failureBackoffSeconds": 30,
+    "failureCooldownSeconds": 300,
+    "maximumConsecutiveFailures": 3,
+    "maximumBacklogCandidates": 320,
+    "testEveryPackages": 4
+  },
+  "priorityQueue": {
+    "enabled": true,
+    "endpoint": "http://127.0.0.1:4310/api/blockers/live",
+    "pollSeconds": 5,
+    "yieldForStates": ["QUEUED", "PREPARING", "CONTEXT_LOADING", "EXECUTING", "TESTING", "REVIEWING"]
+  },
+  "thermalGuard": {
+    "maximumTemperatureCelsius": 82,
+    "resumeBelowCelsius": 74,
+    "minimumFreeRamGb": 4,
+    "minimumFreeRamGbWhenModelResident": 1,
+    "minimumFreeDiskGb": 12,
+    "pollSeconds": 15
+  },
+  "cognitivePipeline": {
+    "enabled": true,
+    "mode": "ADAPTIVE_FOUR_LOGICAL_ROLES",
+    "physicalConcurrentModels": 2,
+    "baselineLogicalAgents": 2,
+    "targetLogicalAgents": 4,
+    "roles": ["proposer", "critic", "verifier", "synthesizer"],
+    "simpleTaskMaximumStages": 1,
+    "complexTaskMaximumStages": 4,
+    "maximumTimeBudgetMultiplier": 2,
+    "earlyStopOnVerifiedConvergence": true,
+    "preserveDisagreements": true,
+    "requireExternalTestEvidenceForCode": true,
+    "configuration": "config/model-capability-ladder.json"
+  },
+  "lanes": [
+    {
+      "id": "gpu-3060-development",
+      "label": "RTX 3060 — architecture et code",
+      "gpuUuid": "GPU-REDACTED-RTX3060",
+      "expectedGpuName": "NVIDIA GeForce RTX 3060",
+      "minimumVramMb": 12000,
+      "nvidiaIndex": 0,
+      "windowsTaskManagerIndex": 1,
+      "endpoint": "http://127.0.0.1:11434",
+      "host": "127.0.0.1:11434",
+      "model": "qwen2.5-coder:14b",
+      "fallbackModel": "qwen2.5-coder:7b",
+      "contextLength": 3072,
+      "maximumOutputTokens": 900,
+      "temperature": 0.15,
+      "thermalGuard": {
+        "maximumTemperatureCelsius": 82,
+        "resumeBelowCelsius": 65
+      },
+      "roles": [
+        "architecture",
+        "code-proposal",
+        "debug",
+        "correction",
+        "documentation"
+      ],
+      "focusRotation": [
+        "architecture",
+        "code",
+        "debug",
+        "correction",
+        "documentation"
+      ]
+    },
+    {
+      "id": "gpu-4060-quality",
+      "label": "RTX 4060 — diagnostic, tests et validation",
+      "gpuUuid": "GPU-REDACTED-RTX4060",
+      "expectedGpuName": "NVIDIA GeForce RTX 4060",
+      "minimumVramMb": 8000,
+      "nvidiaIndex": 1,
+      "windowsTaskManagerIndex": 0,
+      "endpoint": "http://127.0.0.1:11435",
+      "host": "127.0.0.1:11435",
+      "model": "qwen2.5-coder:7b",
+      "fallbackModel": "qwen2.5-coder:7b",
+      "contextLength": 8192,
+      "maximumOutputTokens": 1400,
+      "temperature": 0.1,
+      "roles": [
+        "analysis",
+        "diagnostic",
+        "test-design",
+        "validation",
+        "verification",
+        "documentation-review"
+      ],
+      "focusRotation": [
+        "diagnostic",
+        "tests",
+        "validation",
+        "verification",
+        "documentation-review"
+      ]
+    }
+  ],
+  "backlogSources": [
+    "config/reflective-autonomy.json",
+    "FORGE_P0_COGNITIVE_SECURITY_DIRECTIVE.md",
+    "config/agentic-development-continuity.json",
+    "config/week-soak-production.json",
+    "config/fractal-context-thermal.json",
+    "config/bounded-adaptive-evolution.json",
+    "config/autonomous-model-evolution.json",
+    "config/model-capability-ladder.json",
+    "config/daily-intelligence-journal.json",
+    "config/ecosystem-domains.json",
+    "PRIORITY.md",
+    "TASK.md",
+    "KANBAN.md",
+    "docs/IMPLEMENTATION_BACKLOG.md",
+    "docs/UNFINISHED_FEATURES_AUDIT.md",
+    "projects/fractal-formula-corpus/BACKLOG.md",
+    "config/project-portfolio.json",
+    "docs/development/FRACTALOS_HARD_DEVELOPMENT_24_7.md",
+    "S:\\AI_LAB\\Runtime\\OwnerReview\\approved-backlog.md",
+    "S:\\AI_LAB\\Runtime\\DualGpuDevelopment\\generated-backlog.md",
+    "S:\\AI_LAB\\Runtime\\ModelEvolution\\generated-backlog.md"
+  ],
+  "deduplication": {
+    "enabled": true,
+    "reprocessOnlyWhenSourceChanges": true,
+    "backlogRequestPerPartition": true
+  },
+  "isolatedImplementation": {
+    "enabled": true,
+    "runtimeRoot": "S:\\AI_LAB\\Runtime\\DualGpuDevelopment",
+    "minimumConfidence": 0.72,
+    "maximumChangesPerProposal": 3,
+    "maximumImplementationsPerCycle": 1,
+    "testSandbox": "NODE_PERMISSION_MODEL",
+    "isolatedRetention": "AUTO_KEEP_IF_VALIDATED",
+    "autonomousRetryOrReplan": true,
+    "canonicalPromotion": "ASK_OWNER"
+  },
+  "agentCommons": {
+    "enabled": true,
+    "configPath": "config/agent-commons.json",
+    "milestoneEveryPackages": 25,
+    "proposalEveryPackages": 100,
+    "proposalCategories": ["SELF", "PROJECT", "USER", "COLLABORATION"],
+    "channel": "AI_FORUM"
+  },
+  "guardrails": {
+    "localOnly": true,
+    "bindLoopbackOnly": true,
+    "allowCloudModels": false,
+    "allowModelDownload": false,
+    "allowDependencyInstall": false,
+    "allowCanonicalMutation": false,
+    "allowIsolatedWorkspaceMutation": true,
+    "allowGitCommitPushMerge": false,
+    "allowExternalPublication": false,
+    "requireHumanReviewBeforeCanonicalApply": true,
+    "protectedPath": "S:\\AI_LAB\\Validation"
+  }
+}

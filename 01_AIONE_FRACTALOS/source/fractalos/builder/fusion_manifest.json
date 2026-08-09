@@ -1,0 +1,20 @@
+{
+  "name": "FractalOS",
+  "version": "0.1.0",
+  "target": {
+    "firmware": "UEFI x64",
+    "board": "ASUS TUF GAMING B550-PLUS WIFI II"
+  },
+  "absorbed_projects": [
+    "OmegaSystem",
+    "Omegafusion",
+    "omega_tilemind_os",
+    "fractal_ecosystem_build_v6",
+    "fractal_auto_evolution_realtime",
+    "local_ai_stack_pack",
+    "LAYER_HUD",
+    "hypi",
+    "IA",
+    "folder0001/OmegaSystem2.12"
+  ]
+}

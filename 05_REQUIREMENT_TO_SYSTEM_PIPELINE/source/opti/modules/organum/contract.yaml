@@ -1,0 +1,39 @@
+schema_version: 1
+id: organum
+name: "Organum"
+classification: core_candidate
+status: PARTIALLY_DEFINED
+purpose:
+  status: PARTIAL
+  text: "Autorité d'exécution candidate qui exécute ou bloque après détection, vérification, permission et journalisation; sa spécification antérieure complète manque."
+  source_refs: [SRC-0001, SRC-0006]
+boundaries:
+  must_do:
+    - status: PARTIAL
+      text: "Autorité d'exécution candidate qui exécute ou bloque après détection, vérification, permission et journalisation; sa spécification antérieure complète manque."
+      source_refs: [SRC-0001, SRC-0006]
+  must_not_do:
+    - status: PARTIAL
+      text: "Ne pas laisser le même composant déclarer l'urgence, interpréter la règle, accorder la dérogation et exécuter."
+      source_refs: [SRC-0001, SRC-0006]
+inputs: []
+outputs: []
+dependencies: []
+interactions: []
+state_model:
+  status: UNKNOWN
+  states: []
+maturity:
+  concept: 30
+  documentation: 15
+  architecture: 10
+  api: 0
+  implementation: 0
+  tests: 0
+  dependencies: 0
+  ready_for_next_phase: false
+source_refs: [SRC-0001, SRC-0006]
+open_questions:
+  - "Valider le statut et la définition de Organum."
+  - "Formaliser entrées, sorties, invariants et dépendances."
+

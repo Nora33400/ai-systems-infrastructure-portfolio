@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/hardware-cognitive-instruction.schema.json",
+  "title": "HardwareCognitiveInstruction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["opcode", "semanticIntent", "inputRepresentation", "outputRepresentation", "executionDomain", "memoryDomain", "precisionPolicy", "parallelismPolicy", "persistencePolicy", "verificationPolicy", "failurePolicy", "fallbackPolicy", "synchronizationPolicy", "securityScope", "resourceBudget", "temporalScope", "observabilityLevel"],
+  "properties": {
+    "opcode": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,63}$"},
+    "semanticIntent": {"type": "string", "minLength": 1},
+    "inputRepresentation": {"type": "string"},
+    "outputRepresentation": {"type": "string"},
+    "executionDomain": {"enum": ["CPU", "GPU", "RAM", "VRAM", "NVME", "SANDBOX", "AUTO"]},
+    "memoryDomain": {"type": "string"},
+    "precisionPolicy": {"enum": ["EXACT", "FP32", "FP16", "BF16", "INT8", "INT4", "ADAPTIVE"]},
+    "parallelismPolicy": {"enum": ["SERIAL", "BOUNDED", "ADAPTIVE"]},
+    "persistencePolicy": {"enum": ["EPHEMERAL", "TASK", "PROJECT_IF_VERIFIED", "IMMUTABLE_EVIDENCE"]},
+    "verificationPolicy": {"type": "array", "items": {"type": "string"}, "maxItems": 32},
+    "failurePolicy": {"type": "string"},
+    "fallbackPolicy": {"type": "array", "items": {"type": "string"}, "maxItems": 16},
+    "synchronizationPolicy": {"enum": ["NONE", "BARRIER", "DEPENDENCY", "TRANSACTION"]},
+    "securityScope": {"enum": ["SIMULATION_ONLY", "READ_ONLY", "TASK", "PROJECT", "OWNER_APPROVED"]},
+    "resourceBudget": {"type": "object"},
+    "temporalScope": {"type": "string"},
+    "observabilityLevel": {"enum": ["MINIMAL", "NORMAL", "FULL", "REPLAYABLE"]}
+  }
+}

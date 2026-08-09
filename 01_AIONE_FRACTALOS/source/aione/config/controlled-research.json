@@ -1,0 +1,89 @@
+{
+  "schema": "aione.controlled-research-lab-config.v1",
+  "enabled": true,
+  "mode": "CONTROLLED_METADATA_ONLY",
+  "runtimeRoot": "S:\\AI_LAB\\Runtime\\ControlledResearchLab",
+  "schedule": {
+    "timezone": "Europe/Paris",
+    "minimumIntervalHours": 24,
+    "offlineFallback": true,
+    "automaticPublication": false,
+    "automaticIntegration": false
+  },
+  "budgets": {
+    "maxSourcesPerRun": 4,
+    "maxRequestsPerRun": 4,
+    "maxItemsPerSource": 10,
+    "maxItemsPerRun": 32,
+    "maxBytesPerResponse": 750000,
+    "maxBytesPerRun": 2000000,
+    "timeoutMs": 12000,
+    "maxGraphNodes": 180,
+    "maxGraphEdges": 480,
+    "maxGraphDepth": 3,
+    "maxProposalsPerRun": 8
+  },
+  "sources": [
+    {
+      "id": "arxiv-agentic-systems",
+      "provider": "ARXIV_ATOM",
+      "baseUrl": "https://export.arxiv.org/api/query?search_query=all%3A%22autonomous%20agents%22%20OR%20all%3A%22agentic%20systems%22&start=0&max_results=10&sortBy=submittedDate&sortOrder=descending",
+      "allowedHosts": ["export.arxiv.org"],
+      "enabled": true,
+      "optional": true,
+      "minimumDelayMs": 3000,
+      "cacheTtlMs": 86400000,
+      "ecosystemId": "digital-programming"
+    },
+    {
+      "id": "arxiv-cognitive-graphs",
+      "provider": "ARXIV_ATOM",
+      "baseUrl": "https://export.arxiv.org/api/query?search_query=all%3A%22knowledge%20graph%22%20AND%20%28all%3Asemantic%20OR%20all%3Aconcept%29&start=0&max_results=10&sortBy=submittedDate&sortOrder=descending",
+      "allowedHosts": ["export.arxiv.org"],
+      "enabled": true,
+      "optional": true,
+      "minimumDelayMs": 3000,
+      "cacheTtlMs": 86400000,
+      "ecosystemId": "scientific-extension"
+    },
+    {
+      "id": "wikipedia-organization-patterns-fr",
+      "provider": "WIKIMEDIA_JSON",
+      "baseUrl": "https://fr.wikipedia.org/w/api.php?action=query&list=search&srsearch=organisation%20logicielle%20planification%20projet&format=json&srlimit=10&utf8=1",
+      "allowedHosts": ["fr.wikipedia.org"],
+      "enabled": true,
+      "optional": true,
+      "ecosystemId": "social-mediation"
+    },
+    {
+      "id": "wikipedia-local-multimedia-fr",
+      "provider": "WIKIMEDIA_JSON",
+      "baseUrl": "https://fr.wikipedia.org/w/api.php?action=query&list=search&srsearch=creation%20multimedia%20image%20audio%20video%20logiciel%20libre&format=json&srlimit=10&utf8=1",
+      "allowedHosts": ["fr.wikipedia.org"],
+      "enabled": true,
+      "optional": true,
+      "ecosystemId": "local-creation"
+    }
+  ],
+  "accessProviders": [
+    {"id": "FREE_LOCAL", "enabled": true, "autoSelectable": true, "cost": "FREE"},
+    {"id": "OPTIONAL_FREE_CONNECTOR", "enabled": true, "autoSelectable": false, "fallback": "FREE_LOCAL", "cost": "FREE"},
+    {"id": "FUTURE_PAID", "enabled": false, "autoSelectable": false, "routesEnabled": false, "cost": "PAID_OR_UNKNOWN"}
+  ],
+  "guardrails": {
+    "httpsOnly": true,
+    "exactHostAllowlist": true,
+    "redirects": "DENY",
+    "metadataOnly": true,
+    "externalInstructions": "QUARANTINE",
+    "downloads": "DENY",
+    "dependencyInstall": "DENY",
+    "automaticExecution": "DENY",
+    "automaticIntegration": "DENY",
+    "publication": "OWNER_REQUIRED"
+  },
+  "acknowledgements": [
+    "Thank you to arXiv for use of its open access interoperability.",
+    "Wikimedia metadata remains subject to source attribution and reuse terms."
+  ]
+}

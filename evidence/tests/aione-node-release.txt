@@ -1,0 +1,14 @@
+Suite: AIONE selected Node.js release-blocker rerun
+Date: 2026-08-09
+Command: node tools/run_aione_node_tests.mjs
+Working directory managed by runner: 01_AIONE_FRACTALOS/source/aione
+Environment: Windows 11; Node v24.13.0; isolated temporary runtime
+Exit code: 0
+Result: 85 tests; 85 passed; 0 failed; 0 skipped
+Targeted portability/security assertion: PASS
+- allowed root itself: accepted
+- child of allowed root: accepted
+- sibling sharing the root prefix: rejected
+- unrelated absolute path: rejected
+- explicit runtime backlog remained readable; unrelated secret fixture remained unread
+Node summary duration: 1491.2561 ms

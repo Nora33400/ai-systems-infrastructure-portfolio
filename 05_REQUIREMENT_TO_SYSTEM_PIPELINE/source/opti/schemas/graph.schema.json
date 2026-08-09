@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gpt-cognitive-constitution.local/schemas/graph.schema.json",
+  "title": "Evidence graph",
+  "type": "object",
+  "required": ["schema_version", "graph_type", "status", "nodes", "edges"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "graph_type": {"type": "string"},
+    "status": {"enum": ["EMPTY", "PARTIAL", "DEFINED"]},
+    "nodes": {"type": "array", "items": {"type": "object", "required": ["id", "type"], "properties": {"id": {"type": "string"}, "type": {"type": "string"}}, "additionalProperties": true}},
+    "edges": {"type": "array", "items": {"type": "object", "required": ["id", "from", "to", "relation", "certainty", "source_refs"], "properties": {"id": {"type": "string"}, "from": {"type": "string"}, "to": {"type": "string"}, "relation": {"type": "string"}, "certainty": {"enum": ["EXPLICIT", "PROPOSED", "EXAMPLE_ONLY", "INFERRED"]}, "source_refs": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": false}}
+  },
+  "additionalProperties": true
+}

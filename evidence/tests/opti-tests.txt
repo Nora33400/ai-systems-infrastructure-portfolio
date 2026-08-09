@@ -1,0 +1,172 @@
+Opti pre-hardening copied-tree validation (historical negative evidence)
+This record predates the curated 199-file public slice. Do not treat its counts as the current release result; see validation-summary.md.
+UTC: 
+2026-08-09T12:35:35.6623615Z
+Source under test: 05_REQUIREMENT_TO_SYSTEM_PIPELINE/source/opti
+Compiler: TypeScript compilation succeeded with existing read-only dependency toolchain
+Build output: isolated temporary directory (removed after validation)
+Command: node --test <21 recursively selected compiled test files>
+Compile exit code: 0
+Test exit code: 1
+Result: 93 tests — 89 passed, 2 failed, 2 skipped.
+Sanitization note: personal identifiers and absolute profile paths were redacted throughout the copied tree. Historical receipt/source hashes were intentionally not rewritten.
+✔ Directions Registry - Create and Retrieve (147.6489ms)
+✔ Directions Registry - Persistence after close and reopen (224.863ms)
+✔ Directions Registry - List active directions with ordering (293.9423ms)
+✔ Directions Registry - Update priority (540.5504ms)
+✔ Directions Registry - PAUSED directions not in listActive (563.3428ms)
+✔ Directions Registry - CANCELLED directions not usable (474.2979ms)
+✔ Directions Registry - Expired directions (437.9408ms)
+✔ Directions Registry - SATISFIED directions (236.2583ms)
+✔ refuses a repository without a valid HEAD (815.3621ms)
+✔ creates a detached worktree from the exact canonical HEAD (1995.7009ms)
+✔ writes occur only in the isolated worktree (1120.9201ms)
+✔ canonical HEAD, branch and status remain unchanged after an isolated mutation (1695.0311ms)
+✔ produces a non-empty deterministic binary-capable patch (2462.9518ms)
+✔ includes a newly created allowed file in the patch (2096.1404ms)
+✔ rejects a touched file outside allowed_paths (1381.0088ms)
+✔ rejects .env and .git paths (1340.5316ms)
+✔ rejects unsafe task and execution identifiers (668.9086ms)
+✔ refuses creation when the canonical repository is dirty (886.0651ms)
+✔ cleanup removes a captured isolated worktree (2288.4297ms)
+✔ cleanup is idempotent (2424.6398ms)
+✔ cleanup refuses to discard an uncaptured modification (2842.9118ms)
+✔ recovery refreshes an interrupted allowed patch and then cleans (2997.8575ms)
+✔ recovery prunes a missing interrupted worktree idempotently (1504.89ms)
+✔ never changes master or creates a remote while producing and cleaning a patch (2750.5906ms)
+✔ verifies patch integrity and rejects a modified artifact (1780.9227ms)
+✔ structured parser accepts only raw JSON or one exact JSON fence (2.5279ms)
+✔ the canonical WQ-0044 Codex review receipt keeps its schema and runtime hash (84.4118ms)
+✔ read-only package is bounded, preserves canonical acceptance criteria and exposes no action capability (508.8761ms)
+✔ read-only worker falls back after timeout, persists hashes and never changes task or repository files (654.257ms)
+✔ unknown evidence and patch-like output are rejected with a failure receipt (589.199ms)
+✔ missing Ollama models fail locally without blocking the persistent kernel (448.273ms)
+✔ read-only report verification detects database tampering (266.3336ms)
+﹣ real Ollama endpoint returns schema-valid structured JSON (1.7816ms) # SKIP
+✔ planning state machine allows the validated path and rejects invalid completion (1.8088ms)
+✔ state store enforces planning transitions and survives reopen (545.3651ms)
+✔ policy validates from schema and blocks sensitive, deep and external tasks (91.872ms)
+✔ receipt registry is immutable and detects database tampering (788.0098ms)
+✖ the canonical WQ-0042 receipt projection keeps its schema and runtime hash (15.846ms)
+✔ command parser preserves arguments and executor runs without a shell (96.8094ms)
+✔ phase 1 run-once completes a safe local task without external services (620.7126ms)
+✔ dependency analysis reports missing definitions and deterministic cycles (5.1265ms)
+✔ scheduler continues independent branches while cycles, missing dependencies and path conflicts stay blocked (634.311ms)
+✔ resource locks are atomic across store instances and detect parent-child path conflicts (675.9872ms)
+✔ scheduler respects retry delay without blocking another ready task (474.5884ms)
+✔ recursion guard enforces depth, child count, ancestry and new evidence (69.0059ms)
+✔ resource planner is dry-run, prioritizes the owner and selects bounded dual-GPU modes (30.9738ms)
+✔ nvidia-smi observer parses a read-only inventory through an injected runner (0.8407ms)
+✔ the canonical WQ-0049 review receipt keeps its schema and runtime hash (20.9032ms)
+✔ agent action protocol accepts exact actions and rejects extra fields (92.8916ms)
+✖ repository documentation, source hashes, schemas, graph endpoints and links validate (683.6577ms)
+✔ the stop sentinel is persistent until an explicit clear (20.2128ms)
+✔ AUTONOMY_DISABLED uses the same fail-closed guard (12.6825ms)
+✔ planning run-once fails closed before importing or mutating tasks (27.0472ms)
+✔ legacy execution entrypoints fail closed without clearing the sentinel (25.8477ms)
+✔ security policy accepts scoped paths and rejects escapes, secrets, protected files, and dangerous commands (34.2594ms)
+✔ state survives reopen and interrupted tasks are recovered (276.3235ms)
+✔ scheduler enforces completed dependencies and deterministic priority (375.9494ms)
+✔ terminal status imported from the work queue overrides stale runtime state (512.4251ms)
+✔ a non-running planning task follows the canonical WORK_QUEUE status (610.4708ms)
+✔ writer mutates atomically and recovery restores changed and newly-created files (57.6436ms)
+✔ CalContexte exposes every sub-score and authority alone cannot select an irrelevant tile (6.6117ms)
+✔ Cohérental distinguishes contradiction, definition gaps and a structured no-single-score policy (1.7066ms)
+✔ answer provenance verifier rejects unsupported or non-verbatim assertions (0.573ms)
+✔ Markdown atomization preserves structure, Unicode, exact content and line positions (3.8022ms)
+✔ stable ids survive identical input and unaffected atoms survive a partial change (2.6168ms)
+✔ invalid YAML is rejected explicitly (15.3299ms)
+✔ an unavailable Ollama endpoint fails after configured retries (52.1904ms)
+﹣ real Ollama proposal is schema-gated, atom-bounded and auditable (1.0291ms) # SKIP
+✔ vertical source-to-answer pipeline resumes after interruption and preserves ids without duplication (1603.8332ms)
+✔ pipeline rejects absent and empty sources (355.6118ms)
+✔ SQLite ingestion is idempotent, persistent and rejects orphan provenance (591.8907ms)
+✔ provenance graph stores valid endpoints and rejects unauthorized dependency cycles (496.6159ms)
+✔ a locked database fails explicitly instead of hiding persistence errors (732.6773ms)
+✔ all constitutional YAML documents satisfy their JSON schemas and cross references (289.0544ms)
+✔ the twenty stable axiom ids are unique and complete (3.9167ms)
+✔ the capability matrix covers every top-level module exactly once (37.5938ms)
+✔ capability validator detects unknown, forbidden and globally incompatible grants (80.4316ms)
+✔ every completed constitutional task has a schema-valid factual receipt (36.1104ms)
+✔ missing dependency and ambiguity remain explicit states (1.3347ms)
+✔ absence of contradiction does not jump from compatible to supported (0.3451ms)
+✔ protected concepts are not fused without explicit identity evidence (0.1987ms)
+✔ deterministic fake model output remains a proposal and unverifiable content is not accepted (0.6235ms)
+✔ a claim revision must preserve all historical fields (0.2397ms)
+✔ UNKNOWN is a valid non-failure answer when uncertainty and support are explicit (0.4177ms)
+✔ an inference without an authorized rule or premises is rejected (0.251ms)
+✔ a complete constitutional execution follows every observed durable state (2.5213ms)
+✔ stop at tiles_built resumes under the same id and completed resume is idempotent (0.4168ms)
+✔ missing artifacts and incompatible versions fail explicitly (0.4143ms)
+✔ historical receipt mutation is terminal while the original hash is accepted (0.2528ms)
+✔ historical fixture preserves the canonical unknown answer and protected distinction (1.3408ms)
+✔ the canonical execution is reread from SQLite without mutation (20.9851ms)
+✔ the historical answer is authorized but an invented Cohérental definition is rejected (5.1969ms)
+✔ all ten historical receipt files retain their captured hashes (35.4651ms)
+ℹ tests 93
+ℹ suites 0
+ℹ pass 89
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 2
+ℹ todo 0
+ℹ duration_ms 31217.1941
+
+✖ failing tests:
+
+test at <LOCAL_TEMP>\opti-portfolio-validation-019fe656-final\dist\tests\autonomy\planning-phase1.test.js:76:1
+✖ the canonical WQ-0042 receipt projection keeps its schema and runtime hash (15.846ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '493501bef64f65760a7c02a6a5c7802fe57f7382bff056f4faa058ef19aa646c'
+  - '2ea650d5c7002cb575c5232a2cf89263d09c4317c06487093f2e6147d27c3adb'
+  
+      at TestContext.<anonymous> (file:///<LOCAL_TEMP>/opti-portfolio-validation-019fe656-final/dist/tests/autonomy/planning-phase1.test.js:81:12)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '493501bef64f65760a7c02a6a5c7802fe57f7382bff056f4faa058ef19aa646c',
+    expected: '2ea650d5c7002cb575c5232a2cf89263d09c4317c06487093f2e6147d27c3adb',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at <LOCAL_TEMP>\opti-portfolio-validation-019fe656-final\dist\tests\autonomy\protocol-docs.test.js:19:1
+✖ repository documentation, source hashes, schemas, graph endpoints and links validate (683.6577ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   'Source hash mismatch: SRC-0005',
+  +   'Source hash mismatch: SRC-0007',
+  +   'Source hash mismatch: SRC-0009',
+  +   'Source hash mismatch: SRC-0012',
+  +   'Source hash mismatch: SRC-0013',
+  +   'Source hash mismatch: SRC-0014',
+  +   'Source hash mismatch: SRC-0015',
+  +   'Source hash mismatch: SRC-0016',
+  +   'Source hash mismatch: SRC-0017'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///<LOCAL_TEMP>/opti-portfolio-validation-019fe656-final/dist/tests/autonomy/protocol-docs.test.js:21:12)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Source hash mismatch: SRC-0005', 'Source hash mismatch: SRC-0007', 'Source hash mismatch: SRC-0009', 'Source hash mismatch: SRC-0012', 'Source hash mismatch: SRC-0013', 'Source hash mismatch: SRC-0014', 'Source hash mismatch: SRC-0015', 'Source hash mismatch: SRC-0016', 'Source hash mismatch: SRC-0017' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

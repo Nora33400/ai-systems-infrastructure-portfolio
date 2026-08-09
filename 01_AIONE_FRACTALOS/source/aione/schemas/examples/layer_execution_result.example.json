@@ -1,0 +1,14 @@
+{
+  "packet_id": "LP-0001",
+  "status": "done",
+  "backend": "simulation",
+  "metrics": {
+    "latency_ms": 0,
+    "cost_class": "low"
+  },
+  "output": {
+    "cpu_usage": "simulation: 34%"
+  },
+  "risk_triggered": false,
+  "created_at": "2026-05-24T00:00:00Z"
+}

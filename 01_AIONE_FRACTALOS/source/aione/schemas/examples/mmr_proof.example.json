@@ -1,0 +1,23 @@
+{
+  "id": "MMRPROOF-0001-001",
+  "target_slice_id": "MSLICE-0001-001",
+  "claims": [
+    "The slice is bounded to the current Forge cycle.",
+    "The full memory store was not materialized."
+  ],
+  "constraints_satisfied": [
+    "contract_gate_required",
+    "materialize_only_observed_context"
+  ],
+  "constraints_not_satisfied": [],
+  "sources": [
+    "cahier_des_charges/MMR_minimum_materialization_runtime/MMR_CDC_v0.md"
+  ],
+  "tests": [
+    "tests/test_aione_mmr.py"
+  ],
+  "cost_trace_id": "CTRACE-0001-001",
+  "confidence": 0.78,
+  "status": "passed",
+  "created_at": "2026-05-25T00:00:00Z"
+}

@@ -1,0 +1,41 @@
+{
+  "receipt_id": "RCP-c3e0361c-b12c-4b63-b98e-98288b5e9921",
+  "task_id": "WQ-0049",
+  "execution_id": "EXE-53d9f0f4-f85f-4669-bcde-6715a9a5fede",
+  "timestamp": "2026-07-18T00:14:43.555Z",
+  "actor": "CODEX_LOCAL",
+  "action": "phase_2_post_smoke_review",
+  "inputs_hash": "9c4a8b9df1f3334be9eaead9e25496d4f37f3dfbef379c01dce50a79d50c6462",
+  "outputs_hash": "98b2a9ba7bb0f23216607acfe7fed0aa91a54ea5abb9340200ec8e899b7f4eaa",
+  "files_read": [
+    "docs/autonomy-planning/phase-2-implementation-report.md",
+    "docs/autonomy-planning/local-capability-audit-2026-07-18.md",
+    "tests/autonomy/planning-phase2.test.ts",
+    "WORK_QUEUE.yaml"
+  ],
+  "files_modified": [],
+  "commands": [
+    "npm run build",
+    "npm test",
+    "scripts/invoke-autonomy.ps1 validate-docs -NoBuild",
+    "scripts/invoke-autonomy.ps1 resources -RequestedWorkers 2 -UserIdle"
+  ],
+  "tests": [
+    {"suite": "autonomy", "passed": 22, "skipped": 1, "failed": 0},
+    {"suite": "cognitive", "passed": 12, "skipped": 1, "failed": 0},
+    {"suite": "constitution", "passed": 20, "skipped": 0, "failed": 0},
+    {"smoke": "WQ-0049", "validation_count": 4, "passed": true}
+  ],
+  "decision": "VERIFIED",
+  "result": {
+    "next_task": "WQ-0044",
+    "limitations": [
+      "no_execution_parallelism",
+      "no_gpu_control",
+      "no_litellm",
+      "no_trello",
+      "no_git_baseline"
+    ]
+  },
+  "parent_receipt": "RCP-897b0492-080b-4f23-84a5-de2cad9740ce"
+}

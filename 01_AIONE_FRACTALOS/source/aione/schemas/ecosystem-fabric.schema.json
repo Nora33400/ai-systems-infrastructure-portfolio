@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/ecosystem-fabric.schema.json",
+  "title": "AIONE Ecosystem Fabric",
+  "type": "object",
+  "required": [
+    "schema",
+    "enabled",
+    "namespace",
+    "databasePath",
+    "shardCount",
+    "controller",
+    "rootPolicy",
+    "bootstrap"
+  ],
+  "properties": {
+    "schema": {
+      "const": "aione.ecosystem-fabric.v1"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "namespace": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "databasePath": {
+      "type": "string",
+      "minLength": 3
+    },
+    "shardCount": {
+      "type": "integer",
+      "minimum": 16,
+      "maximum": 65536
+    },
+    "controller": {
+      "const": "aione-autonomous-forge"
+    },
+    "principles": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "rootPolicy": {
+      "$ref": "#/$defs/policy"
+    },
+    "bootstrap": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "policy": {
+      "type": "object",
+      "properties": {
+        "permissions": {
+          "type": "object",
+          "properties": {
+            "allow": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "deny": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "limits": {
+          "type": "object",
+          "properties": {
+            "maxConcurrentAgents": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxContextTokens": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxStorageBytes": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        },
+        "externalActionsDefault": {
+          "enum": [
+            "ALLOW",
+            "DENY"
+          ]
+        },
+        "crossOrganizationRead": {
+          "type": "boolean"
+        },
+        "destructiveMutation": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "node": {
+      "type": "object",
+      "required": [
+        "kind",
+        "naturalKey",
+        "name"
+      ],
+      "properties": {
+        "ref": {
+          "type": "string"
+        },
+        "parentRef": {
+          "type": "string"
+        },
+        "parentId": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "federation",
+            "ecosystem",
+            "organization",
+            "domain",
+            "project",
+            "agent",
+            "workflow",
+            "resource",
+            "knowledge"
+          ]
+        },
+        "naturalKey": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "policy": {
+          "$ref": "#/$defs/policy"
+        },
+        "context": {
+          "type": "object",
+          "properties": {
+            "level": {
+              "enum": [
+                "unitile",
+                "tile",
+                "kilotile",
+                "megatile",
+                "gigatile"
+              ]
+            },
+            "perspective": {
+              "enum": [
+                "machine-subjective",
+                "user-objective",
+                "dual"
+              ]
+            },
+            "utility": {
+              "enum": [
+                "useful",
+                "neutral",
+                "irrelevant",
+                "contradictory",
+                "unknown"
+              ]
+            },
+            "machineSubjective": {
+              "type": "string"
+            },
+            "userObjective": {
+              "type": "string"
+            },
+            "confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "reconstruction": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "sourceRefs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "sourceChecksum": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "reversible": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "metadata": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

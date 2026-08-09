@@ -1,0 +1,33 @@
+{
+  "receipt_id": "RCP-dc3ffa50-3883-4211-ab57-249ef3aad4b5",
+  "task_id": "WQ-0042",
+  "execution_id": "EXE-c741e1cd-585a-43d1-82db-5bf37d5d9b28",
+  "timestamp": "2026-07-17T23:46:30.792Z",
+  "actor": "LOCAL_SYSTEM",
+  "action": "phase_1_run_once_validation",
+  "inputs_hash": "f661005270d0bdb082be21106c1c3af65163d45ce7b12f9ad0e1e1b875ef36d1",
+  "outputs_hash": "48687fdf391a0d9d2586622f678cb2e92b9ed06315d4e68ed19d9bb0516734ff",
+  "files_read": [],
+  "files_modified": ["WORK_QUEUE.yaml"],
+  "commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-autonomy.ps1",
+    "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/invoke-autonomy.ps1 validate-docs -NoBuild"
+  ],
+  "tests": [
+    {"passed": true, "detail": "validated 128 YAML, 38 JSON, 938 Markdown", "criterion": {"type": "docs_validate"}},
+    {"passed": true, "detail": "exit=0 timeout=false log=<AIONE_RUNTIME>\\opti-runtime\\logs\\commands/320f1ce7-c2fd-4971-a6f7-c40ab2c777fe.log", "criterion": {"type": "validation_command", "command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-autonomy.ps1"}},
+    {"passed": true, "detail": "exit=0 timeout=false log=<AIONE_RUNTIME>\\opti-runtime\\logs\\commands/3b83a747-f8f7-4be3-ac91-8a01473b6cbb.log", "criterion": {"type": "validation_command", "command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/invoke-autonomy.ps1 validate-docs -NoBuild"}}
+  ],
+  "decision": "COMPLETED",
+  "result": {
+    "summary": "Phase 1 local validation task completed without an external supervisor or worker.",
+    "modified_files": [],
+    "validation": [
+      {"criterion": {"type": "docs_validate"}, "passed": true, "detail": "validated 128 YAML, 38 JSON, 938 Markdown", "timestamp": "2026-07-17T23:46:21.886Z"},
+      {"criterion": {"type": "validation_command", "command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-autonomy.ps1"}, "passed": true, "detail": "exit=0 timeout=false log=<AIONE_RUNTIME>\\opti-runtime\\logs\\commands/320f1ce7-c2fd-4971-a6f7-c40ab2c777fe.log", "timestamp": "2026-07-17T23:46:22.283Z"},
+      {"criterion": {"type": "validation_command", "command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/invoke-autonomy.ps1 validate-docs -NoBuild"}, "passed": true, "detail": "exit=0 timeout=false log=<AIONE_RUNTIME>\\opti-runtime\\logs\\commands/3b83a747-f8f7-4be3-ac91-8a01473b6cbb.log", "timestamp": "2026-07-17T23:46:24.271Z"}
+    ],
+    "commit": null
+  },
+  "parent_receipt": null
+}

@@ -1,0 +1,79 @@
+schema_version: 1
+module_id: autonomy-engine
+claims:
+  - id: autonomy-engine-CLAIM-0001
+    statement: "Le moteur doit continuer les tâches ordinaires après le départ de Codex avec Ollama local."
+    modality: ACCEPTED_DECISION
+    status: DEFINED
+    source_refs: [SRC-0007]
+    normative: true
+  - id: autonomy-engine-CLAIM-0002
+    statement: "La tranche bootstrap est implémentée dans src/autonomy avec état SQLite, journal JSONL, protocole d'actions validé et exécution bornée au workspace."
+    modality: ACCEPTED_DECISION
+    status: TESTED
+    source_refs: [SRC-0007]
+    normative: true
+    evidence_refs: [WQ-0007, tests/autonomy]
+  - id: autonomy-engine-CLAIM-0003
+    statement: "L'intégration Ollama réelle a produit une réponse structurée valide avec qwen2.5-coder:14b."
+    modality: ACCEPTED_DECISION
+    status: TESTED
+    source_refs: [SRC-0007]
+    normative: true
+    evidence_refs: [tests/autonomy/ollama.integration.test.ts]
+  - id: autonomy-engine-CLAIM-0004
+    statement: "Le moteur a terminé WQ-0008 puis poursuivi WQ-0009 et WQ-0010 avec validation indépendante, arrêt/reprise et persistance."
+    modality: ACCEPTED_DECISION
+    status: TESTED
+    source_refs: [SRC-0007]
+    normative: true
+    evidence_refs: [WORK_QUEUE.yaml, docs/AUTONOMY_QUICKSTART.md, docs/AUTONOMY_TROUBLESHOOTING.md]
+  - id: autonomy-engine-CLAIM-0005
+    statement: "Le moteur orchestre et reprend la tranche cognitive verticale SRC-0008 avec dix receipts persistants."
+    modality: ACCEPTED_DECISION
+    status: TESTED
+    source_refs: [SRC-0008]
+    normative: true
+    evidence_refs: [WQ-0011, WQ-0020, docs/COGNITIVE_VERTICAL_EXECUTION_REPORT.md, COG-EXE-242CFBBC-9F9E-49F6-8D27-EBBDA67A3AF0]
+  - id: autonomy-engine-CLAIM-0006
+    statement: "Le noyau local Phase 1 applique une machine d'états explicite, une politique validée par schéma, un store SQLite additif, des receipts immuables et un run-once sans service externe."
+    modality: ACCEPTED_DECISION
+    status: TESTED
+    source_refs: [SRC-0012]
+    normative: true
+    evidence_refs: [WQ-0041, WQ-0042, tests/autonomy/planning-phase1.test.ts, EXE-c741e1cd-585a-43d1-82db-5bf37d5d9b28, RCP-dc3ffa50-3883-4211-ab57-249ef3aad4b5]
+  - id: autonomy-engine-CLAIM-0007
+    statement: "Trello, Codex automatique, ChatGPT API, patches Ollama et worktrees ne sont pas activés par la Phase 1."
+    modality: ACCEPTED_DECISION
+    status: DEFINED
+    source_refs: [SRC-0012]
+    normative: true
+    evidence_refs: [D-0020, config/autonomy-policy.yaml, config/trello.yaml]
+  - id: autonomy-engine-CLAIM-0008
+    statement: "La Phase 2 détecte cycles et dépendances absentes, temporise les retries, borne la récursion, verrouille atomiquement plusieurs ressources et sélectionne des branches indépendantes."
+    modality: ACCEPTED_DECISION
+    status: TESTED
+    source_refs: [SRC-0012, SRC-0013]
+    normative: true
+    evidence_refs: [WQ-0043, WQ-0049, tests/autonomy/planning-phase2.test.ts, docs/autonomy-planning/phase-2-implementation-report.md]
+  - id: autonomy-engine-CLAIM-0009
+    statement: "Le planificateur matériel Phase 2 observe deux GPU via nvidia-smi et produit uniquement une recommandation dry-run; il ne contrôle ni GPU, ni modèle, ni processus."
+    modality: ACCEPTED_DECISION
+    status: TESTED
+    source_refs: [SRC-0013]
+    normative: true
+    evidence_refs: [D-0024, config/resource-policy.yaml, tests/autonomy/planning-phase2.test.ts, docs/autonomy-planning/local-capability-audit-2026-07-18.md]
+  - id: autonomy-engine-CLAIM-0010
+    statement: "La Phase 3 produit un rapport Ollama local borné, validé par schéma et références, persisté avec hashes et receipt, sans patch, commande ou transition canonique issue du modèle."
+    modality: ACCEPTED_DECISION
+    status: TESTED
+    source_refs: [SRC-0012, SRC-0014]
+    normative: true
+    evidence_refs: [WQ-0044, EXE-03a81aa1-6f3a-4e55-96b7-ee9d9afb81c1, ORR-770f3dd9-ff51-430d-81bb-5fc3ec9118ab, RCP-a23c6e95-7dc6-4157-80c0-1520808cfd8e, RCP-569c326c-77f6-4a96-bc58-fd2b6db18525, tests/autonomy/ollama-readonly.test.ts, docs/autonomy-planning/phase-3-ollama-readonly-report.md]
+  - id: autonomy-engine-CLAIM-0011
+    statement: "La Phase 4 crée des worktrees détachés hors dépôt canonique pour les seules tâches explicitement isolées, route leurs mutations et validations dans le worktree, produit un patch binaire hashé et nettoie ou récupère sans apply, push ou fusion."
+    modality: ACCEPTED_DECISION
+    status: TESTED
+    source_refs: [SRC-0012, SRC-0017]
+    normative: true
+    evidence_refs: [WQ-0045, RCP-WQ-0045-20260723, tests/autonomy/isolated-workspace.test.ts, docs/autonomy-planning/phase-4-isolated-patches-report.md]

@@ -1,0 +1,8 @@
+program LowMemoryMode {
+  context task source=input.user_request scope=TASK memory=RAM.ActiveContextSpace
+  represent task as bounded_state_machine target=compact_state
+  model worker role=small_model_worker device=CPU fallback=CPU
+  hypothesis candidate from worker context=compact_state
+  verify candidate with=constraints,output_contract target=verification
+  select result from=candidate strategy=maximum_verified_score
+}

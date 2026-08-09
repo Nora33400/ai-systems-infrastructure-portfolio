@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/upgrade-type.schema.json",
+  "title": "UpgradeType",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["identity", "objective", "targetModels", "requiredCapabilities", "addedCapabilities", "modifiedUsage", "functionalScope", "activationConditions", "deactivationConditions", "contextRequirements", "memoryRequirements", "executionBackend", "securityPolicy", "verificationStrategy", "resourceBudget", "compatibility", "compositionRules", "failureModes", "recoveryStrategy", "evaluationProtocol"],
+  "properties": {
+    "identity": {"type": "object", "required": ["id", "version"]},
+    "objective": {"type": "string", "minLength": 1},
+    "targetModels": {"type": "array", "items": {"type": "string"}},
+    "requiredCapabilities": {"type": "array", "items": {"type": "string"}},
+    "addedCapabilities": {"type": "array", "items": {"type": "string"}},
+    "modifiedUsage": {"type": "array", "items": {"type": "string"}},
+    "functionalScope": {"type": "array", "items": {"enum": ["GLOBAL", "SESSION", "PROJECT", "TASK", "STEP", "MODEL", "USER", "DEVICE", "SANDBOX", "TEMPORARY", "READ_ONLY", "SIMULATION_ONLY"]}},
+    "activationConditions": {"type": "array", "items": {"type": "object"}},
+    "deactivationConditions": {"type": "array", "items": {"type": "object"}},
+    "contextRequirements": {"type": "object"},
+    "memoryRequirements": {"type": "object"},
+    "executionBackend": {"type": "array", "items": {"type": "string"}},
+    "securityPolicy": {"type": "object"},
+    "verificationStrategy": {"type": "array", "items": {"type": "string"}},
+    "resourceBudget": {"type": "object"},
+    "compatibility": {"type": "object"},
+    "compositionRules": {"type": "object"},
+    "failureModes": {"type": "array", "items": {"type": "object"}},
+    "recoveryStrategy": {"type": "array", "items": {"type": "string"}},
+    "evaluationProtocol": {"type": "object"}
+  }
+}

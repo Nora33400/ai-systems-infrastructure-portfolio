@@ -1,0 +1,130 @@
+{
+  "schema": "aione.bounded-adaptive-evolution.v1",
+  "enabled": true,
+  "mode": "AUTONOMOUS_L4_ISOLATED",
+  "runtimeRoot": "S:\\AI_LAB\\Runtime\\AdaptiveEvolution",
+  "axes": {
+    "VISION": {
+      "question": "Cette évolution sert-elle durablement la vision et les projets de l’utilisateur ?",
+      "signals": [
+        "goal-alignment",
+        "user-value",
+        "ecosystem-coherence",
+        "capability-extension",
+        "rights-and-consent"
+      ]
+    },
+    "TIMEWARP": {
+      "question": "Quels effets, blocages et coûts apparaissent à court, moyen et long terme ?",
+      "horizons": [
+        "next-cycle",
+        "24-hours",
+        "7-days",
+        "6-months",
+        "1-year",
+        "5-years"
+      ],
+      "signals": [
+        "causal-order",
+        "lead-time",
+        "resource-drift",
+        "technical-debt",
+        "future-lock-in"
+      ]
+    },
+    "COHERENTAL": {
+      "question": "La proposition reste-t-elle auto-cohérente et cohérente avec la fédération ?",
+      "signals": [
+        "contract-consistency",
+        "permission-monotonicity",
+        "dependency-consistency",
+        "memory-consistency",
+        "cross-ecosystem-invariants"
+      ]
+    }
+  },
+  "predictiveBottleneck": {
+    "enabled": true,
+    "observationWindowSamples": 24,
+    "minimumEvidenceSamples": 6,
+    "forecastHorizonsMinutes": [
+      30,
+      120,
+      1440,
+      10080
+    ],
+    "signals": [
+      "queue-arrival-rate",
+      "queue-service-rate",
+      "queue-age",
+      "gpu-thermal-headroom",
+      "ram-headroom",
+      "disk-growth",
+      "context-reconstruction-latency",
+      "test-failure-rate",
+      "implementation-rejection-rate",
+      "owner-review-wait-time"
+    ],
+    "speculation": {
+      "maximumConcurrentScenarios": 5,
+      "maximumBranchesPerScenario": 3,
+      "minimumConfidenceToExperiment": 0.65,
+      "minimumConfidenceToRecommend": 0.8,
+      "simulationOnlyByDefault": true,
+      "updateOnEveryNewSample": true
+    }
+  },
+  "processFactory": {
+    "enabled": true,
+    "maximumActiveGeneratedProcesses": 8,
+    "allowedTemplates": [
+      "observer",
+      "analyzer",
+      "planner",
+      "isolated-prototyper",
+      "tester",
+      "reviewer",
+      "context-reconstructor",
+      "incident-reproducer"
+    ],
+    "requiredContract": [
+      "goal",
+      "inputs",
+      "outputs",
+      "permissionCeiling",
+      "resourceBudget",
+      "stopCriteria",
+      "tests",
+      "rollback",
+      "ownerImpact"
+    ],
+    "forbidden": [
+      "identity-spoofing",
+      "permission-growth",
+      "unbounded-loop",
+      "implicit-network",
+      "implicit-publication",
+      "canonical-self-promotion"
+    ]
+  },
+  "cycle": [
+    "observe",
+    "measure",
+    "predict-bottleneck",
+    "generate-scenarios",
+    "score-vision-timewarp-coherental",
+    "simulate",
+    "experiment-isolated",
+    "test",
+    "compare-baseline",
+    "propose-or-rollback",
+    "record-memory"
+  ],
+  "autonomousCeiling": {
+    "level": "L4_ISOLATED_EXECUTE",
+    "canonicalMutation": "ASK",
+    "permissionChange": "OWNER_REQUIRED",
+    "externalPublication": "OWNER_REQUIRED",
+    "resourceCeilingIncrease": "OWNER_REQUIRED"
+  }
+}

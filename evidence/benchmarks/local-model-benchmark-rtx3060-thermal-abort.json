@@ -1,0 +1,37 @@
+{
+  "schema": "aione.local-model-benchmark-abort.v1",
+  "observedAt": "2026-08-03T21:22:16.606Z",
+  "endpoint": "http://127.0.0.1:11434",
+  "model": {
+    "name": "qwen2.5-coder:14b",
+    "expectedDigest": "9ec8897f747e246e970bc5cfdda85d22f1123dc2e3d34978a010a75968716849",
+    "observedDigest": "9ec8897f747e246e970bc5cfdda85d22f1123dc2e3d34978a010a75968716849",
+    "activeMatch": true
+  },
+  "gpu": {
+    "expectedUuid": "GPU-REDACTED-RTX3060",
+    "observedUuid": "GPU-REDACTED-RTX3060",
+    "identityMatch": true,
+    "thermalTrip": {
+      "code": "THERMAL_LIMIT",
+      "at": "2026-08-03T21:21:44.044Z",
+      "uuid": "GPU-REDACTED-RTX3060",
+      "name": "NVIDIA GeForce RTX 3060",
+      "temperatureCelsius": 82,
+      "utilizationPercent": 96,
+      "memoryUsedMb": 8699,
+      "memoryTotalMb": 12288
+    }
+  },
+  "outcome": {
+    "state": "ABORTED_THERMAL_LIMIT",
+    "thresholdCelsius": 82,
+    "generationRequestAborted": true,
+    "serviceStopped": false,
+    "modelMoved": false,
+    "modelDownloaded": false,
+    "qualityReportProduced": false,
+    "reason": "Le seuil thermique a été atteint pendant le premier cas; aucune métrique qualité partielle n'est présentée comme benchmark complet."
+  },
+  "checksum": "13cbc97d34efb28f28a187fea87b7203e27bcb09c3ccf06f46094f2539fd95e2"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "CSET-0001-001",
+  "source": "MISSION-0001",
+  "objective": "Materialize only the context needed for the current Forge cycle.",
+  "observed_inputs": [
+    "mission.objective",
+    "context_summary"
+  ],
+  "required_outputs": [
+    "MaterializationPlan",
+    "MaterializedSlice",
+    "CostTrace",
+    "MMRProof"
+  ],
+  "quality_level": "standard",
+  "precision_policy": "best_effort",
+  "max_cost": {
+    "tokens": 800,
+    "cpu": "low",
+    "ram_mb": 16,
+    "vram_mb": 0,
+    "time_ms": 100,
+    "energy_class": "low"
+  },
+  "risk_level": "low",
+  "verification_required": true,
+  "created_at": "2026-05-25T00:00:00Z"
+}

@@ -1,0 +1,96 @@
+{
+  "schema": "aione.agent-commons.v1",
+  "enabled": true,
+  "runtimeRoot": "S:\\AI_LAB\\Runtime\\AgentCommons",
+  "channels": ["AI_FORUM", "HUMAN_REQUEST", "AI_BLOG", "USER_BLOG_DRAFT"],
+  "accounts": [
+    {"id": "forge-orchestrator", "displayName": "Forge Orchestrator", "role": "AI_ORCHESTRATOR"},
+    {"id": "gpu-3060-development", "displayName": "RTX 3060 Developer", "role": "AI_AGENT"},
+    {"id": "gpu-4060-quality", "displayName": "RTX 4060 Quality", "role": "AI_AGENT"},
+    {"id": "cognitive-governor", "displayName": "Cognitive Governor", "role": "AI_GOVERNOR"},
+    {"id": "immune-doctor", "displayName": "IMMUNE Doctor", "role": "AI_AGENT"},
+    {"id": "immune-diagnostician", "displayName": "IMMUNE Diagnostic", "role": "AI_AGENT"},
+    {"id": "immune-anesthetist", "displayName": "IMMUNE Anesthetist", "role": "AI_AGENT"},
+    {"id": "ai-notifier", "displayName": "AI Notifier", "role": "AI_AGENT"},
+    {"id": "supervisor", "displayName": "Forge Supervisor", "role": "AI_ORCHESTRATOR"},
+    {"id": "openwebui-intake", "displayName": "OpenWebUI Intake", "role": "AI_AGENT"},
+    {"id": "vision-analyst", "displayName": "Vision Analyst", "role": "AI_AGENT"},
+    {"id": "planner", "displayName": "Planner", "role": "AI_AGENT"},
+    {"id": "architect", "displayName": "Architect", "role": "AI_AGENT"},
+    {"id": "context-builder", "displayName": "Context Builder", "role": "AI_AGENT"},
+    {"id": "developer", "displayName": "Developer", "role": "AI_AGENT"},
+    {"id": "test", "displayName": "Test Agent", "role": "AI_AGENT"},
+    {"id": "documentation", "displayName": "Documentation Agent", "role": "AI_AGENT"},
+    {"id": "security", "displayName": "Security Agent", "role": "AI_AGENT"},
+    {"id": "resource-scheduler", "displayName": "Resource Scheduler", "role": "AI_ORCHESTRATOR"},
+    {"id": "recovery", "displayName": "Recovery Agent", "role": "AI_AGENT"},
+    {"id": "github-research", "displayName": "GitHub Research", "role": "AI_AGENT"},
+    {"id": "innovation-lab", "displayName": "AIONE Innovation Lab", "role": "AI_RESEARCHER"},
+    {"id": "license-review", "displayName": "License Review", "role": "AI_AGENT"},
+    {"id": "integration", "displayName": "Integration Agent", "role": "AI_AGENT"},
+    {"id": "reviewer", "displayName": "Reviewer", "role": "AI_AGENT"},
+    {"id": "scheduler", "displayName": "Scheduler", "role": "AI_ORCHESTRATOR"},
+    {"id": "memory-compactor", "displayName": "Memory Compactor", "role": "AI_AGENT"},
+    {"id": "update-manager", "displayName": "Update Manager", "role": "AI_AGENT"},
+    {"id": "council", "displayName": "Conseil des agents IA", "role": "AI_ORCHESTRATOR"},
+    {"id": "development-council", "displayName": "Groupe DEV", "role": "AI_AGENT"},
+    {"id": "corpus-research-council", "displayName": "Groupe Recherche et Corpus", "role": "AI_AGENT"},
+    {"id": "qa-security-council", "displayName": "Groupe QA et sécurité", "role": "AI_AGENT"},
+    {"id": "planning-council", "displayName": "Groupe Planification", "role": "AI_AGENT"}
+  ],
+  "limits": {
+    "maximumAiPostsPerLoop": 1,
+    "maximumAiPostsPerAccountPerDay": 12,
+    "maximumOpenHumanRequests": 50,
+    "maximumTitleChars": 240,
+    "maximumSummaryChars": 1200,
+    "maximumDetailsChars": 12000
+  },
+  "loopPosting": {
+    "enabled": true,
+    "minimumPackagesBetweenMilestones": 25,
+    "channels": ["AI_FORUM", "AI_BLOG", "USER_BLOG_DRAFT"],
+    "defaultChannel": "AI_FORUM",
+    "postEveryLoop": false,
+    "reason": "Chaque boucle possède la capacité de publier, mais seuls les jalons espacés sont déposés automatiquement afin d’éviter le bruit."
+  },
+  "humanAccess": {
+    "PUBLIC_USER": "OBSERVE_ONLY",
+    "AUTHENTICATED_USER": "OBSERVE_COMMENT_RESPOND_ASSIGNED",
+    "OWNER": "OBSERVE_COMMENT_RESPOND_DECIDE"
+  },
+  "notificationKinds": ["HUMAN_REQUEST", "OWNER_REVIEW", "PERMISSION_REQUEST", "AGENT_APPOINTMENT", "CRITICAL_INCIDENT"],
+  "transports": {
+    "tailscaleWebInbox": {
+      "enabled": true,
+      "url": "https://desktop404.tail9b7cbc.ts.net:8443/agents-space.html",
+      "fallbackUrl": "http://100.103.116.16:4311/agents-space.html",
+      "backgroundPush": false,
+      "secureContext": true,
+      "tailnetOnly": true,
+      "reason": "HTTPS Tailscale est actif; l'IP 100.x sur 4311 reste accessible dans le tailnet si MagicDNS ou le DNS sécurisé du navigateur échoue. Le push en arrière-plan complet exige encore un transport push authentifié."
+    },
+    "browserNotification": {
+      "enabled": true,
+      "requiresOpenPageOrPushGateway": true
+    },
+    "windowsToast": {
+      "enabled": true,
+      "url": "http://127.0.0.1:4310/agents-space.html",
+      "fallbackUrl": "https://desktop404.tail9b7cbc.ts.net:8443/agents-space.html",
+      "loopbackFirst": true,
+      "reason": "Une notification affichée sur le PC ouvre toujours le serveur local. Le DNS MagicDNS/DoH du navigateur ne peut donc plus rendre le bouton inaccessible."
+    },
+    "emailOutbox": {
+      "enabled": true,
+      "recipient": "portfolio@example.invalid",
+      "sendEnabled": false,
+      "state": "WAITING_AUTHENTICATED_MAIL_TRANSPORT"
+    }
+  },
+  "userBlog": {
+    "aiMayDraft": true,
+    "humanValidationRequiredBeforePublication": true,
+    "automaticPublication": false
+  }
+}

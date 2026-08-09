@@ -1,0 +1,54 @@
+schema_version: 1
+id: tilemindfs
+name: "TileMindFS"
+classification: core_candidate
+status: PARTIALLY_DEFINED
+purpose:
+  status: PARTIAL
+  text: "Cœur mémoire conçu comme système de connaissance; une tuile réunit état, contexte, relations, résumé, compression, historique, hash, importance, température, version et delta."
+  source_refs: [SRC-0001, SRC-0002, SRC-0003, SRC-0004]
+boundaries:
+  must_do:
+    - status: PARTIAL
+      text: "Cœur mémoire conçu comme système de connaissance; une tuile réunit état, contexte, relations, résumé, compression, historique, hash, importance, température, version et delta."
+      source_refs: [SRC-0001, SRC-0002, SRC-0003, SRC-0004]
+  must_not_do:
+    - status: PARTIAL
+      text: "Ne pas réduire TileMindFS à un système de fichiers ni une tuile à un fichier."
+      source_refs: [SRC-0001, SRC-0002, SRC-0003, SRC-0004]
+inputs: []
+outputs: []
+dependencies: []
+interactions: []
+state_model:
+  status: PARTIAL
+  states: ["SEED_TILE", "WORK_TILE", "SUMMARY_TILE", "FROZEN_TILE", "ARCHIVE"]
+maturity:
+  concept: 30
+  documentation: 15
+  architecture: 10
+  api: 0
+  implementation: 10
+  tests: 10
+  dependencies: 0
+  ready_for_next_phase: false
+tested_slices:
+  - id: cognitive_vertical_v1
+    status: TESTED
+    scope: "Projection minimale atomes/tiles/claims/provenance; ne constitue pas le contrat complet de TileMindFS."
+    implementation: [src/cognitive/markdown-atomizer.ts, src/cognitive/tile-builder.ts, src/cognitive/cognitive-store.ts]
+    execution_id: COG-EXE-242CFBBC-9F9E-49F6-8D27-EBBDA67A3AF0
+    source_refs: [SRC-0008]
+  - id: workmesh_tilemindfs_minimal_v1
+    status: TESTED
+    scope: "Contrat externe borné : enregistrement v1, index versionné, températures logiques, compaction non destructive, sélection, intégrité et récupération. N'implémente pas le service TileMindFS global."
+    implementation:
+      - "C:/Dev/AIONE_WORKMESH/AIONE_WORKMESH_FORGE_v0.1/10_RUNTIME/workmesh/tilemindfs_contracts.py"
+      - "C:/Dev/AIONE_WORKMESH/AIONE_WORKMESH_FORGE_v0.1/10_RUNTIME/tests/test_tilemindfs_contracts.py"
+    receipt_id: RCP-20260718-TSK-P1-015
+    report_id: workmesh-commit-3a253f028f8cc401213f4784240a401a252d5d0e
+    source_refs: [SRC-0008]
+source_refs: [SRC-0001, SRC-0002, SRC-0003, SRC-0004, SRC-0008]
+open_questions:
+  - "Valider le statut et la définition de TileMindFS."
+  - "Formaliser entrées, sorties, invariants et dépendances."

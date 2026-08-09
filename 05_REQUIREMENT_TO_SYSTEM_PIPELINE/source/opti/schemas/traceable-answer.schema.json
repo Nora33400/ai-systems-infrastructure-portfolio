@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/traceable-answer.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["answer_id", "question", "text", "assertions", "used_tiles", "used_atoms", "explicit_claims", "inferred_claims", "unresolved_questions", "confidence", "support_check", "created_at"],
+  "properties": {
+    "answer_id": {"type": "string"}, "question": {"type": "string"}, "text": {"type": "string"},
+    "assertions": {"type": "array", "items": {"type": "object", "required": ["text", "epistemic_status", "support_claim_ids"]}},
+    "used_tiles": {"type": "array", "items": {"type": "string"}}, "used_atoms": {"type": "array", "items": {"type": "string"}},
+    "explicit_claims": {"type": "array", "items": {"type": "string"}}, "inferred_claims": {"type": "array", "items": {"type": "string"}},
+    "unresolved_questions": {"type": "array", "items": {"type": "string"}}, "confidence": {"enum": ["low", "medium", "high"]},
+    "support_check": {"type": "object", "required": ["passed", "issues"]}, "created_at": {"type": "string", "format": "date-time"}
+  }
+}

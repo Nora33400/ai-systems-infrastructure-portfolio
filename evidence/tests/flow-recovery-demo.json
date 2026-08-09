@@ -1,0 +1,46 @@
+{
+  "schema": "portfolio.flow-recovery-demo.v1",
+  "scope": "single-machine deterministic logical-worker integration",
+  "injected_failure": true,
+  "detection": {
+    "state": "CRITICAL_LOCAL_BLOCKER",
+    "local_blockers": 2,
+    "detection_time_ms": 12.101
+  },
+  "recovery": {
+    "retry_eligible": true,
+    "retry_count": 1,
+    "retry_budget": 2,
+    "corruption_detected": true,
+    "data_loss_risk_detected": true,
+    "restore_authorized": true,
+    "final_state": "LOCAL_READY",
+    "remaining_blockers": 0,
+    "recovery_time_ms": 1.528
+  },
+  "jobs": {
+    "submitted": 3,
+    "completed": 3,
+    "retried": 1,
+    "lost": 0
+  },
+  "transitions": [
+    "AVAILABLE",
+    "OBSERVED",
+    "SUSPECT",
+    "RESTRICTED",
+    "ISOLATED",
+    "DIAGNOSTIC",
+    "REPAIRING",
+    "RELOADING",
+    "VALIDATING",
+    "LIMITED_RETURN",
+    "AVAILABLE"
+  ],
+  "limitations": [
+    "Logical workers run in one Node.js process; no physical node or network partition is exercised.",
+    "Job counts are deterministic scenario bookkeeping, not throughput measurement.",
+    "No workload migration or real process restart is performed.",
+    "Times measure harness function overhead only and are not operational recovery SLOs."
+  ]
+}

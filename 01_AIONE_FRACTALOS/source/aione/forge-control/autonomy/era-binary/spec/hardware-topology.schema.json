@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/hardware-topology.schema.json",
+  "title": "HardwareTopology",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "observedAt", "host", "cpu", "memory", "storage", "gpus", "models", "networkInspection"],
+  "properties": {
+    "schema": {"const": "aione.hardware-topology.v1"},
+    "observedAt": {"type": "string", "format": "date-time"},
+    "host": {"type": "object", "required": ["node", "system", "release"], "additionalProperties": {"type": "string"}},
+    "cpu": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["architecture", "name", "logicalProcessors"],
+      "properties": {
+        "architecture": {"type": "string"},
+        "name": {"type": "string"},
+        "logicalProcessors": {"type": "integer", "minimum": 1}
+      }
+    },
+    "memory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["totalPhysicalBytes"],
+      "properties": {"totalPhysicalBytes": {"type": ["integer", "null"], "minimum": 1}}
+    },
+    "storage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["mount", "totalBytes", "usedBytes", "freeBytes"],
+        "properties": {
+          "mount": {"type": "string"},
+          "totalBytes": {"type": "integer", "minimum": 0},
+          "usedBytes": {"type": "integer", "minimum": 0},
+          "freeBytes": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "gpus": {"type": "array", "items": {"$ref": "#/$defs/gpu"}},
+    "models": {"type": "array", "items": {"$ref": "#/$defs/model"}},
+    "networkInspection": {"const": "NOT_PERFORMED"}
+  },
+  "$defs": {
+    "gpu": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["index", "name", "uuid", "memoryTotalMb", "memoryUsedMb", "temperatureCelsius", "utilizationPercent", "performanceState", "driverVersion"],
+      "properties": {
+        "index": {"type": "integer", "minimum": 0},
+        "name": {"type": "string"},
+        "uuid": {"type": "string"},
+        "memoryTotalMb": {"type": "integer", "minimum": 0},
+        "memoryUsedMb": {"type": "integer", "minimum": 0},
+        "temperatureCelsius": {"type": "integer", "minimum": 0},
+        "utilizationPercent": {"type": "integer", "minimum": 0, "maximum": 100},
+        "performanceState": {"type": "string"},
+        "driverVersion": {"type": "string"}
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "digestPrefix", "runtime", "observed"],
+      "properties": {
+        "name": {"type": "string"},
+        "digestPrefix": {"type": "string"},
+        "runtime": {"type": "string"},
+        "observed": {"const": true}
+      }
+    }
+  }
+}

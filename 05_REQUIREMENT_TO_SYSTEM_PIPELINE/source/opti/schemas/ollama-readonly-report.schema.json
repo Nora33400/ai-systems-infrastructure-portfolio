@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/ollama-readonly-report.schema.json",
+  "title": "AIONE Ollama read-only report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "summary",
+    "findings",
+    "risks",
+    "suggested_next_actions",
+    "open_questions",
+    "confidence",
+    "mutation_requested"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "task_id": { "type": "string", "pattern": "^WQ-[0-9]{4}$" },
+    "summary": { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "findings": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["statement", "evidence_refs"],
+        "properties": {
+          "statement": { "type": "string", "minLength": 1, "maxLength": 2000 },
+          "evidence_refs": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1, "maxLength": 300 }
+          }
+        }
+      }
+    },
+    "risks": {
+      "type": "array",
+      "maxItems": 15,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["risk", "mitigation", "evidence_refs"],
+        "properties": {
+          "risk": { "type": "string", "minLength": 1, "maxLength": 1500 },
+          "mitigation": { "type": "string", "minLength": 1, "maxLength": 1500 },
+          "evidence_refs": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1, "maxLength": 300 }
+          }
+        }
+      }
+    },
+    "suggested_next_actions": {
+      "type": "array",
+      "maxItems": 12,
+      "items": { "type": "string", "minLength": 1, "maxLength": 1200 }
+    },
+    "open_questions": {
+      "type": "array",
+      "maxItems": 12,
+      "items": { "type": "string", "minLength": 1, "maxLength": 1200 }
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "mutation_requested": { "const": false }
+  }
+}

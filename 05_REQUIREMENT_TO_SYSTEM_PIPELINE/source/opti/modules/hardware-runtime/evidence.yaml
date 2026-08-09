@@ -1,0 +1,10 @@
+schema_version: 1
+module_id: hardware-runtime
+claims:
+  - id: "hardware-runtime-CLAIM-0001"
+    statement: "Runtime matériel cité dans le moteur cognitif; aucune responsabilité détaillée n'est disponible."
+    modality: QUESTION
+    status: MENTIONED
+    source_refs: [SRC-0003]
+    normative: false
+

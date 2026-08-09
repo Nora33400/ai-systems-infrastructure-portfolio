@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/task-state.schema.json",
+  "type": "object",
+  "required": ["id","title","module","description","dependencies","priority","status","acceptance","likely_files","source_refs","attempts","history","blockers","test_results","updated_at"],
+  "properties": {
+    "id":{"type":"string","minLength":1},"title":{"type":"string"},"module":{"type":"string"},"description":{"type":"string"},
+    "dependencies":{"type":"array","items":{"type":"string"}},"priority":{"type":"integer"},
+    "status":{"enum":["pending","ready","running","testing","reviewing","completed","retryable_failure","blocked","quarantined","cancelled","DISCOVERED","NEEDS_CONTEXT","READY_LOCAL_AI","RUNNING_LOCAL_AI","READY_CODEX_REVIEW","RUNNING_CODEX_REVIEW","NEEDS_CHATGPT_REVIEW","NEEDS_OWNER_DECISION","BLOCKED","FAILED_RETRYABLE","FAILED_FINAL","VALIDATED","COMPLETED","ARCHIVED","CANCELLED"]},
+    "acceptance":{"type":"array","items":{"type":"object"}},"likely_files":{"type":"array","items":{"type":"string"}},"source_refs":{"type":"array","items":{"type":"string"}},
+    "attempts":{"type":"integer","minimum":0},"history":{"type":"array"},"blockers":{"type":"array"},"test_results":{"type":"array"},
+    "last_agent":{"type":["string","null"]},"updated_at":{"type":"string"},"autonomy_eligible":{"type":"boolean"},
+    "objective":{"type":"string"},"project":{"type":"string"},"risk_level":{"enum":["SAFE","CONTROLLED","SENSITIVE","CRITICAL"]},
+    "parent_task":{"type":["string","null"]},"subtask_depth":{"type":"integer","minimum":0},"assigned_agent":{"type":"string"},
+    "required_supervisor":{"type":["string","null"]},"required_validator":{"type":["string","null"]},
+    "allowed_paths":{"type":"array","items":{"type":"string"}},"forbidden_paths":{"type":"array","items":{"type":"string"}},"allowed_commands":{"type":"array","items":{"type":"string"}},
+    "context_requirements":{"type":"array","items":{"type":"string"}},"resource_budget":{"type":"object"},"retry_policy":{"type":"object"},"trello":{"type":"object"},"created_at":{"type":"string"}
+  },
+  "additionalProperties": true
+}

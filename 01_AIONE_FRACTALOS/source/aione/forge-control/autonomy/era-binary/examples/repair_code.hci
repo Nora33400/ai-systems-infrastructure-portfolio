@@ -1,0 +1,12 @@
+# Structural repair pipeline. HCI/0.1 never executes the proposed patch.
+program RepairCode {
+  context task source=input.user_request scope=TASK memory=RAM.ActiveContextSpace
+  represent task as dependency_graph target=task_graph
+  model coder role=generate_patch device=GPU fallback=CPU
+  model critic role=inspect_patch device=GPU fallback=CPU
+  hypothesis patch_a from coder context=task_graph
+  hypothesis patch_b from critic context=task_graph
+  verify patch_a,patch_b with=compile,unit_tests,static_analysis,constraint_check target=verification
+  select selected_patch from=patch_a,patch_b strategy=maximum_verified_score
+  persist selected_patch to=memory://project/AIONE/decision/latest_verified
+}

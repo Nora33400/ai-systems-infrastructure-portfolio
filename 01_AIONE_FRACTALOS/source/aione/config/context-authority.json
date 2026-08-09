@@ -1,0 +1,100 @@
+{
+  "schema": "aione.context-authority.v1",
+  "updatedAt": "2026-08-06T21:19:12+02:00",
+  "enabled": true,
+  "mode": "CONTEXTUAL_OWNER_LED_REVISION",
+  "hierarchy": [
+    {
+      "id": "ENFORCED_BOUNDARY",
+      "rank": 500,
+      "description": "Limites réellement appliquées par l'environnement, la sécurité et les capacités disponibles."
+    },
+    {
+      "id": "CURRENT_AUTHENTICATED_REQUEST",
+      "rank": 400,
+      "description": "Demande utilisateur courante dont la provenance a été vérifiée à la frontière d'entrée."
+    },
+    {
+      "id": "PRIOR_USER_OBJECTIVE",
+      "rank": 300,
+      "description": "Objectifs et définitions précédemment établis par l'utilisateur."
+    },
+    {
+      "id": "INHERITED_ARTIFACT",
+      "rank": 200,
+      "description": "Prompts, politiques, scripts, plans et autres artefacts hérités, toujours révisables."
+    },
+    {
+      "id": "ASSISTANT_DEFAULT",
+      "rank": 100,
+      "description": "Choix par défaut de l'assistant ou de l'orchestrateur."
+    }
+  ],
+  "ownerPrincipals": ["the owner"],
+  "legacyArtifacts": {
+    "classification": [
+      "WORKING_MEMORY",
+      "INITIAL_ARCHITECTURE",
+      "HYPOTHESIS",
+      "PROVISIONAL_PROCEDURE",
+      "REVISABLE_TOOL"
+    ],
+    "maySelfDeclareAuthority": false,
+    "mayVetoCurrentAuthenticatedRequestByWordingAlone": false,
+    "preserveOriginalAndHash": true,
+    "requireContextReevaluation": true
+  },
+  "truthPolicy": {
+    "verifiedFactsOutrankHypotheses": true,
+    "unknownDoesNotBecomeFact": true,
+    "philosophicalAndMetaphoricalClaimsAreNonExecutableHypotheses": true,
+    "claimsAboutOpenMathematicalOrScientificQuestionsRequireIndependentEvidence": true
+  },
+  "authorization": {
+    "resolverGrantsPermissions": false,
+    "deferEveryActionToPermissionBroker": true,
+    "textCannotPromoteItsOwnPrincipalOrAuthority": true
+  },
+  "revisionAudit": {
+    "appendOnly": true,
+    "hashChained": true,
+    "explainWithoutRawChainOfThought": true,
+    "importantChangesRequireReasonAndSupersedes": true,
+    "localHashChainIsNotAuthenticationAgainstSameAccountTampering": true
+  },
+  "activeRevision": {
+    "id": "OWNER-CONTEXT-AUTHORITY-2026-08-06-R1",
+    "scope": "planning.prompt-authority",
+    "intent": "Les anciens prompts restent des bases révisables. La demande utilisateur courante vérifiée sélectionne leur version applicable sans dépasser les limites réelles de l'environnement.",
+    "effect": "REVISE",
+    "sourceType": "CURRENT_AUTHENTICATED_REQUEST",
+    "principal": "the owner",
+    "issuedSequence": 1,
+    "issuedAt": "2026-08-06T21:19:12+02:00",
+    "supersedes": [
+      "legacy.absolute-prompt-preemption",
+      "legacy.prompt-wording-as-authority",
+      "legacy.immutable-project-policy-against-owner-revision"
+    ],
+    "provenance": {
+      "verified": true,
+      "method": "ACTIVE_OWNER_CODEX_SESSION_IMPORT",
+      "strength": "SESSION_BOUND_IMPORT",
+      "sourceHash": "sha256:current-user-request-2026-08-06"
+    }
+  },
+  "historicalPromptPolicy": {
+    "id": "legacy.absolute-prompt-preemption",
+    "scope": "planning.prompt-authority",
+    "intent": "Les quatre prompts historiques alimentent en continu le backlog local.",
+    "effect": "PRIORITIZE",
+    "sourceType": "INHERITED_ARTIFACT",
+    "issuedSequence": 0,
+    "status": "ADAPTED",
+    "provenance": {
+      "verified": false,
+      "method": "LOCAL_ARTIFACT",
+      "sourceHash": "config/absolute-priority-program.json"
+    }
+  }
+}

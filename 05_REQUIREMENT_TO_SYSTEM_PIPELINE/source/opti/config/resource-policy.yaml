@@ -1,0 +1,18 @@
+schema_version: 1
+activation: dry_run_only
+user_activity_priority: absolute
+safeguards:
+  max_gpu_temperature_c: 78
+  reserve_vram_gpu1_mb: 2048
+  pause_on_fullscreen_application: true
+  pause_on_game_detected: true
+  checkpoint_before_mode_switch: true
+  never_kill_uncommitted_agent_work: true
+modes:
+  personal_interactive: { max_parallel_agents: 1 }
+  ai_balanced: { max_parallel_agents: 2 }
+  autonomous_coding: { max_parallel_agents: 2 }
+  heavy_reasoning: { max_parallel_agents: 1 }
+  low_power: { max_parallel_agents: 0 }
+  gaming: { max_parallel_agents: 1 }
+source_refs: [SRC-0013:L159-L178]

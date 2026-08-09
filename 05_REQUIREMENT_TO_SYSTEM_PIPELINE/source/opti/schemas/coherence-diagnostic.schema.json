@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/coherence-diagnostic.schema.json",
+  "type": "object",
+  "required": ["diagnostic_id", "question", "policy", "compatible_claims", "tensions", "contradictions", "missing_dependencies", "ambiguous_terms", "unsupported_inferences", "duplicated_claims", "obsolete_claims", "suggested_resolutions", "created_at"],
+  "properties": {
+    "diagnostic_id": {"type": "string"}, "question": {"type": "string"},
+    "policy": {"type": "object", "required": ["single_score_rejected", "source_refs"]},
+    "compatible_claims": {"type": "array"}, "tensions": {"type": "array"}, "contradictions": {"type": "array"},
+    "missing_dependencies": {"type": "array"}, "ambiguous_terms": {"type": "array"}, "unsupported_inferences": {"type": "array"},
+    "duplicated_claims": {"type": "array"}, "obsolete_claims": {"type": "array"}, "suggested_resolutions": {"type": "array"},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

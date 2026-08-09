@@ -1,0 +1,54 @@
+schema_version: 1
+architecture_id: opti-autonomy-planning-v1
+status: PARTIALLY_IMPLEMENTED
+normative_source_refs: [SRC-0012, SRC-0013, SRC-0014, SRC-0017]
+canonical_surfaces:
+  work_queue: WORK_QUEUE.yaml
+  project_state: PROJECT_STATE.md
+  decisions: DECISION_LOG.md
+  module_registry: MASTER_MODULE_REGISTRY.yaml
+  dependency_graph: ARCHITECTURE_GRAPH.yaml
+  execution_state: "${LOCALAPPDATA}/AIONE/opti-runtime/state/autonomy.db"
+  receipts: autonomy_receipts
+authority:
+  the owner: FINAL_AND_SENSITIVE_ACTIONS
+  chatgpt: STRATEGIC_SUPERVISION_PORT
+  codex: TECHNICAL_SUPERVISION_PORT
+  local_orchestrator: POLICY_BOUNDED_EXECUTION
+  ollama: LOW_RISK_TASK_WORKER_PORT
+  trello: OPTIONAL_HUMAN_PROJECTION
+components:
+  - {id: task_adapter, phase: 1, status: IMPLEMENTED, responsibility: "Compatible WORK_QUEUE import"}
+  - {id: task_state_machine, phase: 1, status: IMPLEMENTED, responsibility: "Explicit guarded transitions"}
+  - {id: policy_engine, phase: 1, status: IMPLEMENTED, responsibility: "Schema-validated autonomy decisions"}
+  - {id: persistent_state_store, phase: 1, status: IMPLEMENTED, responsibility: "Tasks, executions, locks, decisions, authorizations, sync candidates, checkpoints and receipts"}
+  - {id: receipt_engine, phase: 1, status: IMPLEMENTED, responsibility: "Immutable hash-verified receipts"}
+  - {id: meta_scheduler, phase: 1, status: IMPLEMENTED, responsibility: "Deterministic dependency-aware local selection"}
+  - {id: local_validation_worker, phase: 1, status: IMPLEMENTED, responsibility: "External-free acceptance validation"}
+  - {id: persistent_planning, phase: 2, status: IMPLEMENTED, responsibility: "Retries, dependency cycles, bounded recursion, atomic resource locks and independent branches"}
+  - {id: hardware_observer, phase: 2, status: TESTED_READ_ONLY, responsibility: "nvidia-smi inventory without process or model control"}
+  - {id: resource_planner, phase: 2, status: TESTED_DRY_RUN, responsibility: "Pure recommendation of bounded hardware modes with the owner priority"}
+  - {id: model_router, phase: future, status: PROPOSED_UNAVAILABLE, responsibility: "LiteLLM or equivalent routing after separate authorization and tests"}
+  - {id: ollama_readonly_worker, phase: 3, status: TESTED, responsibility: "Bounded local report with schema, evidence allowlist, model fallback, immutable persistence and no mutation capability"}
+  - {id: isolated_workspace_manager, phase: 4, status: TESTED, responsibility: "Opt-in detached worktree outside canonical repository, scoped mutation routing, binary patch artifact, integrity verification and idempotent cleanup/recovery"}
+  - {id: codex_review_gateway, phase: 5, status: PROPOSED, responsibility: "Manual bundle first; optional real adapters"}
+  - {id: chatgpt_strategic_gateway, phase: 6, status: PROPOSED, responsibility: "Minimal strategic bundle and decision import"}
+  - {id: trello_synchronizer, phase: 7, status: UNCONFIGURED, responsibility: "Dry-run projection, conflict detection and optional sync"}
+  - {id: planned_runtime, phase: 8, status: PROPOSED, responsibility: "Loop and Windows Task Scheduler"}
+invariants:
+  - INTERNAL_REGISTERS_ARE_CANONICAL
+  - TRELLO_NEVER_COMPLETES_OR_DELETES_A_CANONICAL_TASK_BY_ITSELF
+  - SENSITIVE_ACTIONS_REQUIRE_OWNER
+  - MISSING_SUPERVISOR_BLOCKS_ONLY_AFFECTED_BRANCH
+  - NO_SECRET_IN_REPOSITORY
+  - NO_EXTERNAL_INTEGRATION_CLAIM_WITHOUT_REAL_TEST
+  - NO_BUSINESS_MODULE_PROMOTION
+  - NO_DIRECT_INTERFACE_TO_INTERFACE_COMMAND
+  - MODEL_REPORT_NEVER_CHANGES_CANONICAL_TASK_STATE
+  - ISOLATED_PATCH_IS_A_PROPOSAL_AND_IS_NEVER_APPLIED_AUTOMATICALLY
+  - ISOLATED_MUTATIONS_TARGET_ONLY_THE_RUNTIME_WORKTREE
+  - CANONICAL_HEAD_BRANCH_AND_STATUS_REMAIN_UNCHANGED
+  - NO_PUSH_OR_MERGE
+  - HARDWARE_PLANNING_IS_DRY_RUN_ONLY
+  - UNKNOWN_USER_ACTIVITY_FAILS_CLOSED_FOR_HEAVY_GPU_WORK
+source_refs: [SRC-0012:L7-L34, SRC-0012:L36-L86, SRC-0012:L126-L146, SRC-0013:L104-L119, SRC-0013:L159-L184, SRC-0014:L13-L35, SRC-0014:L176-L180, SRC-0017]

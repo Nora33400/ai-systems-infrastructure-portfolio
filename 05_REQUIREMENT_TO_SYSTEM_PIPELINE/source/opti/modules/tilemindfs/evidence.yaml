@@ -1,0 +1,26 @@
+schema_version: 1
+module_id: tilemindfs
+claims:
+  - id: "tilemindfs-CLAIM-0001"
+    statement: "Cœur mémoire conçu comme système de connaissance; une tuile réunit état, contexte, relations, résumé, compression, historique, hash, importance, température, version et delta."
+    modality: ASSERTED
+    status: PARTIALLY_DEFINED
+    source_refs: [SRC-0001, SRC-0002, SRC-0003, SRC-0004]
+    normative: false
+  - id: "tilemindfs-CLAIM-0002"
+    statement: "Une projection minimale atomes/tiles/claims est implémentée et testée pour le cycle vertical, sans stabiliser TileMindFS dans son ensemble."
+    modality: DECIDED_SLICE
+    status: TESTED
+    source_refs: [SRC-0008]
+    normative: true
+    evidence: [schemas/atom.schema.json, schemas/tile.schema.json, tests/cognitive/markdown-atomizer.test.ts, tests/cognitive/store-graph.test.ts]
+  - id: "tilemindfs-CLAIM-0003"
+    statement: "WorkMesh possède un contrat/prototype TileMindFS minimal v1 testé et revu indépendamment ; cette tranche externe ne stabilise pas TileMindFS global et ne migre pas le format opti."
+    modality: VERIFIED_EXTERNAL_SLICE
+    status: TESTED
+    source_refs: [SRC-0008]
+    normative: false
+    evidence:
+      - "C:/Dev/AIONE_WORKMESH/AIONE_WORKMESH_FORGE_v0.1@3a253f028f8cc401213f4784240a401a252d5d0e"
+      - "C:/Dev/AIONE_WORKMESH/AIONE_WORKMESH_FORGE_v0.1/13_REPORTS/20260718_TILEMINDFS_TESTER.json"
+      - "C:/Dev/AIONE_WORKMESH/AIONE_WORKMESH_FORGE_v0.1/13_REPORTS/20260718_TILEMINDFS_REVIEWER.json"

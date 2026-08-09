@@ -1,0 +1,14 @@
+{
+  "id": "TASK-0001-001",
+  "title": "Stabiliser les contrats Mission et Message",
+  "locality": "mission",
+  "operator": "PlanningOperator",
+  "verification": "schemas exist, examples exist, checklist passes",
+  "status": "pending",
+  "source_refs": [
+    "cahier_des_charges/AIONE_CDC_v0.md"
+  ],
+  "artifact_targets": [
+    "schemas/aione_contracts.schema.json"
+  ]
+}

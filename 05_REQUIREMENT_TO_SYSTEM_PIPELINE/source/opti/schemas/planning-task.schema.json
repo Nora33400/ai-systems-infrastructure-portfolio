@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/planning-task.schema.json",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["id", "title", "objective", "project", "status", "priority", "risk_level", "dependencies", "subtask_depth", "assigned_agent", "allowed_paths", "forbidden_paths", "allowed_commands", "acceptance_criteria", "created_at", "updated_at"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^WQ-[0-9]{4}$"},
+    "title": {"type": "string", "minLength": 1},
+    "objective": {"type": "string", "minLength": 1},
+    "project": {"type": "string", "minLength": 1},
+    "status": {"enum": ["DISCOVERED", "NEEDS_CONTEXT", "READY_LOCAL_AI", "RUNNING_LOCAL_AI", "READY_CODEX_REVIEW", "RUNNING_CODEX_REVIEW", "NEEDS_CHATGPT_REVIEW", "NEEDS_OWNER_DECISION", "BLOCKED", "FAILED_RETRYABLE", "FAILED_FINAL", "VALIDATED", "COMPLETED", "ARCHIVED", "CANCELLED"]},
+    "priority": {"oneOf": [{"type": "integer"}, {"type": "string"}]},
+    "risk_level": {"enum": ["SAFE", "CONTROLLED", "SENSITIVE", "CRITICAL"]},
+    "dependencies": {"type": "array", "items": {"type": "string"}},
+    "parent_task": {"type": ["string", "null"]},
+    "subtask_depth": {"type": "integer", "minimum": 0},
+    "assigned_agent": {"type": "string"},
+    "required_supervisor": {"type": ["string", "null"]},
+    "required_validator": {"type": ["string", "null"]},
+    "allowed_paths": {"type": "array", "items": {"type": "string"}},
+    "forbidden_paths": {"type": "array", "items": {"type": "string"}},
+    "allowed_commands": {"type": "array", "items": {"type": "string"}},
+    "context_requirements": {"type": "array", "items": {"type": "string"}},
+    "resource_budget": {"type": "object"},
+    "retry_policy": {"type": "object"},
+    "next_retry_at": {"type": ["string", "null"]},
+    "acceptance_criteria": {"type": "array"},
+    "trello": {"type": "object"},
+    "isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "cleanup_on_success": {"type": "boolean"}
+      }
+    },
+    "created_at": {"type": "string"},
+    "updated_at": {"type": "string"}
+  }
+}

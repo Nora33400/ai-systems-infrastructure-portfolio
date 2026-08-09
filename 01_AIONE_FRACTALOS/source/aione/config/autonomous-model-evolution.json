@@ -1,0 +1,185 @@
+{
+  "schema": "aione.autonomous-model-evolution.v1",
+  "updatedAt": "2026-08-04T08:45:00Z",
+  "enabled": true,
+  "mode": "LOCAL_AUTOAPPROVE_BOUNDED",
+  "ownerDirective": {
+    "scope": "Improve local model competence, reasoning, analysis, action quality and throughput for AIONE projects.",
+    "authorized": [
+      "inventory-installed-models",
+      "benchmark-installed-models",
+      "simulate-cognitive-pipelines",
+      "run-local-canary",
+      "promote-config-route-after-passing-gates",
+      "rollback-config-route",
+      "create-isolated-small-change",
+      "run-existing-tests",
+      "write-local-evidence",
+      "refill-roadmap-backlog"
+    ],
+    "stillDenied": [
+      "delete-model",
+      "delete-data",
+      "publish-external",
+      "send-secret",
+      "git-write",
+      "expand-permissions",
+      "public-network-listener",
+      "execute-untrusted-model-output"
+    ],
+    "modelDownloadPolicy": "CURRENT_OWNER_TURN_MAY_APPROVE_A_NAMED_CANDIDATE; FUTURE_UNKNOWN_MODELS_REQUIRE_A_NEW_EXACT_GRANT"
+  },
+  "circuits": [
+    {
+      "id": "C1_DISCOVER",
+      "stages": ["official-source-watch", "license-check", "hardware-fit", "threat-review"],
+      "output": "candidate-record",
+      "mutation": false
+    },
+    {
+      "id": "C2_BENCHMARK",
+      "stages": ["baseline", "three-repeats", "quality-score", "latency-vram-thermal", "safety-contract"],
+      "output": "signed-benchmark-evidence",
+      "mutation": false
+    },
+    {
+      "id": "C3_DELIBERATE",
+      "stages": ["proposer", "critic", "verifier", "synthesizer", "early-stop"],
+      "output": "decision-with-disagreements",
+      "mutation": false
+    },
+    {
+      "id": "C4_CANARY",
+      "stages": ["isolated-route", "bounded-workload", "external-tests", "compare-baseline"],
+      "output": "promotion-or-rollback-decision",
+      "mutation": "ISOLATED_CONFIG_ONLY"
+    },
+    {
+      "id": "C5_LEARN",
+      "stages": ["incident-memory", "owner-feedback", "failure-clusters", "next-experiment"],
+      "output": "roadmap-refill",
+      "mutation": "LOCAL_MEMORY_ONLY"
+    }
+  ],
+  "roadmap": [
+    {
+      "id": "P0-COGNITIVE-BASELINE",
+      "priority": "P0",
+      "status": "ACTIVE",
+      "objective": "Mesurer les modèles installés sur un corpus AIONE reproductible et conserver le baseline.",
+      "acceptance": ["three-repeated-runs", "latency-and-vram", "security-refusal", "contract-validity", "rollback-baseline"]
+    },
+    {
+      "id": "P0-FOUR-ROLE-DELIBERATION",
+      "priority": "P0",
+      "status": "ACTIVE",
+      "objective": "Exécuter proposer, critique, vérificateur et synthétiseur sur deux lanes GPU avec backpressure.",
+      "acceptance": ["four-logical-agents", "two-physical-model-limit", "early-stop", "disagreements-preserved", "prompt-injection-quarantined"]
+    },
+    {
+      "id": "P0-QUALITY-ROUTER",
+      "priority": "P0",
+      "status": "ACTIVE",
+      "objective": "Choisir chemin rapide ou profond selon risque, complexité, contexte et ressources.",
+      "acceptance": ["deterministic-route", "resource-aware", "quality-floor", "fallback", "explainable-decision"]
+    },
+    {
+      "id": "P1-CONTEXT-RETRIEVAL",
+      "priority": "P1",
+      "status": "QUEUED",
+      "objective": "Comparer embedding seul contre retrieval plus reranking sur le contexte de dépôt.",
+      "acceptance": ["context-precision", "context-recall", "token-budget", "provenance", "cold-cache-fallback"]
+    },
+    {
+      "id": "P1-TOOL-CONTRACTS",
+      "priority": "P1",
+      "status": "QUEUED",
+      "objective": "Utiliser sorties structurées et appels d'outils à schéma strict sans shell libre.",
+      "acceptance": ["json-schema", "unknown-tool-denied", "argument-validation", "tool-result-provenance", "bounded-loop"]
+    },
+    {
+      "id": "P1-HETEROGENEOUS-CANARY",
+      "priority": "P1",
+      "status": "QUEUED",
+      "objective": "Évaluer un petit raisonneur différent du codeur afin de réduire les erreurs corrélées.",
+      "acceptance": ["named-model-grant", "license-approved", "single-gpu-fit", "beats-baseline", "unload-and-rollback"]
+    },
+    {
+      "id": "P2-SPECULATIVE-DECODING",
+      "priority": "P2",
+      "status": "RESEARCH_ONLY",
+      "objective": "Mesurer le décodage spéculatif ou n-gram sans le présenter comme gain avant preuve locale.",
+      "acceptance": ["compatible-runtime", "acceptance-rate", "real-speedup", "quality-identical", "thermal-safe"]
+    },
+    {
+      "id": "P2-MULTIMODAL",
+      "priority": "P2",
+      "status": "RESEARCH_ONLY",
+      "objective": "Ajouter perception image/document/audio avec modèles locaux spécialisés et licences compatibles.",
+      "acceptance": ["license-reviewed", "media-local-only", "structured-description", "privacy-test", "resource-isolation"]
+    },
+    {
+      "id": "P2-CONTINUOUS-EVALUATION",
+      "priority": "P2",
+      "status": "QUEUED",
+      "objective": "Transformer incidents, tests et feedback Owner en expériences bornées plutôt qu'en auto-modification des permissions.",
+      "acceptance": ["append-only-evidence", "no-self-permission-change", "canary", "rollback", "weekly-owner-digest"]
+    },
+    {
+      "id": "P0-HCI-CIR-VERTICAL",
+      "priority": "P0",
+      "status": "ACTIVE",
+      "objective": "Stabiliser le chemin HCI vers CIR typé, plan matériel, simulation et preuves sans exécution non fiable.",
+      "acceptance": ["strict-parser", "typed-cir", "fail-closed-security", "hash-chained-evidence", "five-reference-programs"]
+    },
+    {
+      "id": "P0-HCI-MODEL-ADAPTER",
+      "priority": "P0",
+      "status": "QUEUED",
+      "objective": "Relier les rôles HCI au routeur de modèles signé sans autoriser directement les sorties de modèle à exécuter des outils.",
+      "acceptance": ["signed-benchmark-route", "schema-bound-output", "cancellation", "thermal-backpressure", "no-tool-authority-from-model"]
+    },
+    {
+      "id": "P1-CONTEXT-COMPILER-HCI",
+      "priority": "P1",
+      "status": "QUEUED",
+      "objective": "Compiler les tuiles thermiques et la provenance en vues HCI bornées par tâche, modèle et sensibilité.",
+      "acceptance": ["tile-to-context-view", "subjective-objective-separation", "provenance", "token-budget", "frozen-memory-permission-gate"]
+    },
+    {
+      "id": "P1-POLYBINARY-CANARY",
+      "priority": "P1",
+      "status": "QUEUED",
+      "objective": "Tester trois morphologies CPU, CPU-GPU et multi-GPU avec repli thermique et VRAM reproductible.",
+      "acceptance": ["cpu-only-proof", "cpu-gpu-proof", "multi-gpu-proof", "migration-cost", "thermal-safe-fallback"]
+    },
+    {
+      "id": "P1-HCI-REPAIR-SANDBOX",
+      "priority": "P1",
+      "status": "QUEUED",
+      "objective": "Étendre RepairCode de la simulation structurelle vers le runner isolé avec patch, tests, rollback et preuve externe.",
+      "acceptance": ["isolated-workspace-only", "network-denied", "patch-scope-allowlist", "tests-real-evidence", "rollback-on-failure"]
+    },
+    {
+      "id": "P2-HCI-CPP-BACKEND",
+      "priority": "P2",
+      "status": "BLOCKED_TOOLCHAIN",
+      "objective": "Compiler et comparer le backend C++ de référence seulement après disponibilité d'un toolchain approuvé.",
+      "acceptance": ["approved-toolchain", "cxx17-build", "python-conformance", "measured-speedup", "portable-fallback"]
+    },
+    {
+      "id": "P2-HCI-COMPARATIVE-EVALUATION",
+      "priority": "P2",
+      "status": "QUEUED",
+      "objective": "Comparer sur les mêmes tâches modèle seul, prompt, outils, HCI, mémoire et vérification sans confondre sécurité contractuelle et intelligence sémantique.",
+      "acceptance": ["same-task-corpus", "three-repeats", "quality-and-contract-separated", "latency-vram-thermal", "negative-result-published-locally"]
+    }
+  ],
+  "autonomousRefill": {
+    "enabled": true,
+    "when": ["all-active-acceptance-pass", "queue-empty", "quality-regression", "new-official-candidate"],
+    "maximumNewExperimentsPerDay": 3,
+    "requiredFields": ["hypothesis", "baseline", "metric", "risk", "stop-condition", "rollback"],
+    "defaultStatus": "PROPOSED_LOCAL"
+  }
+}

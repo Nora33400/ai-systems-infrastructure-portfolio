@@ -1,0 +1,170 @@
+{
+  "schema": "aione.ecosystem-domains.v1",
+  "updatedAt": "2026-07-30T14:40:00+02:00",
+  "status": "BOOTSTRAP_GOVERNANCE_TARGET",
+  "accessPolicy": {
+    "defaultMode": "LOCAL_FREE",
+    "publicAccess": "OWNER_CONTROLLED",
+    "modes": [
+      {
+        "id": "LOCAL_FREE",
+        "enabled": true,
+        "autoSelectable": true,
+        "networkRequired": false,
+        "cost": "FREE"
+      },
+      {
+        "id": "OPTIONAL_FREE_CONNECTOR",
+        "enabled": true,
+        "autoSelectable": false,
+        "degradableTo": "LOCAL_FREE",
+        "cost": "FREE"
+      },
+      {
+        "id": "FUTURE_PAID",
+        "enabled": false,
+        "autoSelectable": false,
+        "activation": "OWNER_CONFIGURATION_REQUIRED",
+        "cost": "PAID_OR_UNKNOWN"
+      }
+    ],
+    "guardrails": [
+      "no-paid-route-auto-selection",
+      "offline-first",
+      "no-publication-without-owner-validation",
+      "optional-connector-failure-never-blocks-local-planning"
+    ]
+  },
+  "federation": {
+    "id": "aione-federation",
+    "governor": "AI_GOVERNOR",
+    "responsibilities": [
+      "cross-ecosystem-map",
+      "conflict-arbitration",
+      "shared-resource-allocation",
+      "duplicate-detection",
+      "exchange-governance",
+      "systemic-risk",
+      "owner-review-routing"
+    ],
+    "mustNot": [
+      "implicit-cross-ecosystem-read",
+      "implicit-permission-transfer",
+      "routine-project-micromanagement",
+      "ai-self-escalation"
+    ]
+  },
+  "requiredSubsystemsPerEcosystem": [
+    "project-registry",
+    "goal-and-dependency-graph",
+    "task-queue-and-scheduler",
+    "specialized-agent-pool",
+    "workflow-registry",
+    "tile-context-memory",
+    "resource-budget",
+    "permission-overlay",
+    "health-and-incidents",
+    "test-and-evidence-ledger",
+    "backup-and-restore",
+    "owner-review-inbox"
+  ],
+  "ecosystems": [
+    {
+      "id": "digital-programming",
+      "name": "Écosystème numérique et programmation",
+      "orchestratorRole": "AI_ECOSYSTEM_ORCHESTRATOR",
+      "mission": "Concevoir, programmer, tester, documenter et maintenir les systèmes numériques.",
+      "domains": [
+        "software",
+        "automation",
+        "interfaces",
+        "data",
+        "infrastructure-local",
+        "developer-tools"
+      ],
+      "exchangeOffers": [
+        "software-components",
+        "automation-workflows",
+        "technical-evidence"
+      ]
+    },
+    {
+      "id": "scientific-extension",
+      "name": "Écosystème scientifique et extensions",
+      "orchestratorRole": "AI_ECOSYSTEM_ORCHESTRATOR",
+      "mission": "Explorer, formaliser, simuler et valider des connaissances et extensions scientifiques.",
+      "domains": [
+        "research",
+        "mathematics",
+        "simulation",
+        "experiments",
+        "corpus",
+        "hypothesis-management"
+      ],
+      "exchangeOffers": [
+        "validated-models",
+        "datasets-with-provenance",
+        "experimental-protocols"
+      ]
+    },
+    {
+      "id": "social-mediation",
+      "name": "Écosystème social et médiation",
+      "orchestratorRole": "AI_ECOSYSTEM_ORCHESTRATOR",
+      "mission": "Aider à organiser les interactions, médiations, conventions et décisions sociales.",
+      "domains": [
+        "communication",
+        "mediation",
+        "community-governance",
+        "conventions",
+        "accessibility",
+        "collective-decisions"
+      ],
+      "exchangeOffers": [
+        "interaction-conventions",
+        "mediation-proposals",
+        "consent-records"
+      ],
+      "safetyNote": "Aucune IA ne remplace le consentement ou l'autorité d'une personne."
+    },
+    {
+      "id": "local-creation",
+      "name": "Écosystème local et création",
+      "orchestratorRole": "AI_ECOSYSTEM_ORCHESTRATOR",
+      "mission": "Créer localement des médias, objets, expériences, outils et projets personnels.",
+      "domains": [
+        "image",
+        "video",
+        "audio",
+        "3d",
+        "writing",
+        "interactive-experiences"
+      ],
+      "exchangeOffers": [
+        "creative-assets",
+        "design-systems",
+        "local-production-workflows"
+      ]
+    }
+  ],
+  "exchangeContract": {
+    "defaultDecision": "DENY",
+    "requiredFields": [
+      "flowId",
+      "sourceEcosystemId",
+      "targetEcosystemId",
+      "principalId",
+      "purpose",
+      "offeredValue",
+      "requestedValue",
+      "dataClass",
+      "provenance",
+      "license",
+      "permissionDecisionId",
+      "causalClock",
+      "ttl",
+      "compensation"
+    ],
+    "missingOrInvalid": "QUARANTINE"
+  }
+}

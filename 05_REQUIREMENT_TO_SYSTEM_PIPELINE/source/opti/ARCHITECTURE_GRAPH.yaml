@@ -1,0 +1,23 @@
+schema_version: 1
+graph_kind: curated_public_slice
+nodes:
+  - {id: requirements, type: source_directives, maturity: P1}
+  - {id: assumptions, type: assumption_and_contradiction_registers, maturity: P1}
+  - {id: contracts, type: schemas_and_module_contracts, maturity: P2}
+  - {id: autonomy_runtime, type: typescript_implementation, maturity: P4-I}
+  - {id: cognitive_pipeline, type: typescript_implementation, maturity: P4-I}
+  - {id: tests, type: deterministic_test_suites, maturity: P4-I}
+  - {id: receipts, type: bounded_historical_evidence, maturity: P3}
+edges:
+  - {from: requirements, to: assumptions, relation: CONSTRAINS}
+  - {from: assumptions, to: contracts, relation: REFINED_INTO}
+  - {from: contracts, to: autonomy_runtime, relation: BOUNDS}
+  - {from: contracts, to: cognitive_pipeline, relation: BOUNDS}
+  - {from: autonomy_runtime, to: tests, relation: VERIFIED_BY}
+  - {from: cognitive_pipeline, to: tests, relation: VERIFIED_BY}
+  - {from: tests, to: receipts, relation: PRODUCES_OR_CHECKS}
+limitations:
+  - External connectors are excluded from the public slice.
+  - Module contracts without linked executable code remain P2.
+  - Synthetic telemetry does not demonstrate a physical distributed cluster.
+

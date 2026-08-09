@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=69.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fractalos"
+version = "0.1.0"
+description = "Fused FractalOS platform with TileMindFS, OmegaRAM, builder and UEFI boot source"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.setuptools]
+packages = [
+  "fractal_os",
+  "omega_tile_os",
+  "omega_tile_os.core",
+  "omega_tile_os.tilemindfs",
+]

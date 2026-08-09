@@ -1,0 +1,37 @@
+{
+  "id": "PSTATE-0001-001",
+  "title": "AIONE memory context as potential state",
+  "kind": "memory",
+  "logical_scope": "kernel proof memory",
+  "compressed_representation": {
+    "type": "summary_plus_relations",
+    "summary": "Compressed memory context for the current Forge cycle.",
+    "result_count": 5,
+    "materialized": false
+  },
+  "known_constraints": [
+    "contract_gate_required",
+    "materialize_only_observed_context"
+  ],
+  "dependencies": [
+    "MISSION-0001",
+    "context_summary"
+  ],
+  "resolver": "MaterializationOperator.v0",
+  "confidence": 0.72,
+  "materialization_cost_estimate": {
+    "tokens": 600,
+    "cpu": "low",
+    "ram_mb": 8,
+    "vram_mb": 0,
+    "time_ms": 50,
+    "energy_class": "low"
+  },
+  "invalidators": [
+    "memory_store_changed",
+    "contract_gate_blocked"
+  ],
+  "status": "potential",
+  "created_at": "2026-05-25T00:00:00Z",
+  "updated_at": "2026-05-25T00:00:00Z"
+}

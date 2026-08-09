@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gpt-cognitive-constitution.local/schemas/calcontexte-contract.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "contract_id", "constitution_version", "status", "scope", "authority_role", "inputs", "outputs", "rules", "justification_shape", "historical_projection", "source_refs"],
+  "properties": {
+    "schema_version": {"const": 1}, "contract_id": {"type": "string"}, "constitution_version": {"const": "0.1.0"}, "status": {"const": "FORMALIZED"}, "scope": {"type": "string"}, "authority_role": {"const": "selection_not_truth"},
+    "inputs": {"type": "array", "minItems": 1}, "outputs": {"type": "array", "minItems": 8}, "rules": {"type": "array", "minItems": 6, "items": {"type": "object", "required": ["id", "statement"]}},
+    "justification_shape": {"type": "object", "required": ["required_fields"]}, "historical_projection": {"type": "object", "required": ["selection_id", "selected_tiles", "semantic_method", "limitation"]}, "source_refs": {"type": "array", "minItems": 1}
+  }
+}

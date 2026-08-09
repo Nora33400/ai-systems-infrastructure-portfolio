@@ -1,0 +1,784 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/aione_contracts.schema.json",
+  "title": "AIONE Contracts v0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "mission": { "$ref": "#/$defs/Mission" },
+    "autonomous_mission": { "$ref": "#/$defs/AutonomousMissionSpec" },
+    "message": { "$ref": "#/$defs/Message" },
+    "operator": { "$ref": "#/$defs/OperatorSpec" },
+    "knowledge_tile": { "$ref": "#/$defs/KnowledgeTile" },
+    "proof_capsule": { "$ref": "#/$defs/ProofCapsule" },
+    "patch_ledger": { "$ref": "#/$defs/PatchLedger" },
+    "model_role": { "$ref": "#/$defs/ModelRole" },
+    "agent": { "$ref": "#/$defs/AgentSpec" },
+    "agent_decision": { "$ref": "#/$defs/AgentDecision" },
+    "forge_task": { "$ref": "#/$defs/ForgeTask" },
+    "bus": { "$ref": "#/$defs/BusSpec" },
+    "locality": { "$ref": "#/$defs/LocalitySpec" },
+    "node": { "$ref": "#/$defs/NodeSpec" },
+    "layer": { "$ref": "#/$defs/LayerSpec" },
+    "superlayer": { "$ref": "#/$defs/SuperLayerSpec" },
+    "layer_packet": { "$ref": "#/$defs/LayerPacket" },
+    "layer_execution_result": { "$ref": "#/$defs/LayerExecutionResult" },
+    "mmr_potential_state": { "$ref": "#/$defs/PotentialState" },
+    "mmr_constraint_set": { "$ref": "#/$defs/ConstraintSet" },
+    "mmr_materialization_request": { "$ref": "#/$defs/MaterializationRequest" },
+    "mmr_materialization_plan": { "$ref": "#/$defs/MaterializationPlan" },
+    "mmr_materialized_slice": { "$ref": "#/$defs/MaterializedSlice" },
+    "mmr_cost_trace": { "$ref": "#/$defs/CostTrace" },
+    "mmr_proof": { "$ref": "#/$defs/MMRProof" }
+  },
+  "$defs": {
+    "Iso8601": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "ResourceBudget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tokens", "cpu", "gpu", "vram", "time_seconds"],
+      "properties": {
+        "tokens": { "type": ["integer", "null"], "minimum": 0 },
+        "cpu": { "type": ["string", "null"] },
+        "gpu": { "type": ["string", "null"] },
+        "vram": { "type": ["string", "null"] },
+        "time_seconds": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    },
+    "MMRCostEstimate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tokens", "cpu", "ram_mb", "vram_mb", "time_ms", "energy_class"],
+      "properties": {
+        "tokens": { "type": ["integer", "null"], "minimum": 0 },
+        "cpu": { "type": ["string", "null"] },
+        "ram_mb": { "type": ["integer", "null"], "minimum": 0 },
+        "vram_mb": { "type": ["integer", "null"], "minimum": 0 },
+        "time_ms": { "type": ["integer", "null"], "minimum": 0 },
+        "energy_class": { "enum": ["low", "medium", "high", "unknown"] }
+      }
+    },
+    "PotentialState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "kind",
+        "logical_scope",
+        "compressed_representation",
+        "known_constraints",
+        "dependencies",
+        "resolver",
+        "confidence",
+        "materialization_cost_estimate",
+        "invalidators",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "kind": { "enum": ["data", "plan", "simulation", "memory", "code", "agent_state", "graph", "document", "unknown"] },
+        "logical_scope": { "type": "string" },
+        "compressed_representation": { "type": "object" },
+        "known_constraints": { "type": "array", "items": { "type": "string" } },
+        "dependencies": { "type": "array", "items": { "type": "string" } },
+        "resolver": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "materialization_cost_estimate": { "$ref": "#/$defs/MMRCostEstimate" },
+        "invalidators": { "type": "array", "items": { "type": "string" } },
+        "status": { "enum": ["potential", "partially_materialized", "materialized", "stale", "invalid", "archived"] },
+        "created_at": { "$ref": "#/$defs/Iso8601" },
+        "updated_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "ConstraintSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source",
+        "objective",
+        "observed_inputs",
+        "required_outputs",
+        "quality_level",
+        "precision_policy",
+        "max_cost",
+        "risk_level",
+        "verification_required",
+        "created_at"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "source": { "type": "string" },
+        "objective": { "type": "string" },
+        "observed_inputs": { "type": "array", "items": { "type": "string" } },
+        "required_outputs": { "type": "array", "items": { "type": "string" } },
+        "quality_level": { "enum": ["rough", "standard", "verified", "strict"] },
+        "precision_policy": { "enum": ["exact", "bounded_error", "approximate", "best_effort"] },
+        "max_cost": { "$ref": "#/$defs/MMRCostEstimate" },
+        "risk_level": { "enum": ["low", "medium", "high", "critical"] },
+        "verification_required": { "type": "boolean" },
+        "created_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "MaterializationRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "mission_id",
+        "potential_state_id",
+        "constraint_set_id",
+        "requested_slice",
+        "reason",
+        "priority",
+        "deadline_ms",
+        "allowed_approximation",
+        "required_gates",
+        "created_at"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "mission_id": { "type": "string" },
+        "potential_state_id": { "type": "string" },
+        "constraint_set_id": { "type": "string" },
+        "requested_slice": { "type": "object" },
+        "reason": { "type": "string" },
+        "priority": { "enum": ["low", "normal", "high", "critical"] },
+        "deadline_ms": { "type": ["integer", "null"], "minimum": 0 },
+        "allowed_approximation": { "type": "boolean" },
+        "required_gates": { "type": "array", "items": { "type": "string" } },
+        "created_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "MaterializationPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "request_id",
+        "strategy",
+        "steps",
+        "expected_outputs",
+        "expected_cost",
+        "fallback_strategy",
+        "risk_notes",
+        "status",
+        "created_at"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "request_id": { "type": "string" },
+        "strategy": { "enum": ["exact", "delta", "cache_reuse", "lazy", "sampling", "summary", "symbolic", "model_call", "hybrid"] },
+        "steps": { "type": "array", "items": { "type": "object" } },
+        "expected_outputs": { "type": "array", "items": { "type": "string" } },
+        "expected_cost": { "$ref": "#/$defs/MMRCostEstimate" },
+        "fallback_strategy": { "type": ["string", "null"] },
+        "risk_notes": { "type": "array", "items": { "type": "string" } },
+        "status": { "enum": ["proposed", "approved", "running", "blocked", "done", "failed"] },
+        "created_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "MaterializedSlice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "plan_id",
+        "source_potential_state_id",
+        "content",
+        "coverage",
+        "approximation",
+        "confidence",
+        "valid_until",
+        "invalidators",
+        "created_at"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "plan_id": { "type": "string" },
+        "source_potential_state_id": { "type": "string" },
+        "content": { "type": "object" },
+        "coverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requested", "produced", "missing"],
+          "properties": {
+            "requested": { "type": "string" },
+            "produced": { "type": "string" },
+            "missing": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "approximation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["used", "method", "expected_error"],
+          "properties": {
+            "used": { "type": "boolean" },
+            "method": { "type": ["string", "null"] },
+            "expected_error": { "type": ["string", "null"] }
+          }
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "valid_until": { "type": ["string", "null"] },
+        "invalidators": { "type": "array", "items": { "type": "string" } },
+        "created_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "CostTrace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "mission_id",
+        "plan_id",
+        "naive_cost_estimate",
+        "actual_cost_estimate",
+        "control_overhead_estimate",
+        "saved_work_estimate",
+        "metrics",
+        "result",
+        "created_at"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "mission_id": { "type": "string" },
+        "plan_id": { "type": ["string", "null"] },
+        "naive_cost_estimate": { "type": "object" },
+        "actual_cost_estimate": { "type": "object" },
+        "control_overhead_estimate": { "type": "object" },
+        "saved_work_estimate": { "type": "object" },
+        "metrics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["latency_ms", "tokens_used", "cache_hits", "materialized_units", "avoided_units", "quality_score"],
+          "properties": {
+            "latency_ms": { "type": ["integer", "null"], "minimum": 0 },
+            "tokens_used": { "type": ["integer", "null"], "minimum": 0 },
+            "cache_hits": { "type": "integer", "minimum": 0 },
+            "materialized_units": { "type": "integer", "minimum": 0 },
+            "avoided_units": { "type": "integer", "minimum": 0 },
+            "quality_score": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }
+          }
+        },
+        "result": { "enum": ["better", "neutral", "worse", "unknown"] },
+        "created_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "MMRProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "target_slice_id",
+        "claims",
+        "constraints_satisfied",
+        "constraints_not_satisfied",
+        "sources",
+        "tests",
+        "cost_trace_id",
+        "confidence",
+        "status",
+        "created_at"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "target_slice_id": { "type": "string" },
+        "claims": { "type": "array", "items": { "type": "string" } },
+        "constraints_satisfied": { "type": "array", "items": { "type": "string" } },
+        "constraints_not_satisfied": { "type": "array", "items": { "type": "string" } },
+        "sources": { "type": "array", "items": { "type": "string" } },
+        "tests": { "type": "array", "items": { "type": "string" } },
+        "cost_trace_id": { "type": ["string", "null"] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "status": { "enum": ["pending", "passed", "warn", "failed"] },
+        "created_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "Mission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "intent_raw",
+        "objective",
+        "constraints",
+        "expected_outputs",
+        "risk_level",
+        "autonomy_level",
+        "depth",
+        "resource_budget",
+        "verification_required",
+        "status",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "intent_raw": { "type": "string" },
+        "objective": { "type": "string" },
+        "constraints": { "type": "array", "items": { "type": "string" } },
+        "expected_outputs": { "type": "array", "items": { "type": "string" } },
+        "risk_level": { "enum": ["low", "medium", "high", "critical"] },
+        "autonomy_level": { "enum": ["suggestion", "local_execution", "verified_execution", "controlled_autonomy"] },
+        "depth": { "enum": ["quick", "standard", "deep", "abyssal"] },
+        "resource_budget": { "$ref": "#/$defs/ResourceBudget" },
+        "verification_required": { "type": "boolean" },
+        "status": { "enum": ["draft", "planned", "running", "blocked", "done", "archived"] },
+        "created_at": { "$ref": "#/$defs/Iso8601" },
+        "updated_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "AutonomousMissionSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "parent_mission_id",
+        "title",
+        "objective",
+        "constraints",
+        "candidate_agents",
+        "required_gates",
+        "budget",
+        "status",
+        "stop_conditions",
+        "resume_conditions",
+        "expected_proof",
+        "max_cycles",
+        "current_cycle",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "parent_mission_id": { "type": "string" },
+        "title": { "type": "string" },
+        "objective": { "type": "string" },
+        "constraints": { "type": "array", "items": { "type": "string" } },
+        "candidate_agents": { "type": "array", "items": { "type": "string" } },
+        "required_gates": { "type": "array", "items": { "type": "string" } },
+        "budget": { "type": "object" },
+        "status": { "enum": ["draft", "ready", "running", "paused", "blocked", "done", "archived"] },
+        "stop_conditions": { "type": "array", "items": { "type": "string" } },
+        "resume_conditions": { "type": "array", "items": { "type": "string" } },
+        "expected_proof": { "type": "object" },
+        "max_cycles": { "type": "integer", "minimum": 1 },
+        "current_cycle": { "type": "integer", "minimum": 0 },
+        "created_at": { "$ref": "#/$defs/Iso8601" },
+        "updated_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "mission_id",
+        "source",
+        "destination",
+        "bus",
+        "type",
+        "payload",
+        "priority",
+        "confidence",
+        "cost_estimate",
+        "verification_status",
+        "trace",
+        "created_at"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "mission_id": { "type": "string" },
+        "source": { "type": "string" },
+        "destination": { "type": "string" },
+        "bus": { "type": "string" },
+        "type": { "enum": ["observation", "task", "claim", "artifact", "decision", "alert", "command"] },
+        "payload": { "type": "object" },
+        "priority": { "enum": ["low", "normal", "high", "critical"] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "cost_estimate": { "type": "object" },
+        "verification_status": { "enum": ["unverified", "pending", "verified", "rejected"] },
+        "trace": { "type": "array", "items": { "type": "string" } },
+        "created_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "OperatorSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "type",
+        "locality",
+        "objective",
+        "inputs",
+        "outputs",
+        "allowed_buses",
+        "required_layers",
+        "observer_superlayers",
+        "strategies",
+        "degrees",
+        "budget",
+        "permissions",
+        "compatible_model_roles",
+        "compatible_tools",
+        "metrics",
+        "activation_conditions",
+        "stop_conditions",
+        "version",
+        "status"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "enum": ["routing", "planning", "memory", "truth", "compression", "abstraction", "reflection", "scheduler", "code"] },
+        "locality": { "type": "string" },
+        "objective": { "type": "string" },
+        "inputs": { "type": "array", "items": { "type": "string" } },
+        "outputs": { "type": "array", "items": { "type": "string" } },
+        "allowed_buses": { "type": "array", "items": { "type": "string" } },
+        "required_layers": { "type": "array", "items": { "type": "string" } },
+        "observer_superlayers": { "type": "array", "items": { "type": "string" } },
+        "strategies": { "type": "array", "items": { "type": "object" } },
+        "degrees": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["depth", "precision", "cost", "autonomy"],
+          "properties": {
+            "depth": { "type": "array", "items": { "type": "string" } },
+            "precision": { "type": "array", "items": { "type": "string" } },
+            "cost": { "type": "array", "items": { "type": "string" } },
+            "autonomy": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "budget": { "type": "object" },
+        "permissions": { "type": "array", "items": { "type": "string" } },
+        "compatible_model_roles": { "type": "array", "items": { "type": "string" } },
+        "compatible_tools": { "type": "array", "items": { "type": "string" } },
+        "metrics": { "type": "array", "items": { "type": "string" } },
+        "activation_conditions": { "type": "array", "items": { "type": "string" } },
+        "stop_conditions": { "type": "array", "items": { "type": "string" } },
+        "version": { "type": "string" },
+        "status": { "enum": ["experimental", "active", "deprecated", "archived"] }
+      }
+    },
+    "KnowledgeTile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "summary",
+        "source_refs",
+        "tags",
+        "claims",
+        "relations",
+        "verification_status",
+        "usefulness_score",
+        "recency_score",
+        "compression_level",
+        "hash",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "summary": { "type": "string" },
+        "source_refs": { "type": "array", "items": { "type": "string" } },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "claims": { "type": "array", "items": { "type": "string" } },
+        "relations": { "type": "array", "items": { "type": "string" } },
+        "verification_status": { "enum": ["unverified", "partial", "verified", "rejected"] },
+        "usefulness_score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "recency_score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "compression_level": { "enum": ["raw", "summary", "concept", "meta", "structure"] },
+        "hash": { "type": ["string", "null"] },
+        "created_at": { "$ref": "#/$defs/Iso8601" },
+        "updated_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "ProofCapsule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "target_artifact", "claims", "sources", "invariants", "tests", "risks", "confidence", "status", "review_notes", "memory_check", "created_at"],
+      "properties": {
+        "id": { "type": "string" },
+        "target_artifact": { "type": "string" },
+        "claims": { "type": "array", "items": { "type": "string" } },
+        "sources": { "type": "array", "items": { "type": "string" } },
+        "invariants": { "type": "array", "items": { "type": "string" } },
+        "tests": { "type": "array", "items": { "type": "string" } },
+        "risks": { "type": "array", "items": { "type": "string" } },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "status": { "enum": ["pending", "passed", "warn", "failed"] },
+        "review_notes": { "type": "string" },
+        "memory_check": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "confirmations", "contradictions"],
+          "properties": {
+            "status": { "enum": ["passed", "failed", "unverified"] },
+            "confirmations": {
+              "type": "array",
+              "items": { "type": "object" }
+            },
+            "contradictions": {
+              "type": "array",
+              "items": { "type": "object" }
+            }
+          }
+        },
+        "created_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "PatchLedger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "mission_id", "change_summary", "files_touched", "reason", "before_state", "after_state", "verification", "rollback_plan", "status", "created_at"],
+      "properties": {
+        "id": { "type": "string" },
+        "mission_id": { "type": "string" },
+        "change_summary": { "type": "string" },
+        "files_touched": { "type": "array", "items": { "type": "string" } },
+        "reason": { "type": "string" },
+        "before_state": { "type": ["string", "null"] },
+        "after_state": { "type": ["string", "null"] },
+        "verification": { "type": "array", "items": { "type": "string" } },
+        "rollback_plan": { "type": "string" },
+        "status": { "enum": ["proposed", "applied", "reverted", "rejected"] },
+        "created_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "ModelRole": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "candidate_models", "selection_reason", "availability_checked_at", "fallback_role", "cost_class", "local_available", "remote_available", "notes"],
+      "properties": {
+        "role": { "enum": ["planner_deep", "fast_router_or_summarizer", "safety", "retrieval_rerank", "ocr_document", "code", "embedding"] },
+        "candidate_models": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "selection_reason": { "type": "string" },
+        "availability_checked_at": { "type": ["string", "null"] },
+        "fallback_role": { "type": ["string", "null"] },
+        "cost_class": { "enum": ["low", "medium", "high", "unknown"] },
+        "local_available": { "type": "boolean" },
+        "remote_available": { "type": "boolean" },
+        "notes": { "type": "string" }
+      }
+    },
+    "AgentSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "role",
+        "locality",
+        "objective",
+        "inputs",
+        "outputs",
+        "allowed_buses",
+        "required_gates",
+        "permissions",
+        "budget",
+        "compatible_model_roles",
+        "compatible_tools",
+        "memory_policy",
+        "rollback_policy",
+        "tests",
+        "metrics",
+        "activation_conditions",
+        "stop_conditions",
+        "version",
+        "status"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "enum": ["planner", "coder", "verifier", "researcher", "memory_curator", "safety", "orchestrator", "documenter"] },
+        "locality": { "type": "string" },
+        "objective": { "type": "string" },
+        "inputs": { "type": "array", "items": { "type": "string" } },
+        "outputs": { "type": "array", "items": { "type": "string" } },
+        "allowed_buses": { "type": "array", "items": { "type": "string" } },
+        "required_gates": { "type": "array", "items": { "type": "string" } },
+        "permissions": { "type": "array", "items": { "type": "string" } },
+        "budget": { "type": "object" },
+        "compatible_model_roles": { "type": "array", "items": { "type": "string" } },
+        "compatible_tools": { "type": "array", "items": { "type": "string" } },
+        "memory_policy": { "type": "object" },
+        "rollback_policy": { "type": "object" },
+        "tests": { "type": "array", "items": { "type": "string" } },
+        "metrics": { "type": "array", "items": { "type": "string" } },
+        "activation_conditions": { "type": "array", "items": { "type": "string" } },
+        "stop_conditions": { "type": "array", "items": { "type": "string" } },
+        "version": { "type": "string" },
+        "status": { "enum": ["experimental", "active", "paused", "deprecated", "archived"] }
+      }
+    },
+    "AgentDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "mission_id",
+        "selected_agent_id",
+        "selected_agent_name",
+        "selected_agent_role",
+        "status",
+        "reason",
+        "required_gates",
+        "gate_status",
+        "proposed_action",
+        "permissions",
+        "tests",
+        "rollback_policy",
+        "created_at"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "mission_id": { "type": "string" },
+        "selected_agent_id": { "type": "string" },
+        "selected_agent_name": { "type": "string" },
+        "selected_agent_role": { "enum": ["planner", "coder", "verifier", "researcher", "memory_curator", "safety", "orchestrator", "documenter"] },
+        "status": { "enum": ["proposed", "blocked", "skipped"] },
+        "reason": { "type": "string" },
+        "required_gates": { "type": "array", "items": { "type": "string" } },
+        "gate_status": { "type": "object" },
+        "proposed_action": { "type": "object" },
+        "permissions": { "type": "array", "items": { "type": "string" } },
+        "tests": { "type": "array", "items": { "type": "string" } },
+        "rollback_policy": { "type": "object" },
+        "created_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "ForgeTask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "locality", "operator", "verification", "status", "source_refs", "artifact_targets"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "locality": { "type": "string" },
+        "operator": { "type": "string" },
+        "verification": { "type": "string" },
+        "status": { "enum": ["pending", "running", "blocked", "done", "failed"] },
+        "source_refs": { "type": "array", "items": { "type": "string" } },
+        "artifact_targets": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "BusSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "accepted_message_types", "allowed_sources", "allowed_destinations", "min_confidence", "permissions", "logging_required"],
+      "properties": {
+        "id": { "type": "string" },
+        "accepted_message_types": { "type": "array", "items": { "type": "string" } },
+        "allowed_sources": { "type": "array", "items": { "type": "string" } },
+        "allowed_destinations": { "type": "array", "items": { "type": "string" } },
+        "min_confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "permissions": { "type": "array", "items": { "type": "string" } },
+        "logging_required": { "type": "boolean" }
+      }
+    },
+    "LocalitySpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "objective", "inputs", "outputs", "allowed_buses", "layers", "budget", "metrics"],
+      "properties": {
+        "id": { "type": "string" },
+        "objective": { "type": "string" },
+        "inputs": { "type": "array", "items": { "type": "string" } },
+        "outputs": { "type": "array", "items": { "type": "string" } },
+        "allowed_buses": { "type": "array", "items": { "type": "string" } },
+        "layers": { "type": "array", "items": { "type": "string" } },
+        "budget": { "type": "object" },
+        "metrics": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "NodeSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "locality", "purpose", "inputs", "outputs", "operators", "layers", "permissions"],
+      "properties": {
+        "id": { "type": "string" },
+        "locality": { "type": "string" },
+        "purpose": { "type": "string" },
+        "inputs": { "type": "array", "items": { "type": "string" } },
+        "outputs": { "type": "array", "items": { "type": "string" } },
+        "operators": { "type": "array", "items": { "type": "string" } },
+        "layers": { "type": "array", "items": { "type": "string" } },
+        "permissions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "LayerSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "scope", "purpose", "activation_conditions", "effects", "priority"],
+      "properties": {
+        "id": { "type": "string" },
+        "scope": { "enum": ["global", "local", "node", "bus", "operator"] },
+        "purpose": { "type": "string" },
+        "activation_conditions": { "type": "array", "items": { "type": "string" } },
+        "effects": { "type": "array", "items": { "type": "string" } },
+        "priority": { "enum": ["low", "normal", "high", "critical"] }
+      }
+    },
+    "SuperLayerSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "observes", "purpose", "allowed_actions", "requires_verification", "requires_rollback"],
+      "properties": {
+        "id": { "type": "string" },
+        "observes": { "type": "array", "items": { "type": "string" } },
+        "purpose": { "type": "string" },
+        "allowed_actions": { "type": "array", "items": { "type": "string" } },
+        "requires_verification": { "type": "boolean" },
+        "requires_rollback": { "type": "boolean" }
+      }
+    },
+    "LayerPacket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "mission_id", "source_layer", "target_layer", "action", "risk", "mode", "priority", "payload", "permissions", "approved", "reason", "created_at"],
+      "properties": {
+        "id": { "type": "string" },
+        "mission_id": { "type": "string" },
+        "source_layer": { "type": "string" },
+        "target_layer": { "type": "string" },
+        "action": { "enum": ["READ_CPU", "OPTIMIZE_MEMORY", "RUN_PYTHON_SAFE", "WRITE_BIOS", "UNKNOWN"] },
+        "risk": { "enum": ["low", "medium", "high", "critical", "unknown"] },
+        "mode": { "enum": ["safe", "simulation", "blocked"] },
+        "priority": { "type": "integer", "minimum": 0, "maximum": 10 },
+        "payload": { "type": "object" },
+        "permissions": { "type": "array", "items": { "type": "string" } },
+        "approved": { "type": "boolean" },
+        "reason": { "type": "string" },
+        "created_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    },
+    "LayerExecutionResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["packet_id", "status", "backend", "metrics", "output", "risk_triggered", "created_at"],
+      "properties": {
+        "packet_id": { "type": "string" },
+        "status": { "enum": ["done", "blocked", "error"] },
+        "backend": { "type": "string" },
+        "metrics": { "type": "object" },
+        "output": { "type": "object" },
+        "risk_triggered": { "type": "boolean" },
+        "created_at": { "$ref": "#/$defs/Iso8601" }
+      }
+    }
+  }
+}

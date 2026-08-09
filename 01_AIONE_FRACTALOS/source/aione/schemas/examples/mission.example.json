@@ -1,0 +1,31 @@
+{
+  "id": "MISSION-0001",
+  "title": "Construire le noyau AIONE",
+  "intent_raw": "Creer une forge qui structure et code AIONE par cycles verifies.",
+  "objective": "Produire un noyau post-LLM autonome supervise.",
+  "constraints": [
+    "local-first",
+    "verification avant mutation critique",
+    "sobriete ressource"
+  ],
+  "expected_outputs": [
+    "schemas",
+    "plans",
+    "tests",
+    "operations pack"
+  ],
+  "risk_level": "medium",
+  "autonomy_level": "verified_execution",
+  "depth": "deep",
+  "resource_budget": {
+    "tokens": null,
+    "cpu": "normal",
+    "gpu": null,
+    "vram": null,
+    "time_seconds": null
+  },
+  "verification_required": true,
+  "status": "planned",
+  "created_at": "2026-05-24T00:00:00Z",
+  "updated_at": "2026-05-24T00:00:00Z"
+}

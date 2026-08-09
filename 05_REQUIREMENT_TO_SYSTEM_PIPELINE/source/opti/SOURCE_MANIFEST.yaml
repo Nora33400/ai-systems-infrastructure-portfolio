@@ -1,0 +1,30 @@
+schema_version: 1
+manifest_kind: curated_public_slice
+corpus_complete: false
+sanitized: true
+sources:
+  - id: SRC-0005
+    path: sources/SRC-0005-organum-runtime.md
+    sha256: 8a99ccf66f095a2e1a578c24584c23199062b260ba8875f2442f9d64e68fcc9d
+    role: architecture_proposal
+    limitation: Proposed runtime/module architecture; not proof of implementation.
+  - id: SRC-0007
+    path: sources/SRC-0007-autonomy-implementation-directive.md
+    sha256: 42f4c6ddbbaa70979b8a207b5de821e88d6790c5a8263d7045542061cd9d9c53
+    role: implementation_requirement
+    limitation: Public copy replaces private workspace paths with neutral placeholders.
+  - id: SRC-0008
+    path: sources/SRC-0008-cognitive-vertical-cycle-directive.md
+    sha256: 2700d09ae937d2e80a20f184f5e530d2189dd120f519f1fffcfcb5d1f96b7545
+    role: cognitive_vertical_requirement
+    limitation: Acceptance criteria are project-defined, not independent validation.
+  - id: SRC-0012
+    path: sources/SRC-0012-autonomous-planning-mode-directive.md
+    sha256: 3f78ad8fd180b5a700a6147314d5dbd4ec869b1bd9882f7d0b61c5fbdefe3cef
+    role: planning_and_safety_requirement
+    limitation: External integrations described by the requirement are not claimed active.
+  - id: SRC-0016
+    path: sources/SRC-0016-owner-operational-activation.md
+    sha256: 2010343254e3e617d4a59f79b9b91b4955ca38e4bc8f8b91f64e05d221166e36
+    role: bounded_local_authority_record
+    limitation: Private path and account context is sanitized; no external action is demonstrated.

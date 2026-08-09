@@ -1,0 +1,5 @@
+All production changes must be reviewed.
+Secrets shall not be committed.
+Incident response is mandatory within 24 hours.
+Unsafe scripts are forbidden in CI.
+Access logs must be retained for 90 days.

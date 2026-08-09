@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gpt-cognitive-constitution.local/schemas/amendment-protocol.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "protocol_id", "constitution_version", "status", "change_levels", "required_fields", "workflow", "emergency_invariants", "version_policy", "source_refs"],
+  "properties": {
+    "schema_version": {"const": 1}, "protocol_id": {"type": "string"}, "constitution_version": {"const": "0.1.0"}, "status": {"const": "FORMALIZED"},
+    "change_levels": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "object", "required": ["id", "compatibility", "examples"], "properties": {"id": {"enum": ["PATCH", "MINOR", "MAJOR", "EMERGENCY"]}}}},
+    "required_fields": {"type": "array", "minItems": 12, "uniqueItems": true}, "workflow": {"type": "array", "minItems": 5, "items": {"type": "object", "required": ["order", "state", "requirement"]}},
+    "emergency_invariants": {"type": "array", "minItems": 3, "items": {"type": "string"}}, "version_policy": {"type": "object", "required": ["PATCH", "MINOR", "MAJOR", "EMERGENCY"]}, "source_refs": {"type": "array", "minItems": 1}
+  }
+}

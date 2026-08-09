@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gpt-cognitive-constitution.local/schemas/module-contract.schema.json",
+  "title": "Module contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "name", "classification", "status", "purpose", "boundaries", "inputs", "outputs", "dependencies", "interactions", "state_model", "maturity", "source_refs", "open_questions"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "name": {"type": "string", "minLength": 1},
+    "classification": {"enum": ["enabling_module", "core_candidate", "runtime_candidate", "module_candidate", "module_or_protocol_candidate"]},
+    "status": {"enum": ["MENTIONED", "DEFINED", "PARTIALLY_DEFINED", "HYPOTHETICAL", "REQUIRES_RESEARCH", "FORMALIZED", "SIMULATED", "PROTOTYPED", "TESTED", "STABILIZED"]},
+    "purpose": {"$ref": "#/$defs/claimOrUnknown"},
+    "boundaries": {"type": "object", "required": ["must_do", "must_not_do"], "properties": {"must_do": {"type": "array", "items": {"$ref": "#/$defs/claimOrUnknown"}}, "must_not_do": {"type": "array", "items": {"$ref": "#/$defs/claimOrUnknown"}}}, "additionalProperties": false},
+    "inputs": {"type": "array", "items": {"$ref": "#/$defs/namedItem"}},
+    "outputs": {"type": "array", "items": {"$ref": "#/$defs/namedItem"}},
+    "dependencies": {"type": "array", "items": {"$ref": "#/$defs/relation"}},
+    "interactions": {"type": "array", "items": {"$ref": "#/$defs/relation"}},
+    "state_model": {"type": "object", "required": ["status", "states"], "properties": {"status": {"enum": ["UNKNOWN", "PARTIAL", "DEFINED"]}, "states": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": false},
+    "maturity": {"$ref": "#/$defs/maturity"},
+    "tested_slices": {"type": "array", "items": {"$ref": "#/$defs/testedSlice"}},
+    "source_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^SRC-[A-Z0-9-]+(?::L[0-9]+(?:-L[0-9]+)?)?$"}},
+    "open_questions": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "claimOrUnknown": {"type": "object", "required": ["status", "text", "source_refs"], "properties": {"status": {"enum": ["KNOWN", "PARTIAL", "UNKNOWN", "PROPOSED", "EXAMPLE_ONLY"]}, "text": {"type": "string"}, "source_refs": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": false},
+    "namedItem": {"type": "object", "required": ["name", "status", "source_refs"], "properties": {"name": {"type": "string"}, "status": {"enum": ["KNOWN", "PARTIAL", "UNKNOWN", "PROPOSED", "EXAMPLE_ONLY"]}, "source_refs": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": false},
+    "relation": {"type": "object", "required": ["target", "relation", "certainty", "source_refs"], "properties": {"target": {"type": "string"}, "relation": {"type": "string"}, "certainty": {"enum": ["EXPLICIT", "PROPOSED", "EXAMPLE_ONLY", "INFERRED", "UNKNOWN"]}, "source_refs": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": false},
+    "testedSlice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "source_refs"],
+      "properties": {
+        "id": {"type": "string"},
+        "status": {"enum": ["TESTED"]},
+        "scope": {"type": "string"},
+        "implementation": {"type": "array", "items": {"type": "string"}},
+        "execution_id": {"type": "string"},
+        "diagnostic_id": {"type": "string"},
+        "receipt_id": {"type": "string"},
+        "report_id": {"type": "string"},
+        "source_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^SRC-[A-Z0-9-]+(?::L[0-9]+(?:-L[0-9]+)?)?$"}}
+      }
+    },
+    "percentage": {"type": "integer", "minimum": 0, "maximum": 100},
+    "maturity": {"type": "object", "required": ["concept", "documentation", "architecture", "api", "implementation", "tests", "dependencies", "ready_for_next_phase"], "properties": {"concept": {"$ref": "#/$defs/percentage"}, "documentation": {"$ref": "#/$defs/percentage"}, "architecture": {"$ref": "#/$defs/percentage"}, "api": {"$ref": "#/$defs/percentage"}, "implementation": {"$ref": "#/$defs/percentage"}, "tests": {"$ref": "#/$defs/percentage"}, "dependencies": {"$ref": "#/$defs/percentage"}, "ready_for_next_phase": {"type": "boolean"}}, "additionalProperties": false}
+  }
+}

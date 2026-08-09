@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/atom.schema.json",
+  "title": "Faithful source atom",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "atom_id", "source_id", "content", "source_position", "content_hash", "atom_type", "epistemic_status", "created_at", "valid"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "atom_id": {"type": "string", "pattern": "^ATM-[A-F0-9]{16}$"},
+    "source_id": {"type": "string", "pattern": "^SRC-[0-9]{4}$"},
+    "content": {"type": "string", "minLength": 1},
+    "source_position": {
+      "type": "object", "additionalProperties": false,
+      "required": ["start_line", "end_line"],
+      "properties": {"start_line": {"type": "integer", "minimum": 1}, "end_line": {"type": "integer", "minimum": 1}}
+    },
+    "content_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "atom_type": {"enum": ["heading", "paragraph", "list_item", "blockquote", "code_block", "separator", "isolated_line"]},
+    "epistemic_status": {"const": "observed"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "valid": {"type": "boolean"}
+  }
+}

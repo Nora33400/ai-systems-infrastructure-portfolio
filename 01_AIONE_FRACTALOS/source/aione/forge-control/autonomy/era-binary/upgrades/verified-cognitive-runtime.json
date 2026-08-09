@@ -1,0 +1,22 @@
+{
+  "identity": {"id": "aione.era.verified-cognitive-runtime", "version": "0.1.0"},
+  "objective": "Transformer des objectifs en artefacts cognitifs structurés, vérifiés et non exécutables par défaut.",
+  "targetModels": ["ollama-compatible", "gguf-compatible", "openai-compatible-local"],
+  "requiredCapabilities": ["model-router", "resource-governor", "evidence-ledger"],
+  "addedCapabilities": ["hci-parser", "typed-cir", "polybinary-morphologies", "contract-gate"],
+  "modifiedUsage": ["text-to-structured-state", "candidate-to-verification-artifact", "objective-to-action-graph"],
+  "functionalScope": ["PROJECT", "TASK", "MODEL", "SANDBOX", "SIMULATION_ONLY"],
+  "activationConditions": [{"type": "explicit-program"}, {"type": "signed-model-benchmark"}, {"type": "resource-envelope"}],
+  "deactivationConditions": [{"type": "thermal-limit"}, {"type": "contract-failure"}, {"type": "permission-denial"}],
+  "contextRequirements": {"compiled": true, "provenanceRequired": true, "maximumInstructions": 256},
+  "memoryRequirements": {"active": "RAM", "evidence": "NVME", "promotion": "verified-only"},
+  "executionBackend": ["python-reference", "cpp-reference-planned", "ollama-adapter-planned"],
+  "securityPolicy": {"network": "DENY", "filesystem": "SIMULATION_ONLY", "processExecution": "DENY", "permissionExpansion": "DENY"},
+  "verificationStrategy": ["schema", "instruction-registry", "resource-budget", "external-tests", "hash-chain"],
+  "resourceBudget": {"cpuThreadsMax": 4, "ramBytesMax": 536870912, "vramBytesMax": 2147483648, "wallClockMsMax": 30000},
+  "compatibility": {"requires": ["python>=3.11"], "optional": ["nvidia-smi", "ollama"], "newDependency": false},
+  "compositionRules": {"order": ["representation", "context", "model-route", "hypothesis", "verification", "selection"], "rootPolicyImmutable": true},
+  "failureModes": [{"id": "OUT_OF_VRAM", "effect": "degrade-to-cpu"}, {"id": "UNVERIFIED_OUTPUT", "effect": "quarantine"}, {"id": "TOOLCHAIN_MISSING", "effect": "reference-backend-only"}],
+  "recoveryStrategy": ["reduce-branches", "migrate-to-cpu", "retain-evidence", "stop-without-mutation"],
+  "evaluationProtocol": {"sameTaskCorpus": true, "minimumRepeats": 3, "separateSemanticAndContractScores": true}
+}

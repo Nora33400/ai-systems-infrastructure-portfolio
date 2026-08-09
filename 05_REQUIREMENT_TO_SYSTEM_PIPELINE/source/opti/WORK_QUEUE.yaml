@@ -1,0 +1,5 @@
+schema_version: 1
+queue_kind: curated_public_slice
+tasks: []
+note: Runtime work queues and personal planning history are intentionally excluded.
+

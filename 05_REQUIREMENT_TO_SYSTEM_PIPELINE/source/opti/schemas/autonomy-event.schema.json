@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/autonomy-event.schema.json",
+  "type": "object",
+  "required": ["id","timestamp","type","level","data"],
+  "properties": {
+    "id":{"type":"string"},"timestamp":{"type":"string"},"type":{"type":"string"},"level":{"enum":["debug","info","warn","error"]},"task_id":{"type":"string"},"data":{"type":"object"}
+  },
+  "additionalProperties": false
+}

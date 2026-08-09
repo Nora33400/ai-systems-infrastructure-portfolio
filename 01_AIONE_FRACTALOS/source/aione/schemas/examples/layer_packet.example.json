@@ -1,0 +1,19 @@
+{
+  "id": "LP-0001",
+  "mission_id": "MISSION-0001",
+  "source_layer": "IntentLayer",
+  "target_layer": "ExecLayer",
+  "action": "READ_CPU",
+  "risk": "low",
+  "mode": "simulation",
+  "priority": 3,
+  "payload": {
+    "command": "lis l'etat CPU"
+  },
+  "permissions": [
+    "read_system_state"
+  ],
+  "approved": true,
+  "reason": "Low-risk read-only action routed to simulation backend.",
+  "created_at": "2026-05-24T00:00:00Z"
+}

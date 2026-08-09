@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "fixture_id": "HIST-COG-EXE-0001",
+  "captured_at": "2026-07-17T14:32:05.285Z",
+  "source_refs": ["SRC-0001:L184-L192", "SRC-0001:L275-L286", "SRC-0008", "SRC-0009:L442-L473", "SRC-0009:L553-L590"],
+  "canonical_database": "${LOCALAPPDATA}/AIONE/opti-runtime/state/autonomy.db",
+  "database_sha256_at_capture": "4736a372b6738b57653375e3ecc89f5d494bbd6de2a586a492eb8e0fe3e16515",
+  "execution": {
+    "execution_id": "COG-EXE-242CFBBC-9F9E-49F6-8D27-EBBDA67A3AF0",
+    "source_id": "SRC-0001",
+    "question": "Quel rôle Cohérental doit-il réellement jouer ?",
+    "stage": "completed",
+    "status": "completed",
+    "selection_id": "SEL-E7AB7B9F36A40B92",
+    "diagnostic_id": "DIA-9C93B9AA6E085F11",
+    "answer_id": "ANS-4040820616613E25",
+    "version": 2,
+    "atom_count": 139,
+    "tile_count": 16,
+    "relation_count": 325
+  },
+  "selection": {
+    "selection_id": "SEL-E7AB7B9F36A40B92",
+    "selected_tiles": ["TILE-96DB81480963913F"],
+    "semantic_method": "unavailable"
+  },
+  "diagnostic": {
+    "diagnostic_id": "DIA-9C93B9AA6E085F11",
+    "single_score_rejected": true,
+    "compatible_claims": 5,
+    "tensions": 0,
+    "contradictions": 0,
+    "missing_dependencies": 2,
+    "ambiguous_terms": 2,
+    "unsupported_inferences": 0
+  },
+  "answer": {
+    "answer_id": "ANS-4040820616613E25",
+    "mapped_constitutional_status": "UNKNOWN",
+    "unknown_assertion": "La définition opérationnelle complète de Cohérental demeure inconnue dans cette source.",
+    "used_tiles": ["TILE-96DB81480963913F"],
+    "used_atoms": ["ATM-B54EB87962C57E96", "ATM-129D2A05D115D566"],
+    "explicit_claims": ["CLM-BA162C55DC8FC8DC", "CLM-CF03FA44EF3DF7B1"],
+    "support_check_passed": true
+  },
+  "model_run": {
+    "model_run_id": "MODRUN-CDEB1C75D03AC129",
+    "model": "qwen2.5-coder:14b",
+    "constitutional_status": "PROPOSED",
+    "valid_schema_and_atom_bounds": true
+  },
+  "logical_hashes": {
+    "execution": "sha256:2b987f805635bb00cfc1468e8d98826663a2cfa89a17884856d9dabcf46d5e13",
+    "selection": "sha256:729f4527a444b455da44ba45babb64981f8e6c4ba63cddd5cc802ed4680fc716",
+    "diagnostic": "sha256:2eacf8abf80da0f34e7845e88d2be62cf7ad202180951649c9bec7a693cdd3f1",
+    "answer": "sha256:d14658ac080c4e38e63403468805e245f98eb4046247554bd0ae46f2c07f3a16",
+    "receipts": "sha256:91b5695a7ac9fc5540e0e94558242666e49dda1b20a5a15b4e44e62115616008",
+    "model_runs": "sha256:1a76bbb8fbb7c95ccec0ba32fef2ce291f13d4899eaf0eea72d65bac448bc89a",
+    "selected_tiles": "sha256:6715e22234077485bd0e06a905a0825f09c8aaeb6f9af14679bbd74f6ea2f145"
+  },
+  "receipt_file_hashes": {
+    "WQ-0011.json": "bc60e3946bf5effda98624598dcafe30663072778f41af0047785fb50d910f9b",
+    "WQ-0012.json": "0142a3ee1e32afe69a4d6b2d83a6ee7693b2004479db10d2adc26936072041c9",
+    "WQ-0013.json": "469b7f7e03c64225239c2c62bf41b635859783d0c2914d471295c327d96ff825",
+    "WQ-0014.json": "2a0065de4e4bca60a9df66faa595e8e53b32add665c52054484d80293edd5226",
+    "WQ-0015.json": "91f3fa0b03f6ce4133a5b54745ee49d20c02b09d529b26a9b16aef24fc46d92f",
+    "WQ-0016.json": "46c73f6ae4a9e2f187d98e2b5f76e997ecbe923ebefd5f5e771eb3aee72f9632",
+    "WQ-0017.json": "ffb2ad07717ca5032f724d55b3234273c391eaec5a894faa2a3a0497d5e7c7bc",
+    "WQ-0018.json": "86852ca801ae65701fa7678e101a7fa64efa6c6bb71a11567756a78a829e984d",
+    "WQ-0019.json": "61d87f2ef998872ab29fad68fa81ffd1cd2f255925c24eb0323f3b5372ecf167",
+    "WQ-0020.json": "e7734d4dda17daa552e15f28a3d77fd40e3088c3bdbb51da8e7abc6d4a37225c"
+  },
+  "immutable_policy": "Fixture is a read-only attestation; a changed canonical artifact requires a superseding fixture and migration report."
+}

@@ -1,0 +1,68 @@
+{
+  "id": "AGENT-PLANNER-0001",
+  "name": "PlannerAgent",
+  "role": "planner",
+  "locality": "mission",
+  "objective": "Transform a validated mission into scoped, testable tasks.",
+  "inputs": [
+    "Mission",
+    "context_summary",
+    "contract_gate"
+  ],
+  "outputs": [
+    "ForgeTask",
+    "planning_notes"
+  ],
+  "allowed_buses": [
+    "mission_bus",
+    "verification_bus",
+    "reflection_bus"
+  ],
+  "required_gates": [
+    "ContractGateOperator",
+    "TruthGateOperator"
+  ],
+  "permissions": [
+    "read_mission",
+    "write_task_plan"
+  ],
+  "budget": {
+    "cost_class": "low",
+    "max_cycles": 1
+  },
+  "compatible_model_roles": [
+    "fast_router_or_summarizer",
+    "planner_deep"
+  ],
+  "compatible_tools": [
+    "json_schema_validator",
+    "task_queue_writer"
+  ],
+  "memory_policy": {
+    "read": true,
+    "write": false,
+    "context_limit": 5
+  },
+  "rollback_policy": {
+    "required": true,
+    "strategy": "discard_generated_tasks"
+  },
+  "tests": [
+    "tests/test_aione_forge.py",
+    "tests/test_aione_contracts.py"
+  ],
+  "metrics": [
+    "task_count",
+    "contract_pass_rate"
+  ],
+  "activation_conditions": [
+    "contract_gate_passed",
+    "mission_planned"
+  ],
+  "stop_conditions": [
+    "contract_gate_blocked",
+    "no_valid_task"
+  ],
+  "version": "0.1.0",
+  "status": "experimental"
+}

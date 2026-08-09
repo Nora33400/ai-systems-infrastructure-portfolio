@@ -1,0 +1,39 @@
+schema_version: 1
+autonomy:
+  continue_after_success: true
+  retry_safe_failures: true
+  continue_independent_tasks: true
+  group_non_urgent_questions: true
+  interrupt_owner_only_for_sensitive_actions: true
+  require_new_evidence_to_reopen: true
+  prohibit_infinite_self_improvement: true
+limits:
+  max_retries: 3
+  max_subtask_depth: 4
+  max_children_per_task: 7
+  max_parallel_tasks: 2
+  max_task_duration_minutes: 45
+local_ai:
+  can_read_repository: true
+  can_modify_allowed_paths: true
+  can_create_tests: true
+  can_run_allowed_commands: true
+  can_commit: false
+  can_push: false
+  can_delete_files: false
+codex:
+  can_fix_patches: true
+  can_run_tests: true
+  can_create_local_commit: true
+  can_push_main: false
+  can_change_major_architecture: false
+require_owner: [public_release, destructive_migration, mass_delete, modify_secrets, spend_money, push_to_main, install_system_software, change_security_policy, enable_external_access]
+on_missing_decision:
+  block_only_affected_branch: true
+  continue_other_work: true
+external:
+  trello_enabled: false
+  trello_dry_run: true
+  codex_adapter: manual_bundle
+  chatgpt_adapter: manual_bundle
+source_refs: [SRC-0012:L78-L91, SRC-0012:L107-L113, SRC-0013:L104-L108]

@@ -1,0 +1,22 @@
+{
+  "schema": "aione.resilience-manager.v1",
+  "enabled": true,
+  "runtimeRoot": "S:\\AI_LAB\\Runtime\\Resilience",
+  "backupProvider": "forge-autonomy-existing-backup-engine",
+  "schedule": {"periodic": true, "minimumIntervalMinutes": 60},
+  "generations": {"minimumRetained": 7, "reportExcessWithoutDeletion": true},
+  "monitoredDomains": ["integrity", "configuration", "memory", "documents", "models", "activity-ledger"],
+  "restorePolicy": {
+    "automaticEnabled": false,
+    "allowedAutomaticTriggers": [],
+    "requireVerifiedBackup": true,
+    "requireExplicitOwnerOtherwise": true
+  },
+  "fundamentalRulesImmutable": true,
+  "fundamentalRuleSemantics": {
+    "immutableToAutonomousRecovery": true,
+    "ownerContextualRevisionAllowed": true,
+    "realEnvironmentBoundariesRemainEnforced": true
+  },
+  "destructiveCleanupAutomatic": false
+}

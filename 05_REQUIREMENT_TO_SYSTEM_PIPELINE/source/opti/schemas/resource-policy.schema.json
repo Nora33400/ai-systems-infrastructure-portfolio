@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/resource-policy.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "activation", "user_activity_priority", "safeguards", "modes", "source_refs"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "activation": {"const": "dry_run_only"},
+    "user_activity_priority": {"const": "absolute"},
+    "safeguards": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_gpu_temperature_c", "reserve_vram_gpu1_mb", "pause_on_fullscreen_application", "pause_on_game_detected", "checkpoint_before_mode_switch", "never_kill_uncommitted_agent_work"],
+      "properties": {
+        "max_gpu_temperature_c": {"type": "number", "minimum": 40, "maximum": 95},
+        "reserve_vram_gpu1_mb": {"type": "integer", "minimum": 0},
+        "pause_on_fullscreen_application": {"type": "boolean"},
+        "pause_on_game_detected": {"type": "boolean"},
+        "checkpoint_before_mode_switch": {"type": "boolean"},
+        "never_kill_uncommitted_agent_work": {"type": "boolean"}
+      }
+    },
+    "modes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["personal_interactive", "ai_balanced", "autonomous_coding", "heavy_reasoning", "low_power", "gaming"],
+      "properties": {
+        "personal_interactive": {"$ref": "#/$defs/mode"},
+        "ai_balanced": {"$ref": "#/$defs/mode"},
+        "autonomous_coding": {"$ref": "#/$defs/mode"},
+        "heavy_reasoning": {"$ref": "#/$defs/mode"},
+        "low_power": {"$ref": "#/$defs/mode"},
+        "gaming": {"$ref": "#/$defs/mode"}
+      }
+    },
+    "source_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  },
+  "$defs": {
+    "mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_parallel_agents"],
+      "properties": {"max_parallel_agents": {"type": "integer", "minimum": 0, "maximum": 8}}
+    }
+  }
+}

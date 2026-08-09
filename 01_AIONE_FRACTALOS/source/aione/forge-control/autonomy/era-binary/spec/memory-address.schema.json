@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/memory-address.schema.json",
+  "title": "SemanticMemoryAddress",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["uri", "physicalDomain", "scope", "sensitivity", "confidence", "provenance", "retrievalPolicy"],
+  "properties": {
+    "uri": {"type": "string", "pattern": "^memory://(project|task|context|cause|decision)/[A-Za-z0-9._~/-]{1,240}$"},
+    "physicalDomain": {"enum": ["RAM", "VRAM", "NVME", "IMMUTABLE_LEDGER"]},
+    "scope": {"enum": ["TASK", "PROJECT", "ECOSYSTEM", "OWNER"]},
+    "sensitivity": {"enum": ["PUBLIC", "INTERNAL", "PRIVATE", "FROZEN"]},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "provenance": {"type": "object"},
+    "retrievalPolicy": {"type": "object"}
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema": "aione.cognitive-immune-system.v1",
+  "enabled": true,
+  "levels": ["GREEN", "YELLOW", "ORANGE", "RED", "BLACK"],
+  "thresholds": {
+    "cpuPercent": {"yellow": 80, "orange": 90, "red": 97},
+    "ramPercent": {"yellow": 80, "orange": 90, "red": 97},
+    "vramPercent": {"yellow": 85, "orange": 94, "red": 99},
+    "storagePercent": {"yellow": 80, "orange": 90, "red": 97},
+    "temperatureCelsius": {"yellow": 75, "orange": 82, "red": 88},
+    "responseQuality": {"yellowBelow": 0.72, "orangeBelow": 0.55, "redBelow": 0.35}
+  },
+  "criticalIntegrityFailureLevel": "BLACK",
+  "reactionPolicy": "DOCUMENT_ISOLATE_NOTIFY_PROPOSE",
+  "automaticSystemMutation": false,
+  "thresholdPlasticity": {"enabled": true, "minimumSamples": 20, "maximumAdjustmentPercent": 5, "requireVersionedEvidence": true}
+}

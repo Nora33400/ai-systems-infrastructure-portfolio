@@ -1,0 +1,71 @@
+version: 1
+workspace: ..
+mode: GO_BATCH_OUI
+ollama:
+  url: http://127.0.0.1:11434
+  coder_model: qwen2.5-coder:14b
+  reviewer_model: qwen2.5-coder:14b
+  readonly_model: qwen2.5-coder:7b
+  fallback_models: [qwen2.5-coder:14b]
+  temperature: 0.1
+  context_size: 16384
+  timeout_ms: 120000
+  response_retries: 2
+  availability_retries: 6
+  availability_delay_ms: 5000
+limits:
+  max_actions_per_task: 40
+  max_task_retries: 3
+  command_timeout_ms: 120000
+  prompt_output_chars: 12000
+  max_context_chars: 40000
+  max_consecutive_failures: 5
+  max_tasks_per_session: 1000
+  full_validation_every_tasks: 5
+security:
+  allowed_directories: [src, tests, config, schemas, scripts, docs, modules]
+  readable_root_files:
+    - README.md
+    - PROJECT_STATE.md
+    - MASTER_MODULE_REGISTRY.yaml
+    - ARCHITECTURE_GRAPH.yaml
+    - WORK_QUEUE.yaml
+    - DECISION_LOG.md
+    - ASSUMPTION_REGISTER.md
+    - DOCUMENTATION_COVERAGE.md
+    - package.json
+    - tsconfig.json
+  writable_root_files: [WORK_QUEUE.yaml, PROJECT_STATE.md, DOCUMENTATION_COVERAGE.md]
+  protected_files: [AGENTS.md, SOURCE_MANIFEST.yaml, CONSTITUTION.md]
+  allowed_command_families: [node, npm, npx, git, python, pwsh, powershell]
+  forbidden_command_patterns:
+    - '(?i)\b(format|shutdown|restart-computer|stop-computer|diskpart|bcdedit)\b'
+    - '(?i)\b(rm|rmdir|del|erase)\b.*(?:/s|/q|-r|-recurse)'
+    - '(?i)remove-item.*-recurse'
+    - '(?i)git\s+(reset\s+--hard|clean\s+-[a-z]*f|push)'
+    - '(?i)\b(curl|wget|invoke-webrequest)\b'
+  deny_secret_name_patterns: ['(?i)^\.env', '(?i)(secret|credential|private[_-]?key)', '(?i)\.(pem|pfx|key)$']
+git:
+  enabled: true
+  auto_commit: false
+  allow_push: false
+  require_clean_baseline: false
+validation:
+  light_commands:
+    - powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-autonomy.ps1
+    - powershell -NoProfile -ExecutionPolicy Bypass -File scripts/invoke-autonomy.ps1 validate-docs -NoBuild
+  full_commands:
+    - powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-autonomy.ps1 -NoBuild
+    - powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-cognitive.ps1 -NoBuild
+runtime:
+  database: ${LOCALAPPDATA}/AIONE/opti-runtime/state/autonomy.db
+  lock_file: ${LOCALAPPDATA}/AIONE/opti-runtime/state/autonomy.lock
+  stop_file: ${LOCALAPPDATA}/AIONE/opti-runtime/state/stop.requested
+  backup_directory: ${LOCALAPPDATA}/AIONE/opti-runtime/state/backups
+  event_log: ${LOCALAPPDATA}/AIONE/opti-runtime/logs/autonomy-events.jsonl
+  command_log_directory: ${LOCALAPPDATA}/AIONE/opti-runtime/logs/commands
+  work_queue: WORK_QUEUE.yaml
+  workspace_write_backend: wsl
+  wsl_distro: Ubuntu
+  dry_run: false
+  log_level: info

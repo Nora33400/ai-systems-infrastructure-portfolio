@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gpt-cognitive-constitution.local/schemas/source-governance.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "contract_id", "constitution_version", "status", "required_metadata", "integrity_statuses", "mutation_policy", "source_type_rules", "repository_mapping", "source_refs"],
+  "properties": {
+    "schema_version": {"const": 1}, "contract_id": {"type": "string"}, "constitution_version": {"const": "0.1.0"}, "status": {"const": "FORMALIZED"},
+    "required_metadata": {"type": "array", "minItems": 10, "uniqueItems": true}, "integrity_statuses": {"type": "array", "minItems": 1, "uniqueItems": true},
+    "mutation_policy": {"type": "object", "required": ["original_source", "normalization", "correction", "deletion", "archive"], "properties": {"original_source": {"const": "immutable"}}, "additionalProperties": true},
+    "source_type_rules": {"type": "array", "minItems": 10, "items": {"type": "object", "required": ["type", "treatment"]}}, "repository_mapping": {"type": "object"}, "source_refs": {"type": "array", "minItems": 1}
+  }
+}

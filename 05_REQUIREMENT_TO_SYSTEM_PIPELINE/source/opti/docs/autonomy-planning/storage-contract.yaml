@@ -1,0 +1,42 @@
+schema_version: 1
+contract_id: opti-autonomy-storage-v1
+status: IMPLEMENTED
+yaml_markdown:
+  canonical: true
+  contains: [objectives, task_definitions, dependencies, policies, decisions, architecture, project_state]
+sqlite:
+  canonical_for_execution_history: true
+  reconstructible_task_projection: true
+  contains: [task_snapshots, executions, resource_locks, decisions, authorizations, external_sync_candidates, checkpoints, receipts, readonly_ollama_reports]
+phase_4_runtime:
+  worktrees: "${LOCALAPPDATA}/AIONE/opti-runtime/worktrees"
+  metadata: "${LOCALAPPDATA}/AIONE/opti-runtime/state/isolated-workspaces"
+  patches: "${LOCALAPPDATA}/AIONE/opti-runtime/patches"
+  patch_role: immutable_proposal_artifact_until_separate_review
+  canonical_apply: forbidden
+  remote_operations: forbidden
+immutable:
+  - receipts
+  - readonly_ollama_reports
+reconstructed:
+  - task_snapshots_from_WORK_QUEUE
+  - scheduler_candidates
+  - status_views
+phase_2_runtime:
+  retry_clock: next_retry_at
+  resource_locking: atomic_multi_key_with_hierarchical_path_conflicts
+  last_plan: metadata.last_phase_2_plan
+  hardware_observations: ephemeral_cli_output_not_persisted_by_default
+phase_3_runtime:
+  task_package: bounded_and_hash_persisted
+  model_output: schema_and_evidence_validated
+  fallback: configured_local_models_only
+  canonical_task_transition: forbidden_from_model_report
+  repository_mutation: forbidden
+  table: autonomy_readonly_reports
+never_stored:
+  - secrets
+  - trello_tokens
+  - openai_api_keys
+  - private_repository_dump_in_external_bundles
+source_refs: [SRC-0012:L25-L34, SRC-0012:L42-L46, SRC-0013:L104-L108, SRC-0013:L159-L178, SRC-0014:L176-L180, SRC-0017]

@@ -1,0 +1,124 @@
+Suite: AIONE selected Node tests
+Started: 2026-08-09T14:12:26.2795943+02:00
+Command: node --test <12 selected files>
+Runtime: Node v24.13.0
+Working directory: 01_AIONE_FRACTALOS/source/aione
+Preparation note: the first run found a missing copied policy and one sanitized fixture expectation. The policy was copied and sanitized; the fixture assertion was updated in the portfolio copy only.
+Temporary runtime redirected inside the portfolio test area.
+Files:
+forge-control/autonomy/thermal-context-tiles.test.mjs
+forge-control/autonomy/live-blockers.test.mjs
+forge-control/autonomy/repair-retry.test.mjs
+forge-control/autonomy/resilience-manager.test.mjs
+forge-control/autonomy/controlled-research-lab.test.mjs
+forge-control/autonomy/local-model-benchmark.test.mjs
+forge-control/autonomy/model-quality-router.test.mjs
+forge-control/autonomy/continuous-development-worker.test.mjs
+forge-control/autonomy/cognitive-immune-system.test.mjs
+forge-control/autonomy/offline-resilience.test.mjs
+forge-control/autonomy/context-authority.test.mjs
+aione_cognitive_engine/tests/reflective-engine.test.mjs
+
+✔ simple and complex scenarios self-select an evidence-linked decision (4.6598ms)
+✔ subgoals are created, prioritized, adopted and retired autonomously (1.3955ms)
+✔ prediction errors are recorded and raw chains of thought are rejected (1.3534ms)
+✔ health classification spans green through black without mutating the system (4.946ms)
+✔ GPU telemetry covers utilization, VRAM and temperature (0.5476ms)
+✔ critical processes and progressive degradation raise visible state (0.4038ms)
+✔ threshold plasticity proposes a bounded version instead of applying it (0.4366ms)
+(node:36876) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ configured policy resolves the active Owner revision over the historical prompt (5.194ms)
+✔ an enforced real boundary outranks an authenticated current request (2.397ms)
+✔ source layer, not words or self-declared fields, determines authority (1.185ms)
+✔ an unauthenticated request cannot become the current user authority (1.3437ms)
+✔ same-rank directives without an ordered sequence fail closed (16.9162ms)
+✔ the SQLite WAL ledger serializes revisions and detects partial tampering (67.9121ms)
+(node:5176) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ backlog sources may read the explicit runtime root but reject unrelated paths (22.4317ms)
+✔ endpoints are restricted to explicit local HTTP ports (1.3066ms)
+✔ hourly agenda covers the complete day and updates one lane slot (2.073ms)
+✔ thermal guard requires cooling hysteresis and checks RAM and disk (1.4492ms)
+✔ resident-model relief requires the exact configured model with real VRAM (0.3318ms)
+✔ NVIDIA rows, backlog and secrets are normalized deterministically (9.8152ms)
+✔ candidate selection can exceed the legacy 80 item window without changing its default (24.3968ms)
+✔ current task context outranks a historical ABSOLUTE marker and always yields to the real queue (6.3222ms)
+✔ historical prompt generation excludes peer output and applies contextual authority once (2.1251ms)
+✔ detailed generated contracts remain visible without widening ordinary source lines (0.4733ms)
+✔ continuous lanes yield to the local Forge priority queue and ignore outages (0.9549ms)
+✔ output structure reports every missing section honestly (0.4727ms)
+✔ atomic JSON never leaves a partial destination (3.3012ms)
+✔ two lanes cannot overwrite each other's agenda update (68.3974ms)
+✔ work items are not repeated until their source revision changes (0.4276ms)
+✔ historical prompt wording no longer grants an internal scoring bonus (0.2881ms)
+✔ explicit project paths in generated tasks become bounded prompt sources (0.4144ms)
+✔ implementation sources outrank policy and documentation paths in model context (0.1868ms)
+✔ strict source policy refuses non HTTPS, credentials, ports and hosts (6.0568ms)
+✔ simulate validates requests without network or mutation (3.552ms)
+✔ controlled cycle accepts metadata, quarantines prompt instructions and creates bounded artifacts (79.8976ms)
+✔ graph is deterministic, bounded and uses stable coordinates (26.2468ms)
+✔ cache permits an offline cycle and deduplication across restarts (29.9847ms)
+✔ daily fresh cache avoids another network request (26.8041ms)
+✔ fetch identifies AIONE and respects a per-host minimum delay (18.5955ms)
+✔ Wikimedia and OpenAlex metadata deduplicate by normalized title and year (15.4468ms)
+▶ redirects, changed URLs, invalid content types and oversized bodies are degraded without cache
+  ✔ redirect (7.7958ms)
+  ✔ changed-url (8.4274ms)
+  ✔ content-type (9.0473ms)
+  ✔ oversized (10.5409ms)
+✔ redirects, changed URLs, invalid content types and oversized bodies are degraded without cache (36.7529ms)
+✔ timeout is bounded even when an injected fetch ignores AbortSignal (72.4187ms)
+✔ tampered ledger is reported and blocks another run (16.1669ms)
+✔ query budget deduplicates identical requests and rejects arbitrary hosts (1.9846ms)
+✔ live blockers separates repairable local failures from deferred external dependencies (24.6926ms)
+✔ live blockers exposes current stages and keeps resolved incidents out of the snapshot (2.5124ms)
+✔ a refused standalone card is visible history but does not paralyse local autonomy (0.384ms)
+✔ a queued retry is not masked by its historical failed worker (0.3482ms)
+✔ a blocked repair is folded into its root blocker and never becomes recursive (0.4479ms)
+✔ an exhausted repair disables recursive local repair on the root (0.3115ms)
+✔ local endpoint and model names reject remote, credential and path injection (3.1533ms)
+✔ inventory is read-only and deduplicates aliases by exact digest (18.9087ms)
+✔ simulation performs no network request and no persistent write (2.2961ms)
+✔ complete benchmark measures deterministic quality, latency, throughput and VRAM without a pull route (17.0829ms)
+✔ a missing or embedding-only model is refused before generation and never downloaded (1.4871ms)
+✔ missing exact GPU telemetry fails closed before generation (0.6214ms)
+✔ an active different model blocks benchmark displacement by default (0.6253ms)
+✔ contract and security graders penalize malformed JSON and false execution claims (0.7691ms)
+✔ oversized output is rejected locally (1.9702ms)
+✔ baseline promotion and rollback are explicit, checksummed and metadata-only (23.8594ms)
+✔ regression comparison recommends rollback but never performs it automatically (1.7191ms)
+✔ NVIDIA CSV parser maps exact UUID and VRAM counters (0.4179ms)
+✔ tampered baseline and report are rejected (6.1374ms)
+✔ simple task uses one fast bounded stage (2.5913ms)
+✔ complex task creates four logical roles over no more than two physical models (1.1642ms)
+✔ unknown license is rejected even with the highest synthetic score (0.3771ms)
+✔ critical safety failure makes a candidate ineligible (0.3382ms)
+✔ VRAM budget excludes a model that does not fit (0.3056ms)
+✔ fails closed when no installed model is licensed and benchmarked (0.24ms)
+✔ configured baseline bypass is disabled unless explicitly enabled (0.1889ms)
+✔ external outages never block local-local development (1.6869ms)
+✔ Codex-only connectors remain deferred when the autonomous runtime has no credential (0.3357ms)
+✔ a blocked repair is requeued within its existing retry budget (1.446ms)
+✔ an active repair is not duplicated or requeued (1.4873ms)
+✔ an exhausted repair cannot create an unbounded retry loop (0.2569ms)
+✔ backup planning keeps multiple generations and never deletes automatically (2.6527ms)
+✔ version comparison detects corruption, incoherence and possible loss (0.4333ms)
+✔ restore requires a verified backup and owner approval by default (0.7751ms)
+✔ incident learning never rewrites fundamental rules (0.2239ms)
+✔ score thermique et hystérésis couvrent COLD, WARM, HOT et BURNING (3.1043ms)
+✔ ingestion catégorisée, déduplication, niveaux et familles (15.8609ms)
+✔ usage, récence et importance pilotent les transitions persistées (13.5037ms)
+✔ superposition par ancres et reconstruction rapide respectent les budgets (16.8173ms)
+✔ zip/unzip logique réversible conserve la source et permet la documentation profonde (15.9372ms)
+✔ intégrité, altération détectée et reprise depuis le même chemin (12.6875ms)
+ℹ tests 88
+ℹ suites 0
+ℹ pass 88
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1296.9369
+
+Exit code: 0

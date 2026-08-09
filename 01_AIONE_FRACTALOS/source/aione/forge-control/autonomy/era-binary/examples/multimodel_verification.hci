@@ -1,0 +1,10 @@
+program MultiModelVerification {
+  context task source=input.user_request scope=TASK memory=RAM.ActiveContextSpace
+  represent task as hypothesis_graph target=shared_graph
+  model proposer role=proposer device=GPU fallback=CPU
+  model verifier role=verifier device=GPU fallback=CPU
+  hypothesis proposal from proposer context=shared_graph
+  hypothesis counterexample from verifier context=shared_graph
+  verify proposal,counterexample with=provenance,constraints,counterexample target=verification
+  select decision from=proposal,counterexample strategy=maximum_verified_score
+}

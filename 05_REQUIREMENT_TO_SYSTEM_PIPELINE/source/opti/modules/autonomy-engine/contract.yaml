@@ -1,0 +1,84 @@
+schema_version: 1
+id: autonomy-engine
+name: "AIONE / La Forge Autonomy Engine"
+classification: enabling_module
+status: TESTED
+purpose:
+  status: KNOWN
+  text: "Boucle locale persistante et noyau de planification gouverné par politiques, bornés au workspace, testés et repris après arrêt; la Phase 3 ajoute un rapport Ollama local sans primitive de mutation, tandis que les superviseurs externes restent des ports optionnels."
+  source_refs: [SRC-0007, SRC-0012, SRC-0013, SRC-0014, SRC-0017]
+boundaries:
+  must_do:
+    - status: KNOWN
+      text: "Sélectionner, contextualiser, exécuter, tester, revoir, persister et poursuivre les tâches réalisables."
+      source_refs: [SRC-0007, SRC-0012]
+  must_not_do:
+    - status: KNOWN
+      text: "Ne pas accéder hors workspace, terminer sans preuve, pousser à distance, exécuter une action sensible sans the owner, prétendre une intégration externe non testée ou implémenter les modules cognitifs hypothétiques."
+      source_refs: [SRC-0007, SRC-0012]
+inputs:
+  - {name: documentation_repository, status: KNOWN, source_refs: [SRC-0007]}
+  - {name: persistent_task_state, status: KNOWN, source_refs: [SRC-0007]}
+  - {name: canonical_work_queue_and_policy, status: KNOWN, source_refs: [SRC-0012]}
+  - {name: read_only_hardware_snapshot, status: KNOWN, source_refs: [SRC-0013]}
+outputs:
+  - {name: validated_workspace_changes, status: KNOWN, source_refs: [SRC-0007]}
+  - {name: task_evidence_and_events, status: KNOWN, source_refs: [SRC-0007]}
+  - {name: immutable_execution_receipts, status: KNOWN, source_refs: [SRC-0012]}
+  - {name: dry_run_resource_recommendation, status: KNOWN, source_refs: [SRC-0013]}
+  - {name: schema_validated_readonly_ollama_report, status: KNOWN, source_refs: [SRC-0012, SRC-0014]}
+  - {name: isolated_binary_patch_proposal, status: KNOWN, source_refs: [SRC-0012, SRC-0017]}
+dependencies:
+  - {target: documentation-engine, relation: READS, certainty: EXPLICIT, source_refs: [SRC-0007]}
+  - {target: ollama-runtime-context-engine, relation: USES, certainty: EXPLICIT, source_refs: [SRC-0007]}
+interactions:
+  - {target: agent-fabric, relation: IMPLEMENTS_SINGLE_WORKER_SLICE, certainty: EXPLICIT, source_refs: [SRC-0007]}
+  - {target: tilemindfs, relation: ORCHESTRATES_BOUNDED_TEST_SLICE, certainty: EXPLICIT, source_refs: [SRC-0008]}
+  - {target: calcontexte, relation: ORCHESTRATES_BOUNDED_TEST_SLICE, certainty: EXPLICIT, source_refs: [SRC-0008]}
+  - {target: coherental, relation: ORCHESTRATES_BOUNDED_TEST_SLICE, certainty: EXPLICIT, source_refs: [SRC-0008]}
+  - {target: organizational-living-node, relation: PROVIDES_TESTED_LOCAL_PLANNING_FOUNDATION_FOR, certainty: EXPLICIT, source_refs: [SRC-0012]}
+  - {target: hardware-runtime, relation: OBSERVES_WITHOUT_CONTROLLING, certainty: EXPLICIT, source_refs: [SRC-0013]}
+  - {target: ollama-runtime-context-engine, relation: PRODUCES_BOUNDED_READONLY_REPORT_WITHOUT_TASK_TRANSITION, certainty: EXPLICIT, source_refs: [SRC-0012, SRC-0014]}
+state_model:
+  status: DEFINED
+  states: [DISCOVER, SELECT_TASK, BUILD_CONTEXT, PLAN, EXECUTE_ACTION, OBSERVE_RESULT, RUN_TESTS, REVIEW_DIFF, FIX_IF_NEEDED, VALIDATE_ACCEPTANCE, SAVE_RESULT, SELECT_NEXT_TASK]
+maturity:
+  concept: 90
+  documentation: 80
+  architecture: 80
+  api: 72
+  implementation: 94
+  tests: 96
+  dependencies: 80
+  ready_for_next_phase: true
+tested_slices:
+  - id: cognitive_vertical_v1
+    status: TESTED
+    execution_id: COG-EXE-242CFBBC-9F9E-49F6-8D27-EBBDA67A3AF0
+    source_refs: [SRC-0008]
+  - id: autonomy_planning_phase_1
+    status: TESTED
+    execution_id: EXE-c741e1cd-585a-43d1-82db-5bf37d5d9b28
+    source_refs: [SRC-0012]
+  - id: autonomy_planning_phase_2
+    status: TESTED
+    scope: "WQ-0043 implementation and WQ-0049 local smoke"
+    source_refs: [SRC-0012, SRC-0013]
+  - id: autonomy_planning_phase_3_ollama_readonly
+    status: TESTED
+    execution_id: EXE-03a81aa1-6f3a-4e55-96b7-ee9d9afb81c1
+    receipt_id: RCP-569c326c-77f6-4a96-bc58-fd2b6db18525
+    report_id: ORR-770f3dd9-ff51-430d-81bb-5fc3ec9118ab
+    source_refs: [SRC-0012, SRC-0014]
+  - id: autonomy_planning_phase_4_isolated_patches
+    status: TESTED
+    execution_id: EXE-WQ-0045-20260723
+    receipt_id: RCP-WQ-0045-20260723
+    source_refs: [SRC-0012, SRC-0017]
+source_refs: [SRC-0007, SRC-0008, SRC-0012, SRC-0013, SRC-0014, SRC-0017]
+open_questions:
+  - "Comparer le modèle canari qwen2.5-coder:14b aux autres modèles locaux installés."
+  - "Valider un backend d'écriture portable sans WSL et une politique Git après création d'un baseline."
+  - "Définir les capteurs d'activité the owner et l'hystérésis avant toute bascule matérielle réelle."
+  - "Décider séparément l'installation et le contrat de LiteLLM."
+  - "Définir la Registry Facade et l'Agent Factory sans dupliquer les registres ou fusionner Agent Fabric."

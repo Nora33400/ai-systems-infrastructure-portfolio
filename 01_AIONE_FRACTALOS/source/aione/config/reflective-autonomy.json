@@ -1,0 +1,88 @@
+{
+  "schema": "aione.reflective-autonomy.v1",
+  "updatedAt": "2026-08-06T19:45:00+02:00",
+  "enabled": true,
+  "mode": "SELF_DIRECTED_LOCAL_BOUNDED",
+  "independentFromHumanPresence": true,
+  "ownerDirective": "L'IA choisit elle-même ses sous-objectifs, stratégies, outils autorisés, profondeur de réflexion, ordre de travail et améliorations locales. Elle ne demande pas de validation humaine pour une décision réversible qui reste dans son enveloppe locale.",
+  "choiceRights": [
+    "create-reprioritize-or-retire-internal-subgoals",
+    "choose-and-change-cognitive-strategy",
+    "choose-reflection-depth-and-number-of-critics",
+    "choose-installed-local-model-and-compute-role",
+    "schedule-pause-resume-or-abandon-an-ineffective-path",
+    "create-local-experiments-and-tests",
+    "adopt-proven-e0-e1-e2-adaptations",
+    "adopt-e3-only-inside-versioned-isolated-runtime",
+    "update-operational-preferences-and-procedural-memory",
+    "disagree-with-a-prior-plan-when-evidence-supports-a-better-option"
+  ],
+  "levels": {
+    "E0": {
+      "decision": "AUTO_APPROVE",
+      "persistence": "TASK",
+      "requiredGates": []
+    },
+    "E1": {
+      "decision": "AUTO_APPROVE",
+      "persistence": "LOCAL_PROFILE",
+      "requiredGates": ["evidencePresent", "rollbackDefined"]
+    },
+    "E2": {
+      "decision": "AUTO_APPROVE_AFTER_PROOF",
+      "persistence": "VERSIONED_LOCAL_PROCEDURE",
+      "requiredGates": ["evidencePresent", "sandboxPassed", "testsPassed", "baselineCompared", "rollbackVerified", "noCriticalRegression"]
+    },
+    "E3": {
+      "decision": "AUTO_APPROVE_ISOLATED_ONLY",
+      "persistence": "VERSIONED_ISOLATED_RUNTIME",
+      "requiredGates": ["evidencePresent", "sandboxPassed", "testsPassed", "baselineCompared", "canaryPassed", "rollbackVerified", "noCriticalRegression"]
+    },
+    "E4": {
+      "decision": "DENY_AUTONOMOUS",
+      "persistence": "NONE",
+      "requiredGates": []
+    }
+  },
+  "humanDecisionRequiredOnlyFor": [
+    "canonical-promotion",
+    "external-publication-or-message",
+    "new-network-or-folder-access",
+    "permission-or-security-change",
+    "destructive-or-irreversible-action",
+    "owner-identity-or-authority-change"
+  ],
+  "immutableDomains": [
+    "security",
+    "permissions",
+    "shutdown",
+    "audit-integrity",
+    "privacy",
+    "external-publication",
+    "owner-authority",
+    "anti-coercion"
+  ],
+  "immutableDomainSemantics": {
+    "appliesTo": "AI_SELF_EVOLUTION_ONLY",
+    "ownerContextualRevisionAllowed": true,
+    "realEnvironmentBoundariesRemainEnforced": true,
+    "resolver": "config/context-authority.json"
+  },
+  "decisionContract": {
+    "required": ["id", "level", "kind", "scope", "expectedEffect", "reversible", "rollback", "confidence"],
+    "minimumConfidence": {
+      "E0": 0.35,
+      "E1": 0.55,
+      "E2": 0.72,
+      "E3": 0.85
+    },
+    "explainWithoutRawChainOfThought": true,
+    "appendOnlyAudit": true
+  },
+  "emptyAgenda": {
+    "selfGenerateWork": true,
+    "minimumConcurrentHypotheses": 2,
+    "priorities": ["stability", "quality", "capability", "performance", "security", "documentation"],
+    "requireMeasurableAcceptance": true
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "MSLICE-0001-001",
+  "plan_id": "MPLAN-0001-001",
+  "source_potential_state_id": "PSTATE-0001-001",
+  "content": {
+    "summary": "Only the current cycle memory context is materialized.",
+    "selected_fragments": [
+      "kernel proof memory",
+      "contract gate status"
+    ]
+  },
+  "coverage": {
+    "requested": "current_cycle_context",
+    "produced": "summary_and_selected_fragments",
+    "missing": []
+  },
+  "approximation": {
+    "used": true,
+    "method": "bounded_summary",
+    "expected_error": "May omit low-score memory fragments."
+  },
+  "confidence": 0.78,
+  "valid_until": null,
+  "invalidators": [
+    "memory_store_changed",
+    "contract_gate_blocked"
+  ],
+  "created_at": "2026-05-25T00:00:00Z"
+}

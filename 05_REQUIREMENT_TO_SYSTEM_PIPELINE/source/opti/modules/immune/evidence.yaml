@@ -1,0 +1,10 @@
+schema_version: 1
+module_id: immune
+claims:
+  - id: "immune-CLAIM-0001"
+    statement: "Système immunitaire distribué des erreurs couvrant détection, diagnostic, confinement, simulation, réparation, validation, mémoire de l'erreur et prévention."
+    modality: ASSERTED
+    status: PARTIALLY_DEFINED
+    source_refs: [SRC-0001, SRC-0005]
+    normative: false
+

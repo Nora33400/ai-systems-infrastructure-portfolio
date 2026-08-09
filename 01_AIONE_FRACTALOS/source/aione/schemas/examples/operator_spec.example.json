@@ -1,0 +1,84 @@
+{
+  "id": "OP-ROUTING-0001",
+  "name": "RoutingOperator",
+  "type": "routing",
+  "locality": "ressources",
+  "objective": "Choisir modele, outil ou strategie selon complexite, risque et cout.",
+  "inputs": [
+    "Mission",
+    "Message",
+    "resource_state"
+  ],
+  "outputs": [
+    "ModelRole",
+    "routing_decision"
+  ],
+  "allowed_buses": [
+    "mission_bus",
+    "resource_bus",
+    "verification_bus"
+  ],
+  "required_layers": [
+    "cout",
+    "energie",
+    "verification"
+  ],
+  "observer_superlayers": [
+    "sobriete_energetique",
+    "coherence"
+  ],
+  "strategies": [
+    {
+      "id": "small_first",
+      "description": "Preferer le role le moins couteux compatible."
+    }
+  ],
+  "degrees": {
+    "depth": [
+      "quick",
+      "standard",
+      "deep"
+    ],
+    "precision": [
+      "standard",
+      "verified"
+    ],
+    "cost": [
+      "minimal",
+      "balanced"
+    ],
+    "autonomy": [
+      "suggestion",
+      "verified_execution"
+    ]
+  },
+  "budget": {
+    "default_cost_class": "low"
+  },
+  "permissions": [
+    "read_state",
+    "write_routing_decision"
+  ],
+  "compatible_model_roles": [
+    "fast_router_or_summarizer",
+    "planner_deep"
+  ],
+  "compatible_tools": [
+    "local_state_reader"
+  ],
+  "metrics": [
+    "latency",
+    "cost_class",
+    "fallback_count"
+  ],
+  "activation_conditions": [
+    "mission_received",
+    "model_needed"
+  ],
+  "stop_conditions": [
+    "no_valid_route",
+    "safety_gate_failed"
+  ],
+  "version": "0.1.0",
+  "status": "experimental"
+}

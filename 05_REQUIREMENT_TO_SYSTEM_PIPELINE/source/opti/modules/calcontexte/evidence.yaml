@@ -1,0 +1,26 @@
+schema_version: 1
+module_id: calcontexte
+claims:
+  - id: "calcontexte-CLAIM-0001"
+    statement: "Cerveau contextuel candidat qui transforme le contexte en objet combinant histoire, objectif, émotion, temps, projets, priorités, identité, ressources, coût et intensité."
+    modality: ASSERTED
+    status: PARTIALLY_DEFINED
+    source_refs: [SRC-0001, SRC-0002, SRC-0003, SRC-0004]
+    normative: false
+  - id: "calcontexte-CLAIM-0002"
+    statement: "Une projection minimale de sélection contextuelle explicable à huit sous-scores est implémentée et testée dans la tranche verticale."
+    modality: DECIDED_SLICE
+    status: TESTED
+    source_refs: [SRC-0008:L347-L379]
+    normative: true
+    evidence: [src/cognitive/calcontexte.ts, tests/cognitive/engines.test.ts, tests/cognitive/pipeline.integration.test.ts]
+  - id: "calcontexte-CLAIM-0003"
+    statement: "WorkMesh possède un contrat/prototype CalContexte minimal v1 testé et revu indépendamment ; cette tranche externe ne stabilise pas CalContexte global et ne fournit ni sémantique ni autorité de source."
+    modality: VERIFIED_EXTERNAL_SLICE
+    status: TESTED
+    source_refs: [SRC-0008:L347-L379]
+    normative: false
+    evidence:
+      - "C:/Dev/AIONE_WORKMESH/AIONE_WORKMESH_FORGE_v0.1@34b3e0e15445060c260b0474f04cb53eef0db5c9"
+      - "C:/Dev/AIONE_WORKMESH/AIONE_WORKMESH_FORGE_v0.1/13_REPORTS/20260718_CALCONTEXTE_TESTER.json"
+      - "C:/Dev/AIONE_WORKMESH/AIONE_WORKMESH_FORGE_v0.1/13_REPORTS/20260718_CALCONTEXTE_REVIEWER.json"

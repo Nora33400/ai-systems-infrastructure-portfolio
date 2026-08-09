@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/autonomy-policy.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "autonomy", "limits", "local_ai", "codex", "require_owner", "on_missing_decision", "external", "source_refs"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "autonomy": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "limits": {"type": "object", "additionalProperties": false, "required": ["max_retries", "max_subtask_depth", "max_children_per_task", "max_parallel_tasks", "max_task_duration_minutes"], "properties": {"max_retries": {"type": "integer", "minimum": 0}, "max_subtask_depth": {"type": "integer", "minimum": 0}, "max_children_per_task": {"type": "integer", "minimum": 1}, "max_parallel_tasks": {"type": "integer", "minimum": 1}, "max_task_duration_minutes": {"type": "integer", "minimum": 1}}},
+    "local_ai": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "codex": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "require_owner": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "on_missing_decision": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "external": {"type": "object", "additionalProperties": false, "required": ["trello_enabled", "trello_dry_run", "codex_adapter", "chatgpt_adapter"], "properties": {"trello_enabled": {"type": "boolean"}, "trello_dry_run": {"type": "boolean"}, "codex_adapter": {"enum": ["manual_bundle", "codex_cli", "external_command", "api_adapter"]}, "chatgpt_adapter": {"enum": ["manual_bundle", "openai_api", "external_command"]}}},
+    "source_refs": {"type": "array", "items": {"type": "string"}}
+  }
+}

@@ -1,0 +1,11 @@
+Suite: FractalOS Python release-blocker rerun
+Date: 2026-08-09
+Working directory: 01_AIONE_FRACTALOS/source/fractalos
+Command: py -3.14 -m pytest tests -q -p no:cacheprovider
+Environment: Windows 11; Python 3.14; no PYTHONPATH override
+Known defect is annotated with unittest.expectedFailure; its assertion still executes.
+Exit code: 0
+........................................................................ [ 48%]
+..x..................................................................... [ 96%]
+......                                                                   [100%]
+149 passed, 1 xfailed in 67.01s (0:01:07)

@@ -1,0 +1,10 @@
+schema_version: 1
+module_id: organum
+claims:
+  - id: "organum-CLAIM-0001"
+    statement: "Autorité d'exécution candidate qui exécute ou bloque après détection, vérification, permission et journalisation; sa spécification antérieure complète manque."
+    modality: ASSERTED
+    status: PARTIALLY_DEFINED
+    source_refs: [SRC-0001, SRC-0006]
+    normative: false
+

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aione.local/schemas/autonomy-receipt.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["receipt_id", "task_id", "execution_id", "timestamp", "actor", "action", "inputs_hash", "outputs_hash", "files_read", "files_modified", "commands", "tests", "decision", "result", "parent_receipt"],
+  "properties": {
+    "receipt_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "execution_id": {"type": "string", "minLength": 1},
+    "timestamp": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+Z$"},
+    "actor": {"type": "string", "minLength": 1},
+    "action": {"type": "string", "minLength": 1},
+    "inputs_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "outputs_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "files_read": {"type": "array", "items": {"type": "string"}},
+    "files_modified": {"type": "array", "items": {"type": "string"}},
+    "commands": {"type": "array", "items": {"type": "string"}},
+    "tests": {"type": "array", "items": {"type": "object"}},
+    "decision": {"type": "string"},
+    "result": {},
+    "parent_receipt": {"type": ["string", "null"]}
+  }
+}

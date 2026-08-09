@@ -1,0 +1,10 @@
+schema_version: 1
+registry_kind: curated_public_slice
+modules:
+  - {id: autonomy-engine, name: Autonomy Engine, maturity: P4-I, implementation: src/autonomy}
+  - {id: calcontexte, name: CalContexte, maturity: P4-I, implementation: src/cognitive/calcontexte.ts}
+  - {id: dynamic-context-compression, name: Dynamic Context Compression, maturity: P2}
+  - {id: hardware-runtime, name: Hardware Runtime, maturity: P2}
+  - {id: immune, name: IMMUNE, maturity: P2, related_external_implementation: ../../../01_AIONE_FRACTALOS/source/aione/forge-control/autonomy/cognitive-immune-system.mjs}
+  - {id: organum, name: Organum, maturity: P2}
+  - {id: tilemindfs, name: TileMindFS, maturity: P2}
