@@ -1,0 +1,4120 @@
+ PROMPT CODEX 3 — DOCUMENTATION DYNAMIQUE, SITE LOCAL, UPDATE ENGINE ET FEEDBA…
+
+Je vais d’abord lire le brief joint, puis inspecter le workspace pour distinguer ce qui existe déjà de ce qui doit être conçu. Je resterai en mode plan : aucune modification de fichiers ne sera effectuée à ce stade.
+
+Le brief couvre trois systèmes liés — documentation/versioning, mises à jour sécurisées et Feedback Hub — et exige explicitement un audit avant remplacement. Je commence donc par cartographier les applications, manifestes produit, docs, update/reporting et tests existants, puis je vérifierai où se trouve la source de vérité actuelle.
+
+Le dossier actif `S:\AIONE PRODUCT WORKSPACE` est vide. Le code réel semble vivre sous `S:\AIONE` (et quelques dépôts voisins), tandis que le dépôt Git racine `S:\` ne suit actuellement que `README.md`; tous les produits sont non suivis. Je vais auditer `S:\AIONE` en lecture seule et vérifier les instructions de dépôt avant de figer le périmètre.
+
+Le dépôt le plus cohérent est `S:\AIONE\Ecosystem` : il contient déjà l’application Windows, un site Vite, des manifestes/configurations, un générateur de documentation, un Update Center et un service de diagnostic — donc il correspond précisément à l’audit demandé. Comme le brief inclut un site documentaire local/public, j’utilise aussi le skill `sites-building` pour cadrer correctement l’architecture web; il n’entraîne ici aucune publication ni écriture.
+
+L’audit révèle qu’une partie du futur Feedback Hub existe déjà dans la Forge web : formulaire avec consentement, API locale `/api/community/feedback`, stockage et classification. Je vais maintenant vérifier ce pipeline au lieu de prévoir un second système concurrent, puis examiner les frontières avec le HUD Windows et les diagnostics.
+
+Audit intermédiaire : le projet dispose déjà de briques utiles, mais elles sont dispersées et très incomplètes pour ce brief.
+
+- La “documentation vivante” actuelle génère surtout 372 pages-gabarits et peut écraser le contenu; elle n’a ni catalogue produit/plans, ni versionnement, ni recherche.
+- `FeatureRegistry.cs` est la source déclarative de 61 fonctions, mais n’exprime pas produits, plans, add-ons, versions, prix ni couverture documentaire.
+- Le serveur Forge local peut déjà servir `/docs` et persister en SQLite/JSON; son feedback actuel reste un formulaire minimal, sans diagnostics consentis, déduplication ni cycle de vie.
+- Les updates actuels sont des métadonnées/dry-run; aucun manifeste signé, téléchargement sûr ou `UpdateManager` applicatif n’existe.
+- Les versions divergent (`v30`, `Alpha 0.3`, package `0.1.0`, workspace schema `29`), et aucun catalogue commercial fiable n’existe.
+
+Trois décisions structurantes restent donc à verrouiller.
+
+Vos choix impliquent une architecture neuve et indépendante : `S:\AIONE PRODUCT WORKSPACE` deviendra le dépôt canonique de ce système, les offres commerciales resteront vides tant qu’elles ne sont pas officiellement définies, et `0.3.0-alpha` sera la version produit de référence. Il reste à décider comment ce nouveau dépôt coopère avec l’application historique et quel socle technique porterait le mieux les trois moteurs.
+
+Votre choix hybride peut rester cohérent si chaque langage a une frontière stricte : TypeScript/Node porte le catalogue, les API, le site, les updates et le Feedback Hub; Python sert aux audits/imports et contrôles de qualité hors runtime; .NET porte l’adaptateur HUD, l’organisation spatiale du contexte et les context tiles. Les contrats JSON Schema et des fixtures signées empêcheront les divergences.
+
+Comme vous demandez explicitement un durcissement des imports Node/TypeScript, je vérifie maintenant les capacités de sécurité réellement disponibles dans les versions actuelles de Node, uniquement dans la documentation officielle, avant de verrouiller le sandbox et le modèle d’exécution.
+
+A recherché sur le Web
+
+Le poste dispose précisément du socle nécessaire (`Node 24 LTS`, `Python 3.13`, `.NET 10`). Le durcissement prévu combinera ESM fermé, imports statiques allowlistés, lockfile reproductible, scripts d’installation désactivés par défaut, permissions Node minimales et isolation OS pour tout code non fiable — le modèle de permissions Node est un garde-fou, pas un sandbox contre du code malveillant.
+
+Pour terminer la spécification, il faut encore fixer l’identité des produits, le mode de bascule depuis l’ancien dépôt et le niveau de publication de la V1.
+
+La taxonomie est désormais verrouillée : trois produits canoniques pairs — AIONE, FractalOS et MDVWE — plus un Shared Core non commercial. J’intègre également le modèle économique abstrait, les Kredits/tokens non financiers, le Reward Engine simulé, les politiques/consentements versionnés, l’interconnexion et le Policy Playground. La double écriture sera transitoire et réversible; la publication suivra une preview privée puis une promotion `/docs` soumise aux gates.
+
+Cette extension rend l’audit de `S:\MDVWE` et `S:\FractalOS` indispensable avant le plan final. Je les inspecte maintenant de façon ciblée, sans modifier leurs dépôts.
+
+Contexte compacté automatiquement
+
+Je poursuis l’audit des deux périmètres qui restaient ambigus, MDVWE et FractalOS. L’objectif est de distinguer ce qui peut réellement être repris de ce qui doit rester une source legacy, puis je verrouillerai le plan de remplacement, la double écriture et les frontières entre les trois produits.
+
+L’audit confirme déjà deux asymétries importantes : MDVWE est un produit Python cohérent et testable (0.2.1), tandis que FractalOS est un ensemble beaucoup plus composite — runtime Python, noyau bare-metal, HUD .NET et artefacts historiques mêlés. Je resserre maintenant sur les manifestes et interfaces réellement exécutables afin de ne pas transformer cette diversité en fausse architecture « propre ».
+
+La séparation cible est désormais claire : MDVWE peut être migré comme un produit autonome avec ses invariants événementiels ; FractalOS doit d’abord être découpé en pistes distinctes (contrôle hébergé, spatial/HUD, noyau expérimental), sans faire passer le noyau 0.5 ni le « Stage22 » pour une offre stable. Je vérifie encore les baselines testables et les écarts de version avant de figer l’ordre d’implémentation.
+
+Un dernier point d’architecture mérite une vérification factuelle : le backend local doit rester léger et réellement offline, mais il ne faut pas choisir un pilote de base fragile par habitude. Je valide donc l’état des briques SQLite et de sécurité disponibles dans la version Node LTS présente avant d’en faire un choix ferme dans le plan.
+
+Recherche effectuée sur le Web pour Node.js sqlite stability DatabaseSync | nodejs.org ...
+
+Je verrouille aussi les versions d’exécution par produit : elles ne doivent pas être artificiellement alignées sur `0.3.0-alpha`. Le catalogue aura sa propre version, tandis que les runtimes Python et .NET conserveront leurs compatibilités réelles et seront reliés par des contrats versionnés.
+
+Plan
+
+# Plan décisionnel — Catalogue produit, documentation dynamique, mises à jour et feedback AIONE
+
+## 1. Résultat cible et état vérifié
+
+Le nouveau système sera construit dans `S:\AIONE PRODUCT WORKSPACE`, qui deviendra immédiatement la source canonique indépendante. La version du catalogue initial sera `0.3.0-alpha`; les versions propres à AIONE, FractalOS et MDVWE resteront indépendantes.
+
+Constats d’audit à préserver :
+
+- `S:\AIONE\Ecosystem` mélange aujourd’hui AIONE et FractalOS, contient environ 61 fonctions déclaratives dans [FeatureRegistry.cs]\(S:/AIONE/Ecosystem/apps/windows\_hud/FeatureRegistry.cs), des versions contradictoires (`v30`, `Alpha 0.3`, formats 24/29), une documentation dispersée, un générateur largement templatisé, un faux centre de mise à jour et un feedback local incomplet. Le dépôt est fortement modifié : aucune migration ne doit écraser ces changements.
+- `S:\MDVWE` constitue un produit Python cohérent en version `0.2.1`, avec monde événementiel, continuité et migrations additives. Il n’a toutefois aucun commit Git et sa suite ne peut pas être reproduite dans l’environnement global sans installer ses dépendances. Son import exigera donc un snapshot haché et une validation Python 3.12 isolée.
+- `S:\FractalOS\03\FractalOS` combine un contrôle hébergé Python `0.1.0`, un noyau bare-metal `0.5.0`, des expériences Stage22 et un HUD WinUI séparé. Sa suite `unittest` passe localement, mais ses pistes doivent être séparées : le noyau reste expérimental et ne représente pas une offre stable.
+- `S:\AIONE PRODUCT WORKSPACE` est vide et hérite actuellement du dépôt trop large `S:\`. Il recevra son propre dépôt Git avant toute implémentation.
+
+Critères de réussite :
+
+- Une fonction est déclarée une fois dans le catalogue et produit les projections nécessaires : disponibilité, entitlements, matrices, documentation, site, références de permissions, notes de version et tests.
+- Les trois produits sont toujours présentés comme pairs distincts.
+- La documentation locale correspondant exactement à l’installation fonctionne sans réseau.
+- Les anciennes versions documentaires restent disponibles et immuables.
+- Aucune offre, aucun prix, aucune conversion ni valeur économique réelle n’est inventé.
+- Les mises à jour sont typées, signées, séparées par canal et réversibles.
+- Les diagnostics ne quittent jamais la machine sans prévisualisation et consentement portant sur le payload exact.
+- Aucun bug ou rapport de sécurité n’est transformé automatiquement en fonctionnalité publique.
+
+## 2. Décisions structurantes
+
+### 2.1 Nouveau dépôt canonique autonome
+
+- **Décision :** initialiser un dépôt Git dans `S:\AIONE PRODUCT WORKSPACE`; ne jamais utiliser le dépôt racine `S:\` comme dépôt du produit.
+- **Raison :** isoler le travail des nombreux dossiers non suivis de `S:\` et rendre les releases reproductibles.
+- **Alternatives considérées :** continuer dans `S:\AIONE\Ecosystem`; créer seulement une branche du dépôt `S:\`.
+- **Compromis :** la migration nécessite des adaptateurs explicites.
+- **Réversibilité :** totale; les sources legacy restent intactes et référencées par leur provenance.
+
+### 2.2 Trois produits pairs, Shared Core non commercial
+
+- **Décision :** AIONE, FractalOS et MDVWE ont chacun versions, hiérarchie, gammes, entitlements et releases propres. Shared Core/Platform Services reste interne.
+- **Raison :** empêcher le retour du libellé ambigu « FractalOS / AIONE ».
+- **Alternatives :** produit unique avec modules; quatrième produit « Core ».
+- **Compromis :** davantage de contrats interproduits.
+- **Réversibilité :** les frontières peuvent évoluer par migrations de catalogue, sans changer les identifiants historiques.
+
+### 2.3 Catalogue factuel et documentation narrative séparés
+
+- **Décision :** `catalog-source/` est la source des faits structurés; `docs-source/` contient les explications humaines et référence les identifiants du catalogue.
+- **Raison :** une description longue ne peut pas être générée honnêtement à partir d’un manifeste, tandis que plans, permissions, disponibilités et matrices ne doivent pas être recopiés.
+- **Alternative :** tout placer dans le Markdown ou tout générer.
+- **Compromis :** une fonction nécessite un enregistrement de catalogue et une page liée.
+- **Réversibilité :** forte grâce aux schémas versionnés et aux sorties déterministes.
+
+### 2.4 Contrats JSON Schema multilangages
+
+- **Décision :** JSON Schema 2020-12 est normatif; les types TypeScript, modèles Pydantic et records C# sont générés.
+- **Raison :** éviter trois implémentations divergentes.
+- **Alternatives :** Zod, Pydantic ou C# comme source unique.
+- **Compromis :** ajout d’une étape de génération et de tests de conformité croisée.
+- **Réversibilité :** chaque version de schéma reste conservée; les consommateurs négocient `schemaVersion`.
+
+### 2.5 Pile d’exécution
+
+- **Décision :** npm workspaces et TypeScript strict sur la dernière Node 24 LTS compatible; Python 3.12 comme baseline MDVWE avec test 3.13; .NET 10 pour le nouveau shell spatial, avec adaptateur .NET 8 pour LayerOS.
+- **Raison :** correspondre aux runtimes disponibles tout en préservant les compatibilités prouvées.
+- **Alternatives :** tout réécrire dans un seul langage; mettre immédiatement LayerOS à niveau.
+- **Compromis :** SDK générés et tests contractuels obligatoires.
+- **Réversibilité :** les frontières HTTP/JSON permettent de remplacer un runtime sans changer le catalogue.
+
+### 2.6 Base locale et backend futur
+
+- **Décision :** `node:sqlite` est utilisé uniquement pour le backend local/mock alpha derrière `FeedbackRepository`, `AuditRepository` et `LedgerRepository`; un contrat PostgreSQL est prévu pour le serveur public sans être activé.
+- **Raison :** conserver un fonctionnement offline sans dépendance native tierce. Le module SQLite de Node 24 est encore classé « release candidate », donc il ne devient pas un contrat de production irréversible. [Documentation Node SQLite](https://nodejs.org/download/release/latest-v24.x/docs/api/sqlite.html)
+- **Alternatives :** JSON monolithique; pilote SQLite natif npm; PostgreSQL obligatoire.
+- **Compromis :** migration de stockage nécessaire avant un service public à forte charge.
+- **Réversibilité :** assurée par les repositories, migrations SQL et tests communs.
+
+### 2.7 Double écriture contrôlée
+
+- **Décision :** le nouveau système est la source de vérité; une outbox transactionnelle produit des projections legacy idempotentes. Aucun fichier legacy modifié ne sera écrasé automatiquement.
+- **Raison :** respecter le remplacement immédiat tout en maintenant les consommateurs existants.
+- **Alternatives :** big bang; lecture legacy permanente.
+- **Compromis :** surveillance temporaire du drift et rejouabilité de l’outbox.
+- **Réversibilité :** désactivation de l’adaptateur sans toucher aux données canoniques.
+
+### 2.8 Contenu documentaire sans exécution distante
+
+- **Décision :** Markdown compilé en AST assaini avec liste blanche; pas de MDX distant, HTML brut, `eval`, imports dynamiques ou scripts reçus du serveur.
+- **Raison :** une signature de contenu n’autorise pas ce contenu à exécuter du code local.
+- **Alternative :** compiler les pages distantes dans l’application.
+- **Compromis :** composants interactifs limités à ceux inclus dans la release locale.
+- **Réversibilité :** la liste blanche peut être étendue par release signée.
+
+### 2.9 Sécurité des dépendances Node
+
+- **Décision :** versions exactes, `package-lock.json` unique, `npm ci`, scripts d’installation désactivés par défaut, allowlist documentée, SBOM, audit de licences, `overrides` centralisés et mises à jour proposées mais jamais auto-promues.
+- **Raison :** réduire les imports implicites et les mutations de dépendances.
+- **Alternative :** mises à jour automatiques directes.
+- **Compromis :** revue nécessaire pour chaque évolution.
+- **Réversibilité :** rollback exact via lockfile. Le modèle de permissions Node sera utilisé comme défense supplémentaire, jamais comme sandbox de code malveillant, conformément à sa [documentation officielle](https://nodejs.org/download/release/latest-v24.x/docs/api/permissions.html). TypeScript activera notamment [`noUncheckedSideEffectImports`](https://www.typescriptlang.org/tsconfig/noUncheckedSideEffectImports.html).
+
+### 2.10 Économie simulée uniquement
+
+- **Décision :** Kredits, tokens dérivés, rewards et billing restent des abstractions ou simulations désactivées en production.
+- **Raison :** aucune offre, valeur ou implication juridique n’est approuvée.
+- **Alternatives :** prix fictifs; intégration immédiate d’un paiement.
+- **Compromis :** le comparateur affiche « Pricing not defined » ou masque le prix.
+- **Réversibilité :** une politique validée pourra être ajoutée sans changer le ledger historique.
+
+### 2.11 Mises à jour signées et applicateurs déclaratifs
+
+- **Décision :** manifestes JSON canoniques signés Ed25519, SHA-256 par artefact, HTTPS, séquences anti-downgrade et applicateurs internes allowlistés; aucun manifeste ne fournit une commande shell.
+- **Raison :** séparer preuve d’origine, intégrité et logique d’installation.
+- **Alternative :** scripts PowerShell téléchargés ou hash seul.
+- **Compromis :** gestion sécurisée des clés et rotation requise. Node prend nativement en charge la [vérification Ed25519](https://nodejs.org/download/release/latest-v24.x/docs/api/crypto.html).
+- **Réversibilité :** clés identifiées par `keyId`, keyset versionné et rollback side-by-side.
+
+### 2.12 Feedback et sécurité séparés
+
+- **Décision :** les rapports `SECURITY` utilisent une route, un stockage et un dashboard séparés; ils ne sont ni dupliqués vers le flux communautaire legacy ni publiés automatiquement.
+- **Raison :** éviter une fuite par triage ou déduplication générale.
+- **Alternative :** une table unique avec filtre.
+- **Compromis :** deux workflows internes.
+- **Réversibilité :** les vues agrégées peuvent être réunies ultérieurement sans fusionner les données sensibles.
+
+### 2.13 Publication progressive avec Sites
+
+- **Décision :** construire le site local, le publier d’abord en preview Sites privée, conserver l’identifiant dans `.openai/hosting.json`, puis promouvoir la même release validée sous `/docs`.
+- **Raison :** vérifier routes, recherche, versions, contenus juridiques et absence de faux prix avant exposition publique.
+- **Alternative :** publication publique directe.
+- **Compromis :** une étape de promotion supplémentaire.
+- **Réversibilité :** chaque version reste déployée sous une URL immuable; `latest` n’est qu’un alias.
+
+## 3. Architecture cible
+
+```
+S:\AIONE PRODUCT WORKSPACE\
+├── apps\
+│   ├── aione\                    # façade cognition, agents, orchestration
+│   ├── fractalos\                # shell spatial .NET et context tiles
+│   ├── mdvwe\                    # produit Python et façade d’intégration
+│   ├── catalog-web\              # site React/Vite, local et public
+│   ├── platform-api\             # API TypeScript locale/serveur
+│   └── developer-console\        # triage et simulations, local-only
+├── packages\
+│   ├── contracts\
+│   ├── catalog\
+│   ├── docs-engine\
+│   ├── identity\
+│   ├── permissions\
+│   ├── entitlements\
+│   ├── kredits\
+│   ├── rewards\
+│   ├── billing\
+│   ├── policy\
+│   ├── consent\
+│   ├── licensing\
+│   ├── usage-metering\
+│   ├── interconnection\
+│   ├── import-export\
+│   ├── audit\
+│   ├── update-manager\
+│   └── feedback\
+├── catalog-source\
+│   ├── ecosystem.yaml
+│   ├── products\
+│   ├── hierarchy\
+│   ├── capabilities\
+│   ├── actions\
+│   ├── tiers\
+│   ├── addons\
+│   ├── permissions\
+│   ├── policies\
+│   ├── interconnections\
+│   ├── import-export\
+│   └── releases\
+├── docs-source\
+│   ├── products\
+│   ├── features\
+│   ├── plans\
+│   ├── addons\
+│   ├── permissions\
+│   ├── guides\
+│   ├── tutorials\
+│   ├── api\
+│   ├── troubleshooting\
+│   ├── security\
+│   ├── legal\
+│   └── releases\
+├── schemas\                       # JSON Schema normatifs et migrations
+├── adapters\
+│   ├── legacy-aione\
+│   ├── legacy-forge\
+│   ├── fractalos-python\
+│   ├── fractalos-dotnet8\
+│   └── mdvwe-python\
+├── migrations\
+│   ├── source-inventory\
+│   ├── aliases\
+│   └── outbox\
+├── generated\                     # ignoré, jamais édité manuellement
+├── tests\
+├── tooling\
+├── package.json
+├── package-lock.json
+└── .openai\hosting.json           # créé lors de la preview Sites
+```
+
+### Frontières produit
+
+| DomainePropriétaire cibleProvenance legacy principale                |                                  |                                                                   |
+| -------------------------------------------------------------------- | -------------------------------- | ----------------------------------------------------------------- |
+| IA, agents, mémoire cognitive, orchestration, automation, Forge      | AIONE                            | `aione_cognitive_engine`, `aione_forge`, parties autonomie/worker |
+| Espaces, objets, HUD, context tiles, exécution spatiale, VFS spatial | FractalOS                        | `AioneHud`, LayerOS, TileMindFS, Storage VFS                      |
+| Noyau bare-metal et ISO                                              | FractalOS, module `EXPERIMENTAL` | `FractalOS\bare_metal`                                            |
+| Mondes, scènes, continuité, animation, vidéo, rendu                  | MDVWE                            | `S:\MDVWE`                                                        |
+| Identité, permissions, entitlements, policies, Kredits, audit        | Shared Core interne              | réimplémentation avec adaptateurs                                 |
+| Marketplace future                                                   | Service séparé, désactivé        | aucun système monétaire partagé                                   |
+
+AIONE peut demander une action à FractalOS ou MDVWE, mais ne peut pas contourner leur validation. Les pixels MDVWE ne deviennent jamais automatiquement la vérité du monde; le catalogue conservera cet invariant.
+
+## 4. Modèle de données et interfaces publiques
+
+### 4.1 Catalogue et hiérarchie
+
+Hiérarchie obligatoire et acyclique :
+
+```
+Product → Family → Range → SubRange → Module → Capability → Feature → Action
+```
+
+Tous les objets possèdent :
+
+```
+id namespacé
+schemaVersion
+slug
+title
+description
+productId
+lifecycle
+evidenceStatus
+since / until
+owners
+sourceRefs
+documentationRefs
+policyVersionRefs
+```
+
+Séparation des états :
+
+- `lifecycle` : `REQUESTED`, `PROPOSED`, `APPROVED`, `IMPLEMENTING`, `PREVIEW`, `STABLE`, `DEPRECATED`, `RETIRED`, `UNAVAILABLE`.
+- `evidenceStatus` : `SOURCE_DISCOVERED`, `DOC_CLAIM`, `TESTED`, `OBSERVED`, `VERIFIED`.
+- Les affirmations legacy sont importées comme `SOURCE_DISCOVERED` ou `DOC_CLAIM`; seules les validations reproductibles les font passer à `TESTED` ou `VERIFIED`.
+
+`Action` déclare notamment :
+
+```
+executionCostPolicyId
+kreditCostPolicyId
+rewardPolicyId
+resourceCost
+ecosystemValue
+userValue
+permissions
+metering
+locality
+```
+
+Les libellés autorisés sont « Utility Return », « Contribution Return » et « Ecosystem Reward », jamais rentabilité financière.
+
+### 4.2 Gammes, plans, add-ons et disponibilité
+
+`CapabilityTierClass` fournit l’enum commun :
+
+```
+FREE | FREEMIUM | PREMIUM | PRO | TEAM
+ENTERPRISE | RESEARCH | EDUCATION | CUSTOM
+```
+
+Chaque produit choisit son sous-ensemble et ses propres noms d’affichage. Aucun tier d’un produit ne donne implicitement accès à un autre.
+
+En phase alpha :
+
+- Les classes et règles sont opérationnelles.
+- Les offres commerciales restent `UNDECIDED`.
+- Une matrice peut utiliser des fixtures `PROPOSED`, clairement signalées.
+- Aucun prix numérique n’apparaît sans `offerStatus: APPROVED`.
+- Le profil FREE proposé doit couvrir au moins un workflow utile complet par produit et une interconnexion limitée; un test empêche une version artificiellement inutilisable.
+
+Décisions d’affichage normalisées :
+
+```
+AVAILABLE
+AVAILABLE_LIMITED
+REQUIRES_TIER
+REQUIRES_ADDON
+NOT_INSTALLED
+UNSUPPORTED_PLATFORM
+EXPERIMENTAL
+DEPRECATED
+UNAVAILABLE
+OFFER_NOT_DEFINED
+```
+
+Une permission système n’est jamais transformée en simple paywall.
+
+### 4.3 Installation et entitlements
+
+`InstallationProfile` reste local par défaut :
+
+```
+installationId pseudonyme
+platform
+catalogVersion
+products[{productId, productVersion, components}]
+entitlements[]
+addons[]
+selectedChannels[]
+```
+
+Le site public ne sonde jamais la machine. L’application locale transmet ce profil en mémoire au moteur documentaire.
+
+`EntitlementGrant` contient sujet, produit, portée hiérarchique, source, dates, limites, `policyVersion` et preuve/signature éventuelle. L’ordre de décision est fixé :
+
+```
+existence/status
+→ plateforme et installation
+→ entitlement/tier/add-on
+→ licence
+→ acceptations
+→ quota/rate limit
+→ Kredits
+→ permission contextuelle
+→ sécurité/protocole du service distant
+```
+
+### 4.4 Permission Engine
+
+Entrée publique `PermissionRequest` :
+
+```
+subject
+productId
+range/module/feature/action
+resource et dataClassification
+entitlementIds
+licenseIds
+acceptanceIds
+quotaContext
+jurisdiction
+executionContext
+```
+
+Sortie `PermissionDecision` :
+
+```
+ALLOW | DENY | ALLOW_LIMITED | REQUIRE_CONSENT
+UPGRADE | KREDITS | LICENSE | REVIEW
+reasonCodes[]
+limits[]
+requiredActions[]
+policyVersions[]
+auditEventId
+```
+
+Les services distants recalculent toujours la décision. Les fichiers locaux ne sont pas présentés comme impossibles à modifier par leur propriétaire.
+
+### 4.5 Kredits, tokens et rewards
+
+Le ledger est append-only, équilibré en double entrée et utilise des entiers sérialisés en chaîne selon la précision du token. Une correction produit une transaction de reversal; aucune ligne historique n’est modifiée.
+
+Objets principaux :
+
+```
+Account / Wallet / LedgerTransaction / LedgerEntry
+Grant / Spend / Reward / Expiration / Reversal
+KreditPolicy / ConversionRule / UsageMeter
+```
+
+Chaque transaction conserve :
+
+```
+why, source, destination, product, module, action
+amountMinor, unitId, policyVersion, timestamp
+expiry, correlationId, contextHash
+```
+
+Sources modélisées mais non activées automatiquement : achat, abonnement, gratuit, promotion, reward, recherche, développement, communauté, remboursement, administration.
+
+`UtilityTokenPolicy` impose :
+
+- `stabilityType`: `STABLE`, `VARIABLE`, `CONTEXTUAL_DYNAMIC`.
+- `DynamicStabilityWindow`: bornes basse/haute, confiance, durée de validité, signature de contexte.
+- `publicTrading=false`, `yield=false`, `fiatConversion=false`, `externalTransfer=false`.
+- Toute évolution de ces drapeaux exige `LEGAL_REVIEW_REQUIRED`.
+
+`RewardDecision` explique règle, contexte, multiplicateur, cap, budget, signaux anti-abus et montant simulé. Les garde-fous incluent rate limits, plafonds, empreintes de doublons, budget, circuit breaker, signaux sybil abstraits et détection de cycles économiques positifs. Une chaîne « dépenser 1 → recevoir 2 → répéter » doit échouer en validation de politique.
+
+### 4.6 Policies, consentements et licences
+
+`PolicyDocument` :
+
+```
+id, kind, version, effectiveAt, jurisdiction
+required, optional, hash, status
+```
+
+Kinds : terms, privacy, license, import, export, AI, content, data, reward et kredit.
+
+`AcceptanceRecord` est append-only et lie sujet, scope, version, hash, date et méthode. Toute modification du payload feedback ou de la politique invalide le consentement précédent.
+
+### 4.7 Interconnection Graph et import/export
+
+Chaque arête directionnelle contient :
+
+```
+sourceProduct / targetProduct
+accessScope / permissionScope / dataScope / executionScope
+quota / latency / computePolicy
+kreditPolicy / rewardPolicy
+importPolicy / exportPolicy
+privacyPolicy / licensePolicy
+status
+```
+
+Arêtes initiales, toutes `PROPOSED` ou `EXPERIMENTAL` :
+
+- AIONE → FractalOS : orchestration d’actions contextuelles, validées par FractalOS.
+- AIONE → MDVWE : demande de jobs monde/scène/rendu, validés par MDVWE.
+- FractalOS ↔ MDVWE : présentation spatiale de mondes et scènes, sans mutation implicite de la vérité événementielle.
+- MDVWE → AIONE : observations et événements explicitement classifiés, jamais commandes privilégiées.
+
+La matrice import/export est `deny-by-default` et croise type de ressource, source, destination, format, taille, classification, licence, confidentialité, tier, permission, Kredit et reward.
+
+Classifications :
+
+```
+USER_DATA | CREATED_DATA | LICENSED_DATA | SYSTEM_DATA
+MODEL_DATA | DERIVED_DATA | SHARED_DATA
+```
+
+### 4.8 Audit commun
+
+`AuditEvent` consigne :
+
+```
+who / what / product / module / action
+policyVersions / cost / reward
+permissionDecision / outcome
+correlationId / timestamp / evidenceRefs
+```
+
+Les projections peuvent être reconstruites; les événements historiques restent attachés à leur version de politique.
+
+## 5. Documentation et site
+
+### 5.1 Frontmatter
+
+Chaque page possède au minimum :
+
+```
+id:
+title:
+locale: fr
+products: []
+plans: []
+addons: []
+features: []
+permissions: []
+since:
+until:
+status:
+catalog_version:
+```
+
+Le français est la langue initiale. La structure est prête pour l’anglais, mais aucun contenu traduit artificiellement n’est publié.
+
+### 5.2 Pipeline déterministe
+
+```
+JSON Schema
+→ validation catalog-source
+→ résolution des références
+→ validation docs-source
+→ génération des matrices/pages/index API
+→ compilation Markdown en AST assaini
+→ index de recherche par version
+→ prerender React/Vite
+→ bundle offline
+→ manifestes et checksums
+→ artefact de release immuable
+```
+
+Sorties :
+
+- feature, plan, add-on, permission, pricing-state et interconnection matrices;
+- pages produits et architecture;
+- index OpenAPI/TypeScript/Python/.NET;
+- `CHANGELOG.md`, changelog web, changelog in-app et release notes;
+- descriptions de mise à jour;
+- bundle local et site public.
+
+Une fonction `PREVIEW` ou `STABLE` sans page liée bloque le build. Une exemption n’est admise que pour `PROPOSED`, avec motif, propriétaire et expiration.
+
+### 5.3 Versionnement et offline
+
+- Route publique : `/docs/versions/0.3.0-alpha/...`.
+- `/docs/latest` est un alias vers une version immuable.
+- Le bundle de l’installation pointe toujours vers sa version exacte et ne suit jamais `latest`.
+- Chaque index de recherche est limité à sa version.
+- Le serveur local se lie à `127.0.0.1` sur un port découvert au démarrage.
+- FractalOS ouvre le bundle dans WebView2; AIONE et MDVWE exposent une commande ouvrant la même route.
+- Si le service de métadonnées est indisponible, la documentation embarquée reste complète.
+
+Le site `catalog-web` comprend recherche, navigation, versions, produits, comparaison, architecture, tutoriels, troubleshooting, permissions, sécurité, changelog, graphe d’écosystème et explorateur de gamme.
+
+L’explorateur recommande une classe de capacités selon l’usage personnel, développeur, créateur, chercheur, équipe ou entreprise. Il n’affiche que coûts structurels qualitatifs et porte le libellé « simulation non contractuelle ».
+
+Le Policy Playground reste en mémoire dans le navigateur. Aucune simulation n’affecte les politiques réelles avant export, revue, commit et validation.
+
+## 6. UpdateManager
+
+### 6.1 Manifestes
+
+`UpdateManifestV1` contient :
+
+```
+releaseId, sequence, catalogVersion
+productId, componentId, version
+channel, updateType
+issuedAt, expiresAt
+minCurrentVersion, maxCurrentVersion
+protocolRange, platformConstraints
+artifacts[{url,size,sha256,signature,keyId}]
+documentationRelease
+registeredMigrationIds[]
+securityBulletin
+rolloutPolicy
+```
+
+Types :
+
+```
+feature | bugfix | security | critical_security | compatibility
+```
+
+Canaux strictement exclusifs :
+
+```
+stable | preview | development
+```
+
+L’installation initiale `0.3.0-alpha` utilise `preview`. Il n’existe aucun fallback automatique entre canaux.
+
+### 6.2 Flux d’application
+
+```
+check
+→ téléchargement en staging
+→ HTTPS, signature, hash et taille
+→ compatibilité et anti-downgrade
+→ plan explicatif
+→ sauvegarde/restore point
+→ application side-by-side
+→ migrations enregistrées localement
+→ health check
+→ bascule atomique
+→ rollback si échec
+```
+
+Principes :
+
+- Auto-check autorisé; auto-install désactivé pour l’alpha.
+- `critical_security` reçoit une présentation forte mais n’exécute pas silencieusement un binaire.
+- Un service distant peut bloquer une fonction via HTTP `426` avec `featureId`, version actuelle, version minimale, raison, version corrective, bulletin et procédure.
+- Version minimale, protocole, entitlement, session et signature sont contrôlés côté serveur.
+- Les migrations de projets MDVWE restent distinctes des mises à jour de runtime et conservent leur stratégie backup/restore-copy.
+- Le loop d’auto-upgrade FractalOS legacy n’est pas considéré comme un canal de release.
+- Les clés privées de production ne sont jamais stockées dans le dépôt; seules des clés fixtures sont utilisées en test.
+
+## 7. Feedback Hub
+
+### 7.1 Modèle utilisateur
+
+Catégories :
+
+```
+BUG | CRASH | FEATURE_REQUEST | DOCUMENTATION
+PERFORMANCE | COMPATIBILITY | SECURITY | OTHER
+```
+
+Un `FeedbackSubmission` contient titre, description, produit, version, plateforme, catégorie et diagnostics optionnels. Un `FEATURE_REQUEST` utilisateur reste un feedback; seul un triage humain peut créer un `FeatureProposal`.
+
+### 7.2 Pipeline
+
+```
+collecte minimale
+→ sanitizer client
+→ sanitizer serveur
+→ preview exacte
+→ consentement lié au hash
+→ queue locale
+→ upload si configuré
+→ API
+→ stockage
+→ déduplication assistée
+→ triage
+→ issue
+→ roadmap
+→ release
+→ documentation
+```
+
+Sans serveur public :
+
+- API locale sur loopback uniquement;
+- upload clairement indiqué comme indisponible;
+- queue persistante locale et export JSON possible;
+- aucun retry réseau caché;
+- aucune télémétrie.
+
+Le sanitizer applique allowlist de champs, limites de taille, normalisation Unicode, suppression des caractères de contrôle, redaction des tokens, secrets, cookies, authorization headers, variables sensibles, noms d’utilisateur, chemins personnels, identifiants machine et adresses réseau. La stack trace est normalisée sans supprimer l’original consenti.
+
+### 7.3 Déduplication et statuts
+
+- Empreinte exacte : feature ID, stack normalisée, produit et version.
+- Similarité approximative : suggestion de cluster avec score.
+- Aucun original n’est supprimé, fusionné ou marqué duplicate automatiquement.
+- Le triager peut créer un lien `duplicateOf` avec justification.
+
+Statuts utilisateur :
+
+```
+RECEIVED | CONFIRMED | PLANNED | IN_PROGRESS
+RELEASED | DECLINED | DUPLICATE
+```
+
+Le statut est exposé par session authentifiée ou receipt secret opaque dont seul le hash est stocké.
+
+### 7.4 Stockage et dashboard
+
+Tables/projections :
+
+```
+feedback_submission
+feedback_diagnostic
+feedback_status_event
+feedback_similarity
+triage_decision
+feature_proposal
+trace_link
+feedback_outbox
+security_report
+```
+
+Les diagnostics consentis sont chiffrés par un provider de clés OS; sous Windows, DPAPI est utilisé. Sans provider disponible, les diagnostics sensibles ne sont pas persistés.
+
+Le developer console local affiche fréquences, versions, gammes, tendances, candidats et traçabilité. Les rapports de sécurité vivent dans une base et une autorisation séparées et ne génèrent jamais automatiquement une issue publique.
+
+## 8. Migration et double écriture
+
+### 8.1 Snapshot prouvé
+
+Avant import :
+
+- enregistrer statut Git, version des outils, liste des fichiers et SHA-256 des trois sources;
+- archiver MDVWE puisqu’il n’a aucun commit;
+- exécuter MDVWE dans un venv Python 3.12 avec dépendances verrouillées;
+- reproduire la suite FractalOS et les builds .NET applicables;
+- enregistrer chaque résultat comme `EvidenceRecord`.
+
+### 8.2 Import sans promotion implicite
+
+- Convertir les 61 entrées du registre AIONE en candidats namespacés.
+- Importer les flags et statuts MDVWE en conservant `0.2.1`.
+- Séparer FractalOS hosted, spatial/HUD et bare-metal.
+- Conserver tous les anciens noms dans `migrations/aliases`, sans les utiliser comme nouveaux noms publics.
+- Une affirmation documentaire ne devient jamais `STABLE` simplement parce qu’elle existe dans un README.
+
+### 8.3 Double écriture
+
+- Toute mutation canonique validée produit une transaction et une entrée outbox.
+- Les projections legacy vont dans des emplacements générés dédiés; elles ne réécrivent pas les fichiers manuels.
+- Les consommateurs legacy sont modifiés une seule fois pour lire la projection générée puis leur fallback historique.
+- Les feedbacks non-security peuvent être projetés vers l’ancien endpoint communautaire avec clé d’idempotence.
+- Les rapports `SECURITY` restent exclusivement dans le nouveau canal protégé.
+- Un rapport de drift compare les deux côtés; toute divergence empêche une publication, pas l’usage local.
+- L’adaptateur legacy n’est retiré qu’après deux release candidates consécutives sans écriture legacy-only ni drift non résolu.
+
+## 9. Ordre exact d’implémentation
+
+1. **Audit et isolation**
+   - Créer le dépôt autonome, règles de sécurité et inventaires hachés.
+   - Capturer les baselines de tests et les incohérences de version.
+   - Ne déplacer ni supprimer aucune source.
+2. **Architecture et contrats**
+   - Créer le monorepo, toolchains et JSON Schemas.
+   - Générer les types TS/Python/C# et tests de round-trip.
+   - Définir IDs, lifecycle, preuves, version de catalogue et erreurs API.
+3. **Migration et double écriture**
+   - Construire les importeurs read-only, aliases, outbox et rapport de drift.
+   - Importer les catalogues candidats sans promotion.
+   - Faire du nouveau workspace l’unique source des nouvelles déclarations.
+4. **Shared Core**
+   - Implémenter identity, audit, policy, consent, licensing, usage-metering et permission decisions.
+   - Ajouter l’API `/api/v1` locale, l’auth loopback et la négociation de protocole.
+5. **Produits**
+   - Créer les façades AIONE, FractalOS et MDVWE.
+   - Implémenter le shell FractalOS .NET/context tiles et les SDK générés.
+   - Préserver les invariants MDVWE et isoler le noyau FractalOS expérimental.
+6. **Gammes et entitlements**
+   - Implémenter classes de tier, plans/add-ons proposés, décisions de disponibilité et profil installé.
+   - Ajouter les tests « freemium utile » sans publier d’offre officielle.
+7. **Kredits et Reward simulation**
+   - Implémenter ledger append-only, policies versionnées, rewards explicables, anti-abus et Policy Playground.
+   - Laisser billing, paiement et conversions réelles désactivés.
+8. **Interconnexions et données**
+   - Implémenter le graphe directionnel, matrices import/export, classifications, licences et default deny.
+   - Ajouter les premiers scénarios AIONE–FractalOS–MDVWE sous statut expérimental.
+9. **Expérience produit**
+   - **9A :** générateur de catalogue, documentation, changelog et API indexes.
+   - **9B :** site local/public, recherche offline, sélecteurs, matrices et simulateur.
+   - **9C :** UpdateManager, feed signé, applicateurs et rollback.
+   - **9D :** Feedback Hub, sanitizer, stockage local, déduplication et developer console.
+10. **Validation et cutover**
+    - Exécuter toute la matrice de tests.
+    - Produire `0.3.0-alpha` preview avec bundle documentaire exact.
+    - Publier la preview Sites privée et vérifier `/docs`.
+    - Promouvoir publiquement seulement l’artefact identique, après validation sécurité/légal/contenu.
+    - Maintenir la double écriture jusqu’au critère objectif de retrait.
+
+## 10. Tests et critères d’acceptation
+
+### Catalogue et documentation
+
+- IDs uniques, hiérarchie acyclique, références valides, SemVer cohérent.
+- Aucun produit combiné « AIONE / FractalOS ».
+- Shared Core absent des offres publiques.
+- Fonction `PREVIEW`/`STABLE` sans documentation : build en échec.
+- Permissions, plans, entitlements et pricing-state cohérents.
+- Liens, ancres, navigation et recherche par version.
+- Build déterministe : mêmes sources, mêmes hashes.
+- Bundle local entièrement utilisable réseau coupé.
+- Ancienne version inchangée après publication d’une nouvelle.
+
+### Permissions, policies et entitlements
+
+- Chaque outcome et reason code couvert.
+- Permission OS distincte d’un entitlement commercial.
+- Acceptation obligatoire, quota, licence, juridiction et protocole testés.
+- Décision serveur recalculée malgré une décision client falsifiée.
+
+### Kredits et rewards
+
+- Ledger équilibré, append-only, idempotent et reconstruisible.
+- Reversal, expiry et policy version historique.
+- Plafonds, budgets, doublons, circuit breaker et cycles positifs.
+- Absence de valeur fiat, rendement ou trading dans les sorties publiques.
+
+### Mise à jour
+
+- Bon et mauvais hash, signature, clé, HTTPS, taille et expiration.
+- Manifestes falsifiés, versions incompatibles et downgrade.
+- Aucun mélange stable/preview/development.
+- Message `critical_security` précis et bloc serveur structuré.
+- Installation atomique, health check et rollback.
+- Rejet de tout script ou migration non enregistrée.
+- Documentation distante incapable d’exécuter du code.
+
+### Feedback
+
+- Fuzzing et golden tests du sanitizer.
+- Redaction secrets, chemins, identifiants et headers.
+- Consentement absent/refusé/modifié.
+- Preview identique au payload envoyé.
+- Queue offline, outbox idempotente et reprise.
+- Similarité approximative conservant tous les rapports.
+- Bug jamais promu sans triage.
+- Flux SECURITY inaccessible au dashboard public.
+- Historique complet request → issue → commit/PR → release → documentation lorsqu’un lien existe.
+
+### Migration et supply chain
+
+- Couverture des 61 fonctions legacy et de tous les aliases.
+- Sources legacy inchangées par les importeurs.
+- Drift, conflit et panne partielle de double écriture.
+- Tests MDVWE Python 3.12/3.13, FractalOS Python, .NET 8 adapter et .NET 10 shell.
+- `npm ci` reproductible, lockfile exact, scripts non allowlistés bloqués.
+- SBOM, licences et dépendances URL/git non approuvées.
+- Aucun import dynamique depuis un contenu utilisateur ou documentaire.
+
+### Parcours final
+
+Un utilisateur doit pouvoir répondre depuis l’interface, sans lire le code :
+
+- ce que sont AIONE, FractalOS et MDVWE;
+- quel produit ou profil proposé correspond à son usage;
+- ce qui est disponible, proposé ou non défini;
+- pourquoi une permission est demandée et comment la révoquer;
+- ce que représente un Kredit sans promesse financière;
+- ce qui fonctionne offline;
+- quelles données sont collectées;
+- comment envoyer un feedback ou une demande;
+- quelle version est installée;
+- pourquoi une mise à jour ou un blocage distant est nécessaire.
+
+## 11. Hypothèses, valeurs par défaut et revues obligatoires
+
+- Version canonique initiale : catalogue/plateforme `0.3.0-alpha`, canal `preview`.
+- Versions produits conservées séparément; aucune normalisation silencieuse.
+- Français initial, anglais préparé mais non généré automatiquement.
+- Télémétrie et upload feedback désactivés par défaut.
+- Backend public de feedback absent en v1; le local/mock est explicitement étiqueté.
+- Aucune offre, aucun prix, aucune facture, aucun paiement ni abonnement officiel.
+- Les plans/tier fixtures sont `PROPOSED`; les comparateurs affichent l’état, pas une promesse commerciale.
+- Clés de signature production, clés de chiffrement serveur et credentials de déploiement restent des secrets externes.
+- Sont `LEGAL_REVIEW_REQUIRED` avant activation : prix et abonnements, expiration ou conversion de Kredits, transfert interutilisateurs, valeur externe, marketplace, rewards publics, juridictions, conditions contractuelles, données feedback/diagnostics, durée de rétention, disclosure sécurité, licences IA/contenu/modèles et intégration d’un paiement.
+- Sont `UNDECIDED` : offres réelles par produit, formules de coût/reward, taux de conversion, règles d’expiration, backend public et politique commerciale. Le comportement par défaut est désactivé ou masqué.
+- Aucun dossier legacy n’est supprimé; toute future suppression ou bascule irréversible nécessite une décision distincte.
+
+# PROMPT CODEX 2 — LICENCES, JURIDIQUE, PRIVACY ET SÉCURITÉ TOUTES GAMMES
+
+Travaille sur le workspace produit créé précédemment.
+
+Objectif : construire une base **juridique, licensing, privacy et security-by-design** exploitable avant une publication publique.
+
+Ne prétends jamais fournir une certification juridique.
+
+Les documents générés doivent identifier clairement les éléments nécessitant une validation humaine ou par un professionnel du droit.
+
+## 1. Audit des licences
+
+Scanner :
+
+- code source,
+- dépendances Python,
+- npm,
+- Rust/Cargo,
+- Docker,
+- modèles IA,
+- datasets,
+- assets,
+- polices,
+- images,
+- vidéos,
+- bibliothèques natives,
+- Blender,
+- ComfyUI,
+- Qiskit,
+- Ollama,
+- FFmpeg,
+- composants récupérés depuis GitHub.
+
+Créer :
+
+```
+legal/LICENSE_AUDIT.md
+legal/THIRD_PARTY_NOTICES.md
+legal/DEPENDENCY_LICENSES.json
+legal/MODEL_LICENSES.md
+```
+
+Pour chaque composant :
+
+```
+name
+version
+source
+license
+commercial_use
+redistribution
+modification
+attribution
+copyleft
+network_copyleft
+model_specific_terms
+risk
+action
+```
+
+Ne jamais deviner une licence.
+
+Si inconnue :
+
+```
+UNKNOWN — BLOCK PUBLIC DISTRIBUTION UNTIL REVIEW
+```
+
+## 2. Juridictions
+
+La base produit doit particulièrement prendre en compte une exploitation depuis la France et l'Union européenne.
+
+Identifier les textes actuels susceptibles d'affecter :
+
+- logiciels,
+- vente numérique,
+- abonnements,
+- facturation,
+- consommateurs,
+- données personnelles,
+- sécurité,
+- intelligence artificielle,
+- services cloud,
+- crédits internes,
+- marketplace éventuelle.
+
+Toute conclusion dépendante du droit actuel doit être vérifiée depuis des sources officielles et datées.
+
+Marquer :
+
+```
+LEGAL_REVIEW_REQUIRED
+```
+
+lorsqu'une interprétation juridique est nécessaire.
+
+## 3. Credits et tokens
+
+Examiner spécifiquement le modèle AIONE Credits.
+
+La V1 doit considérer les crédits comme :
+
+```
+closed-loop prepaid usage credits
+```
+
+pour consommation de services internes.
+
+Ils ne doivent pas être :
+
+- négociables entre utilisateurs,
+- convertibles librement en monnaie,
+- commercialisés comme investissement,
+- porteurs d'intérêt,
+- présentés comme actifs financiers.
+
+Toute fonctionnalité :
+
+```
+TRANSFERABLE
+TRADEABLE
+REDEEMABLE
+FLOATING_VALUE
+MARKET_PRICED
+```
+
+doit rester désactivée jusqu'à analyse juridique spécifique.
+
+Créer :
+
+```
+legal/CREDITS_LEGAL_BOUNDARIES.md
+```
+
+## 4. Conditions d'utilisation
+
+Préparer des modèles clairement marqués :
+
+```
+DRAFT — REQUIRES LEGAL REVIEW
+```
+
+pour :
+
+```
+Terms of Service
+EULA
+Privacy Policy
+Cookie Policy
+Acceptable Use Policy
+Refund Policy
+Subscription Terms
+Credits Terms
+Security Policy
+Responsible Disclosure Policy
+```
+
+Ne pas ajouter de clauses abusives.
+
+## 5. Mise à jour de sécurité
+
+Créer une politique formelle de versions :
+
+```
+supported
+deprecated
+unsupported
+security-blocked
+```
+
+Séparer :
+
+```
+local application
+network services
+cloud services
+remote API
+```
+
+Une vieille application locale ne doit pas être arbitrairement désactivée.
+
+En revanche, lorsqu'un protocole ou une version présente un risque réel, les services concernés peuvent exiger une version minimale sécurisée lorsque cela est légal, nécessaire et documenté.
+
+Créer :
+
+```
+security/UPDATE_POLICY.md
+security/SUPPORTED_VERSIONS.md
+```
+
+## 6. Update integrity
+
+Chaque release doit pouvoir comporter :
+
+```
+version
+channel
+hash
+signature
+SBOM
+release notes
+security classification
+minimum compatible version
+```
+
+Prévoir la vérification cryptographique des mises à jour.
+
+Le client ne doit jamais exécuter aveuglément un package téléchargé.
+
+## 7. Security architecture
+
+Créer un threat model couvrant :
+
+- agents IA,
+- outils exécutables,
+- filesystem,
+- réseau,
+- plugins,
+- modèles locaux,
+- modèles distants,
+- injection de prompt,
+- secrets,
+- supply chain,
+- updater,
+- billing,
+- entitlement,
+- API,
+- reports,
+- plugins tiers.
+
+Créer :
+
+```
+security/THREAT_MODEL.md
+security/TRUST_BOUNDARIES.md
+security/PERMISSION_MODEL.md
+security/SECURITY_REQUIREMENTS.md
+```
+
+## 8. Principe essentiel
+
+Un plan commercial ne donne jamais davantage de privilèges système.
+
+```
+Plan PRO != administrator access
+Plan ENTERPRISE != unrestricted agent
+```
+
+Les permissions doivent dépendre de :
+
+- l'utilisateur,
+- l'organisation,
+- la policy,
+- le scope,
+- l'action,
+
+pas seulement du paiement.
+
+## 9. Agent sandbox
+
+Lorsque possible :
+
+- scoped filesystem,
+- allowlisted commands,
+- subprocess restrictions,
+- timeout,
+- resource limits,
+- isolated workspace,
+- explicit network permission.
+
+Identifier ce qui n'est techniquement pas sandboxé.
+
+Ne jamais annoncer « sandbox sécurisé » lorsque seule une convention applicative existe.
+
+## 10. Secrets
+
+Aucun secret dans :
+
+```
+repository
+logs
+telemetry
+error reports
+screenshots
+config committed
+```
+
+Prévoir abstraction de secret store.
+
+## 11. Error/Crash Reports
+
+Créer un pipeline de sanitation.
+
+Avant upload :
+
+- retirer secrets,
+- chemins personnels lorsque possible,
+- identifiants,
+- tokens,
+- prompts privés,
+- fichiers utilisateur.
+
+Afficher à l'utilisateur ce qui sera envoyé lorsque raisonnablement possible.
+
+## 12. Privacy
+
+Créer :
+
+```
+privacy/DATA_INVENTORY.md
+privacy/DATA_FLOW_MAP.md
+privacy/RETENTION_POLICY.md
+privacy/CONSENT_MODEL.md
+```
+
+Classer les données :
+
+```
+required
+optional
+analytics
+diagnostics
+billing
+security
+user_content
+```
+
+Minimiser leur collecte.
+
+## 13. Suppression/export
+
+Préparer :
+
+```
+export my data
+delete my account
+delete cloud data
+clear local history
+```
+
+Les données strictement nécessaires à certaines obligations comptables/légales doivent être identifiées séparément et non supprimées arbitrairement.
+
+## 14. Premium/Free security parity
+
+Les correctifs de sécurité fondamentaux ne doivent pas être réservés au Premium.
+
+Tous les plans doivent bénéficier des correctifs nécessaires pour protéger l'application.
+
+Le Premium peut fournir davantage de :
+
+- audit,
+- SSO,
+- administration,
+- policies,
+- monitoring,
+- retention configuration,
+
+mais pas rendre FREE volontairement vulnérable.
+
+## 15. Security gates
+
+Créer des gates CI :
+
+```
+dependency vulnerabilities
+secret scan
+license scan
+static analysis
+unsafe permission changes
+update signature tests
+entitlement bypass tests
+privacy tests
+```
+
+## 16. SBOM
+
+Produire un SBOM par release lorsque techniquement possible.
+
+## 17. AI-specific safety
+
+Documenter :
+
+```
+agent can suggest
+agent can prepare
+agent can execute with permission
+agent cannot silently escalate privileges
+```
+
+Les actions sensibles doivent être accompagnées de :
+
+```
+reason
+scope
+requested permission
+affected resources
+audit record
+```
+
+## 18. Matrice risques
+
+Créer :
+
+```
+security/RISK_REGISTER.md
+```
+
+avec :
+
+```
+ID
+component
+threat
+likelihood
+impact
+severity
+mitigation
+owner
+status
+```
+
+## 19. Vérification juridique avant feature
+
+Ajouter une propriété possible :
+
+```
+legal_status:
+  CLEAR
+  REVIEW_REQUIRED
+  RESTRICTED
+  BLOCKED
+```
+
+au catalogue des fonctionnalités.
+
+Une fonctionnalité marquée BLOCKED ne doit pas être activable simplement en modifiant l'interface.
+
+## 20. Sortie attendue
+
+Terminer par un rapport :
+
+```
+PUBLIC_RELEASE_BLOCKERS.md
+```
+
+classant les problèmes :
+
+```
+P0 — distribution impossible
+P1 — sécurité
+P2 — privacy/compliance
+P3 — licences
+P4 — documentation
+P5 — optimisation
+```
+
+Ne corrige automatiquement que les problèmes techniques clairement définis.
+
+Pour les décisions juridiques ambiguës :
+
+documente, bloque si nécessaire et marque `LEGAL_REVIEW_REQUIRED`.
+
+Afficher plus
+
+jeudi 18:58
+
+J’intègre ce second cahier des charges comme une couche bloquante de la même architecture, pas comme une série de textes juridiques décoratifs. Je commence par inventorier les licences et surfaces sensibles réellement présentes dans AIONE, FractalOS et MDVWE, puis je vérifierai le cadre France/UE uniquement auprès de sources officielles et datées.
+
+L’inventaire montre déjà deux bloqueurs de distribution : plusieurs sources n’ont pas de lockfile exploitable, et des composants IA/média sont référencés par nom ou téléchargés à la demande sans preuve de licence consolidée par artefact. Je distingue maintenant trois choses dans le futur audit : la licence déclarée par le projet, le texte effectivement retrouvé, et la conclusion d’usage — cette dernière restera `UNKNOWN` tant qu’une preuve suffisante n’existe pas.
+
+Le futur scanner devra raisonner par périmètre de distribution, pas seulement par présence disque : MDVWE contient des runtimes, modèles et médias locaux très volumineux, tandis que FractalOS embarque notamment une copie de Limine. « Installé sur la machine » ne signifiera donc jamais « redistribué par AIONE »; chaque artefact aura une décision explicite `BUNDLED`, `DOWNLOADED`, `SYSTEM`, `DEV_ONLY` ou `EXCLUDED`.
+
+A recherché sur le Web
+
+Le cadre temporel ajoute un point critique au calendrier : l’AI Act est déjà largement applicable depuis le 2 août 2026, et les obligations de signalement du Cyber Resilience Act commencent le 11 septembre 2026, moins d’un mois après la date actuelle. Le plan traitera donc la qualification AI Act et la préparation CRA comme des gates P0/P1 avant publication, jamais comme une documentation différable.
+
+A recherché sur le Web
+
+Je termine l’inventaire ciblé sur les composants explicitement cités dans votre demande. Le but est de prévoir un registre qui sait aussi dire « absent du périmètre », car Qiskit, un modèle détecté ou un dépôt GitHub simplement référencé ne doivent pas être ajoutés artificiellement aux notices distribuées.
+
+Les sources officielles confirment aussi qu’un crédit prépayé fermé n’est pas automatiquement « hors réglementation » par simple choix de vocabulaire : les exclusions de réseau limité, la monnaie électronique et le traitement TVA des bons dépendent du fonctionnement réel. La V1 imposera donc techniquement le closed-loop, mais l’émission payante restera bloquée jusqu’à revue juridique et fiscale formelle.
+
+Recherche effectuée sur le Web pour calendrier facturation électronique septembre 2026 2027 officiel | impots.gouv.fr ...
+
+Plan
+
+# Plan consolidé 0.3.0-alpha — Produit, documentation, licences, privacy et sécurité
+
+## 1. Résultat cible et règle de publication
+
+`S:\AIONE PRODUCT WORKSPACE` devient le dépôt canonique autonome des trois produits pairs AIONE, FractalOS et MDVWE. Shared Core reste une infrastructure interne, jamais un quatrième produit commercial.
+
+La publication publique est bloquée tant que les preuves de licence, sécurité, privacy et applicabilité juridique ne sont pas complètes. Aucun document généré ne constitue une certification ou un avis juridique.
+
+Principes obligatoires :
+
+- Toute conclusion juridique porte `DRAFT — REQUIRES LEGAL REVIEW` tant qu’un humain autorisé ne l’a pas validée.
+- Une licence inconnue devient exactement `UNKNOWN — BLOCK PUBLIC DISTRIBUTION UNTIL REVIEW`.
+- Une affirmation juridique cite une source officielle, une date de vérification et les juridictions concernées.
+- Un scanner peut détecter un risque, jamais déclarer seul une situation juridiquement `CLEAR`.
+- Une fonctionnalité `BLOCKED` est refusée par les moteurs serveur/policy et non simplement cachée dans l’interface.
+- Aucun plan commercial n’élève les privilèges système.
+- Tous les plans reçoivent les correctifs de sécurité fondamentaux.
+- Les applications locales anciennes restent utilisables offline; seuls les services réellement exposés à un risque peuvent imposer une version distante minimale documentée.
+
+### Bloqueurs déjà vérifiés
+
+- AIONE ne possède pas de licence racine sélectionnée ni de lockfile npm canonique.
+- FractalOS ne déclare pas de licence de projet; seule la licence BSD-like de Limine est retrouvée dans le code embarqué.
+- MDVWE déclare Apache-2.0, mais ses modèles, workflows, médias et runtimes nécessitent une clôture séparée.
+- MDVWE contient localement des milliers d’assets et plusieurs modèles/médias; leur présence disque ne vaut pas autorisation de redistribution.
+- L’image Docker Open WebUI utilise actuellement le tag mutable `main`.
+- Les modèles Ollama sont identifiés par nom/digest, mais les preuves exactes de licence ne sont pas uniformément conservées.
+- Le modèle LTX utilise une licence custom avec conditions spécifiques; il n’est pas approuvé automatiquement pour une distribution commerciale.
+- Le système actuel possède des conventions de « sandbox » et des allowlists, pas une frontière OS suffisante pour du code tiers hostile.
+- La sanitation feedback, les politiques de rétention, l’updater signé et la séparation des rapports de sécurité ne sont pas encore complets.
+
+## 2. Arborescence cible
+
+```
+S:\AIONE PRODUCT WORKSPACE\
+├── apps\
+│   ├── aione\
+│   ├── fractalos\
+│   ├── mdvwe\
+│   ├── catalog-web\
+│   ├── platform-api\
+│   └── developer-console\
+├── packages\
+│   ├── contracts\
+│   ├── catalog\
+│   ├── docs-engine\
+│   ├── identity\
+│   ├── permissions\
+│   ├── entitlements\
+│   ├── policy\
+│   ├── consent\
+│   ├── licensing\
+│   ├── privacy\
+│   ├── audit\
+│   ├── secrets\
+│   ├── sandbox-broker\
+│   ├── kredits\
+│   ├── rewards\
+│   ├── usage-metering\
+│   ├── interconnection\
+│   ├── import-export\
+│   ├── update-manager\
+│   └── feedback\
+├── catalog-source\
+├── docs-source\
+├── legal\
+│   ├── LICENSE_AUDIT.md
+│   ├── THIRD_PARTY_NOTICES.md
+│   ├── DEPENDENCY_LICENSES.json
+│   ├── MODEL_LICENSES.md
+│   ├── CREDITS_LEGAL_BOUNDARIES.md
+│   ├── JURISDICTION_REGISTER.md
+│   ├── LEGAL_SOURCES.yaml
+│   └── templates\
+│       ├── TERMS_OF_SERVICE_DRAFT.md
+│       ├── EULA_DRAFT.md
+│       ├── PRIVACY_POLICY_DRAFT.md
+│       ├── COOKIE_POLICY_DRAFT.md
+│       ├── ACCEPTABLE_USE_POLICY_DRAFT.md
+│       ├── REFUND_POLICY_DRAFT.md
+│       ├── SUBSCRIPTION_TERMS_DRAFT.md
+│       ├── CREDITS_TERMS_DRAFT.md
+│       ├── SECURITY_POLICY_DRAFT.md
+│       └── RESPONSIBLE_DISCLOSURE_DRAFT.md
+├── privacy\
+│   ├── DATA_INVENTORY.md
+│   ├── DATA_FLOW_MAP.md
+│   ├── RETENTION_POLICY.md
+│   ├── CONSENT_MODEL.md
+│   ├── PROCESSOR_REGISTER.md
+│   └── RIGHTS_REQUESTS.md
+├── security\
+│   ├── THREAT_MODEL.md
+│   ├── TRUST_BOUNDARIES.md
+│   ├── PERMISSION_MODEL.md
+│   ├── SECURITY_REQUIREMENTS.md
+│   ├── UPDATE_POLICY.md
+│   ├── SUPPORTED_VERSIONS.md
+│   ├── RISK_REGISTER.md
+│   ├── INCIDENT_RESPONSE.md
+│   └── RELEASE_SIGNING.md
+├── compliance\
+│   ├── distribution-manifests\
+│   ├── sbom\
+│   ├── model-bom\
+│   ├── asset-bom\
+│   ├── provenance\
+│   └── exceptions\
+├── schemas\
+├── adapters\
+├── migrations\
+├── tooling\
+├── tests\
+└── PUBLIC_RELEASE_BLOCKERS.md
+```
+
+`generated/` contient les projections reproductibles et n’est jamais édité manuellement.
+
+## 3. Contrats publics et catalogue
+
+### 3.1 Statut juridique d’une fonctionnalité
+
+Chaque feature/action/add-on/interconnexion reçoit :
+
+```
+legal_status: REVIEW_REQUIRED
+legal_assessment:
+  jurisdictions: [FR, EU]
+  assessment_id:
+  reviewed_by:
+  reviewed_at:
+  expires_at:
+  source_refs: []
+  restrictions: []
+  required_policy_versions: []
+  rationale:
+```
+
+Valeurs :
+
+- `CLEAR` : preuve et validation humaines enregistrées.
+- `REVIEW_REQUIRED` : valeur par défaut dès qu’une qualification ou interprétation est nécessaire.
+- `RESTRICTED` : activable uniquement dans les contextes, juridictions et scopes explicitement autorisés.
+- `BLOCKED` : refus technique dans le catalogue, les permissions, l’API et les services distants.
+
+Un changement vers `CLEAR` ou `RESTRICTED` exige une revue signée. L’interface ne peut jamais promouvoir ce statut.
+
+### 3.2 Composant de licence
+
+`LicenseComponentRecord` contient :
+
+```
+id
+name
+version
+componentType
+source
+sourceRevision
+purl
+sha256
+distributionRole
+licenseExpression
+licenseEvidence
+commercialUse
+redistribution
+modification
+attribution
+copyleft
+networkCopyleft
+modelSpecificTerms
+risk
+action
+legalStatus
+reviewMetadata
+```
+
+Les champs de droits utilisent `YES`, `NO`, `CONDITIONAL` ou `UNKNOWN`, jamais un booléen supposé.
+
+`distributionRole` :
+
+```
+BUNDLED | DOWNLOADED | SYSTEM | DEV_ONLY | OPTIONAL | EXCLUDED
+```
+
+### 3.3 Preuves et décisions
+
+Ordre de confiance :
+
+1. texte de licence inclus avec l’artefact exact;
+2. métadonnées signées ou dépôt officiel à la révision exacte;
+3. registre de package officiel lié à la version;
+4. déclaration interne non vérifiée;
+5. simple détection de nom.
+
+Les niveaux 4 et 5 ne suffisent jamais à autoriser une distribution.
+
+### 3.4 Séparation sécurité/commercial
+
+La décision d’accès conserve deux axes indépendants :
+
+```
+CommercialDecision: entitlement, plan, add-on, quota
+SecurityDecision: identity, role, policy, permission, scope, action, resource
+```
+
+L’autorisation finale exige les deux décisions. Exemples invariants :
+
+```
+Plan PRO != administrator access
+Plan ENTERPRISE != unrestricted agent
+Plan FREE receives critical security fixes
+```
+
+## 4. Audit des licences et SBOM
+
+### 4.1 Scanner multitechnique
+
+Créer `tooling/compliance-scan` avec des adaptateurs en lecture seule :
+
+- Git : fichiers suivis/non suivis, sous-modules, remote, commit, archives copiées et code vendored.
+- npm : `package-lock.json`, arbre transitif, scripts d’installation, provenance et licence.
+- Python : `pyproject.toml`, lock Python, distributions installées et metadata `dist-info`.
+- Cargo : `Cargo.toml`, `Cargo.lock`, `cargo metadata --locked`; absence rapportée comme `NOT_PRESENT`.
+- .NET/NuGet : références transitives, `packages.lock.json`, runtime et SDK.
+- Docker : Dockerfiles, Compose, labels OCI, digest d’image et packages internes.
+- Native : FFmpeg, Blender, Limine, runtimes Windows, bibliothèques DLL/SO.
+- IA : modèles, tokenizers, embeddings, LoRA, custom nodes, workflows ComfyUI, sources Ollama/Hugging Face.
+- Données : datasets, corpus, fichiers JSONL/CSV/Parquet et conditions de provenance.
+- Assets : images, vidéos, audio, polices, icônes, templates, modèles 3D et licences de génération.
+- GitHub : dépôt, révision exacte, licence retrouvée et fichiers copiés.
+- Qiskit et autres composants explicitement demandés : rapporter `NOT_PRESENT_IN_RELEASE_SCOPE` s’ils ne sont pas réellement distribués.
+
+### 4.2 Périmètres
+
+Deux scans distincts :
+
+- `workspace-discovery` : inventaire large, informatif, sans conclure que tout sera distribué.
+- `release-closure` : fermeture exacte de chaque artefact public.
+
+Seul `release-closure` décide de la distribution. Un outil système non embarqué n’est pas placé artificiellement dans les notices, mais sa dépendance et ses conditions d’installation restent documentées.
+
+### 4.3 Reproductibilité
+
+- npm : versions exactes, `package-lock.json`, `npm ci`.
+- Python : lock unique Python 3.12, export avec hashes et validation Python 3.13.
+- NuGet : `packages.lock.json` et mode locked.
+- Docker : images par digest, jamais `main` ou `latest`.
+- Modèles : ID, révision, taille, SHA-256 et texte de licence exact.
+- Binaires natifs : version, origine, SHA-256 et mode de distribution.
+
+Tout téléchargement dynamique non verrouillé bloque la release.
+
+### 4.4 Sorties
+
+Le scanner produit :
+
+- `legal/DEPENDENCY_LICENSES.json` comme registre machine-readable.
+- `legal/LICENSE_AUDIT.md` avec résumé, inconnues et actions.
+- `legal/THIRD_PARTY_NOTICES.md` uniquement à partir des preuves.
+- `legal/MODEL_LICENSES.md` avec modèles, custom nodes, workflows et limites.
+- un CycloneDX JSON par artefact;
+- un SBOM agrégé signé;
+- `MODEL_BOM.json` et `ASSET_BOM.json`;
+- un diff de conformité entre releases.
+
+Un composant `BUNDLED` ou `DOWNLOADED` sans preuve suffisante échoue avec :
+
+```
+UNKNOWN — BLOCK PUBLIC DISTRIBUTION UNTIL REVIEW
+```
+
+## 5. Cadre France/UE à documenter
+
+`legal/LEGAL_SOURCES.yaml` enregistre autorité, URL, identifiant officiel, version, date de vérification `2026-08-13`, dates d’application, hash du relevé et commentaire d’applicabilité. Une veille peut signaler une évolution, jamais modifier automatiquement une policy.
+
+### 5.1 Données personnelles et cookies
+
+- RGPD : rôles, finalités, bases légales, minimisation, droits, sécurité, sous-traitance et transferts doivent être qualifiés à partir du [Règlement (UE) 2016/679](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A32016R0679).
+- Privacy by design et sécurité suivent les guides officiels de la [CNIL pour les développeurs](https://www.cnil.fr/fr/guide-rgpd-du-developpeur) et son [guide de sécurité](https://www.cnil.fr/fr/guide-de-la-securite-des-donnees-personnelles).
+- La V1 publique n’utilise aucun analytics ni traceur non essentiel. Si cela change, le consentement doit être préalable, spécifique et aussi simple à retirer qu’à donner, conformément aux [règles CNIL sur les cookies](https://www.cnil.fr/fr/cookies-et-autres-traceurs/que-dit-la-loi).
+- La détermination responsable de traitement/sous-traitant, des bases légales et des transferts reste `LEGAL_REVIEW_REQUIRED`.
+
+### 5.2 Intelligence artificielle
+
+Le règlement AI Act s’applique principalement depuis le 2 août 2026, avec des calendriers spécifiques selon les dispositions. [Règlement (UE) 2024/1689](https://eur-lex.europa.eu/eli/reg/2024/1689/oj?locale=en)
+
+Créer un `AI_SYSTEM_REGISTER` pour chaque système ou modèle :
+
+```
+provider/deployer/importer/distributor role
+intended purpose
+affected persons
+prohibited-practice screening
+high-risk screening
+GPAI dependency
+transparency obligations
+human oversight
+logging
+technical documentation
+training/data provenance
+copyright policy
+incident process
+```
+
+Aucune classification n’est devinée. Les systèmes non qualifiés restent `REVIEW_REQUIRED`; toute fonctionnalité potentiellement interdite ou high-risk reste `BLOCKED` jusqu’à analyse.
+
+### 5.3 Cyber Resilience Act et NIS2
+
+Le Cyber Resilience Act s’applique généralement à partir du 11 décembre 2027, mais ses obligations de signalement commencent le 11 septembre 2026. [Synthèse officielle EUR-Lex](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=legissum%3A4797302)
+
+Avant publication :
+
+- qualifier les rôles de fabricant/importateur/distributeur;
+- préparer gestion des vulnérabilités, support, SBOM, signalement, secure-by-default et documentation;
+- déterminer la classe du produit et la voie d’évaluation;
+- enregistrer l’analyse comme `LEGAL_REVIEW_REQUIRED`.
+
+NIS2 est évaluée selon activité, taille et services. La transposition française reste à surveiller selon l’[ANSSI](https://cyber.gouv.fr/reglementation/cybersecurite-systemes-dinformation/directives-nis-nis2-et-dispositif-saiv/directive-nis-2/); aucune applicabilité n’est affirmée automatiquement.
+
+### 5.4 Consommateurs, contenus numériques et abonnements
+
+La matrice juridique couvre :
+
+- contenu/service numérique et garantie de conformité : [Directive (UE) 2019/770](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A32019L0770) et [transposition française](https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000044125847);
+- informations précontractuelles, droit de rétractation, confirmation durable et résiliation électronique : [DGCCRF](https://www.economie.gouv.fr/dgccrf/les-fiches-pratiques/e-commerce-les-regles-entre-professionnels-et-consommateurs);
+- accessibilité des services e-commerce : [Directive (UE) 2019/882](https://eur-lex.europa.eu/eli/dir/2019/882/oj/eng);
+- facturation électronique : réception à préparer au 1er septembre 2026 et émission selon la taille au plus tard le 1er septembre 2027, sous réserve de la situation réelle de l’entité. [DGFiP](https://www.impots.gouv.fr/professionnel/questions/partir-de-quand-suis-je-concerne-par-la-reforme-de-la-facturation)
+
+Les offres, abonnements, remboursements et factures restent désactivés tant que l’entité vendeuse, la TVA, les mentions, la rétractation et la résiliation n’ont pas été validées.
+
+### 5.5 Cloud, marketplace et intermédiation
+
+- DSA : revue requise avant toute marketplace, hébergement public ou contenu tiers. [Règlement (UE) 2022/2065](https://eur-lex.europa.eu/eli/reg/2022/2065/2022-10-27/eng)
+- Data Act : revue requise avant d’offrir un service cloud ou de traitement de données impliquant portabilité et switching. [Règlement (UE) 2023/2854](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32023R2854)
+- Marketplace, paiement tiers et partage public restent `BLOCKED`.
+
+## 6. Frontières juridiques des AIONE Credits
+
+### 6.1 Modèle V1
+
+Les AIONE Credits sont conçus comme :
+
+```
+closed-loop prepaid usage credits
+```
+
+Invariants techniques :
+
+- utilisables uniquement pour des services internes AIONE explicitement listés;
+- aucun transfert entre utilisateurs;
+- aucun trading;
+- aucune conversion libre en monnaie;
+- aucun remboursement en numéraire automatique;
+- aucune valeur flottante ou prix de marché;
+- aucun rendement, intérêt ou gain d’investissement;
+- aucune cotation publique;
+- aucune acceptation par un tiers;
+- ledger append-only et traçable;
+- séparation stricte entre credits achetés, grants promotionnels et rewards.
+
+Les drapeaux suivants restent compilés à `false` et bloqués côté serveur :
+
+```
+TRANSFERABLE
+TRADEABLE
+REDEEMABLE
+FLOATING_VALUE
+MARKET_PRICED
+YIELD_BEARING
+THIRD_PARTY_ACCEPTANCE
+```
+
+### 6.2 Gate juridique et fiscale
+
+La qualification « closed-loop » est une intention produit, pas une exemption juridique acquise. L’exclusion réseau limité dépend du fonctionnement réel selon les [lignes directrices de l’EBA](https://www.eba.europa.eu/legacy/regulation-and-policy/regulatory-activities/payment-services-and-electronic-money-1?version=2022). Le droit français prévoit également des conditions et une surveillance spécifiques. [Code monétaire et financier, article L525-5](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000050370324/2026-05-07)
+
+Les credits peuvent aussi relever des règles TVA relatives aux bons selon leur usage exact. [Directive (UE) 2016/1065](https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX%3A32016L1065)
+
+En conséquence :
+
+- ledger et simulations autorisés localement;
+- émission gratuite de fixtures de test autorisée;
+- achat réel, facturation, expiration commerciale et remboursement restent `BLOCKED`;
+- activation seulement après avis juridique et fiscal documenté;
+- tout changement d’usage déclenche une nouvelle revue.
+
+`legal/CREDITS_LEGAL_BOUNDARIES.md` distingue explicitement produit souhaité, faits techniques, questions ouvertes et conclusions du professionnel.
+
+## 7. Modèles juridiques
+
+Chaque modèle comporte le frontmatter :
+
+```
+status: DRAFT — REQUIRES LEGAL REVIEW
+version:
+jurisdictions: [FR, EU]
+owner:
+reviewer:
+reviewed_at:
+effective_at:
+source_refs: []
+unresolved_placeholders: []
+publication_allowed: false
+```
+
+Règles :
+
+- aucune clause abusive, renonciation générale ou limitation illimitée;
+- aucun choix automatique de droit applicable, tribunal, durée de garantie ou rétention légale;
+- placeholders obligatoires pour identité de l’éditeur, adresse, contacts, hébergeur, DPO/point privacy et médiation;
+- les templates ne deviennent acceptables dans l’application qu’après validation, version, hash et date d’effet;
+- consentements facultatifs séparés des conditions obligatoires;
+- retrait d’un consentement facultatif sans perte indue du service;
+- historique des versions et preuves d’acceptation append-only;
+- modification substantielle d’une policy déclenchant une réacceptation ciblée.
+
+## 8. Architecture de sécurité
+
+### 8.1 Méthode
+
+- STRIDE pour les menaces de sécurité.
+- LINDDUN pour les risques privacy.
+- Attack trees dédiés agents, plugins, updater, feedback et Credits.
+- Chaque menace possède un ID, un actif, une frontière, un scénario, des contrôles, des exigences et des tests.
+
+### 8.2 Frontières de confiance
+
+Documenter séparément :
+
+1. utilisateur et organisation;
+2. interface desktop/web;
+3. permission/policy broker;
+4. processus principal;
+5. workers first-party;
+6. environnement isolé pour code non fiable;
+7. filesystem et projets utilisateur;
+8. modèles locaux;
+9. fournisseurs IA distants;
+10. plugins et modèles tiers;
+11. réseau local et services loopback;
+12. API publique/cloud;
+13. updater et release infrastructure;
+14. feedback/diagnostics;
+15. billing/Credits;
+16. secret store;
+17. CI et chaîne de signature.
+
+### 8.3 Menaces minimales
+
+- prompt injection transformée en policy ou commande;
+- confused deputy entre agent, utilisateur et outil;
+- élévation de privilèges;
+- command injection et shell implicite;
+- traversal, reparse points, symlinks et archive bombs;
+- SSRF vers loopback, metadata ou services locaux;
+- exfiltration de secrets par logs, prompts, captures ou feedback;
+- plugins et custom nodes arbitraires;
+- modèles ou formats de sérialisation dangereux;
+- package confusion, typosquatting et dépendance compromise;
+- mise à jour falsifiée, downgrade ou mix-and-match;
+- bypass d’entitlement ou de permission;
+- double dépense et replay Credits;
+- abus de reports et injection dans le dashboard;
+- contenu documentaire actif;
+- accès horizontal entre organisations;
+- corruption ou effacement des journaux d’audit.
+
+### 8.4 Exigences
+
+`security/SECURITY_REQUIREMENTS.md` attribue des identifiants `SEC-*` :
+
+- secure-by-default et deny-by-default;
+- validation de schéma à toutes les frontières;
+- autorisation côté serveur;
+- isolation des tenants;
+- journal d’audit append-only;
+- chiffrement en transit et au repos selon données;
+- limites de taille, temps, mémoire, CPU et concurrence;
+- sorties encodées et CSP stricte;
+- absence de `eval`, shell implicite et désérialisation arbitraire;
+- pinning et vérification des artefacts;
+- rotation/révocation des clés;
+- sauvegardes et restauration testées;
+- incident response et disclosure responsable;
+- séparation SECURITY/community;
+- correctifs fondamentaux disponibles pour tous les plans.
+
+## 9. Agents, outils et plugins
+
+### 9.1 Niveaux d’autorité
+
+```
+SUGGEST
+PREPARE
+EXECUTE_FIRST_PARTY
+EXECUTE_ISOLATED
+DENY
+```
+
+- `SUGGEST` : texte uniquement.
+- `PREPARE` : écrit uniquement dans un scratch explicitement créé.
+- `EXECUTE_FIRST_PARTY` : outil interne enregistré, hashé et exécuté par broker.
+- `EXECUTE_ISOLATED` : worker jetable avec frontière OS.
+- Tout le reste : `DENY`.
+
+Une action sensible déclare :
+
+```
+reason
+scope
+requestedPermission
+affectedResources
+networkPolicy
+timeout
+resourceLimits
+auditRecord
+```
+
+### 9.2 Sandbox réelle et limites
+
+Pour les outils first-party :
+
+- restricted token Windows;
+- Windows Job Objects;
+- kill-tree et timeout;
+- répertoire de travail dédié;
+- filesystem allowlisté;
+- réseau refusé par défaut;
+- arguments structurés, `shell=false`;
+- limites CPU, mémoire, processus et taille de sortie.
+
+Ces contrôles sont de la défense en profondeur, pas une garantie contre un binaire hostile. Le modèle de permissions Node est explicitement documenté comme n’étant pas une sandbox contre du code malveillant. [Documentation Node](https://nodejs.org/download/release/latest-v24.x/docs/api/permissions.html)
+
+Pour du code non fiable :
+
+- exécution uniquement dans une VM jetable/worker Hyper-V isolé;
+- image signée et restaurée après chaque job;
+- aucun montage du workspace principal;
+- transfert par staging contrôlé;
+- egress réseau allowlisté;
+- secrets absents;
+- résultats traités comme non fiables.
+
+Si cette frontière OS n’est pas disponible, `EXECUTE_ISOLATED` retourne `BLOCKED_UNAVAILABLE`, sans fallback vers le host.
+
+Les plugins V1 restent manifest/data-only. Tout futur plugin exécutable exige signature, licence validée et isolation; un plan Premium ne contourne pas ces exigences.
+
+## 10. Secrets
+
+Créer `ISecretStore` :
+
+- Windows : broker .NET utilisant DPAPI/stockage de credentials OS.
+- Cloud : adaptateur vers secret manager déployé.
+- Tests : mémoire éphémère uniquement.
+- Configuration : seulement `secretRef`, jamais la valeur.
+
+Règles :
+
+- aucun secret dans Git, logs, telemetry, feedback, screenshots ou fichiers de configuration commités;
+- variables d’environnement uniquement pour injection éphémère dans un processus autorisé;
+- redaction par valeur connue et motifs;
+- captures d’écran absentes des diagnostics par défaut;
+- rotation, révocation, version et audit d’accès;
+- clé privée de signature hors dépôt et hors machine de build standard;
+- l’actuel fallback `replace-this-local-secret...` est supprimé : démarrage refusé si le secret requis manque.
+
+## 11. Feedback, erreurs et crash reports
+
+Pipeline :
+
+```
+capture minimale
+→ classification
+→ sanitizer client
+→ sanitizer serveur
+→ preview exacte
+→ hash du payload
+→ consentement lié au hash
+→ queue locale
+→ upload
+→ stockage séparé
+→ déduplication assistée
+→ triage humain
+```
+
+Suppression par défaut :
+
+- tokens, clés, cookies et authorization headers;
+- variables sensibles;
+- chemins personnels et noms d’utilisateur;
+- identifiants machine;
+- prompts privés;
+- fichiers utilisateur;
+- contenu clipboard;
+- URLs avec credentials;
+- IPs non nécessaires;
+- captures d’écran;
+- extraits de code non explicitement sélectionnés.
+
+Les diagnostics sont opt-in. Une modification après preview invalide le consentement.
+
+`SECURITY` utilise une API, une base, des rôles et une rétention séparés. Aucun rapport de sécurité ne devient public, duplicate ou feature sans décision humaine.
+
+## 12. Privacy, rétention et droits
+
+### 12.1 Inventaire
+
+Chaque traitement possède :
+
+```
+dataId
+category
+fields
+purpose
+requiredOrOptional
+candidateLegalBasis
+collectionPoint
+source
+processors
+storageLocation
+transfers
+encryption
+accessRoles
+retentionPolicy
+deletionMethod
+exportMethod
+dataSubjectRights
+risk
+legalStatus
+```
+
+Catégories :
+
+```
+required
+optional
+analytics
+diagnostics
+billing
+security
+user_content
+```
+
+### 12.2 Valeurs par défaut V1
+
+- Documentation/site : aucun compte, analytics ou cookie non essentiel.
+- Application locale : données conservées localement jusqu’à action de l’utilisateur.
+- Feedback cloud : désactivé tant que base légale, notice, processeurs et rétention ne sont pas validés.
+- Diagnostics locaux en attente : purge automatique après 30 jours.
+- Diagnostics refusés : suppression immédiate.
+- Prompts et contenus utilisateur : jamais collectés par défaut.
+- Billing et paiements : désactivés.
+- Données test : synthétiques, jamais copiées depuis un utilisateur réel.
+
+Aucune durée comptable ou légale n’est inventée. Les traitements exigeant une durée réglementaire restent désactivés jusqu’à validation d’un juriste/comptable.
+
+### 12.3 Export et suppression
+
+Implémenter :
+
+```
+export my data
+delete my account
+delete cloud data
+clear local history
+```
+
+Export :
+
+- ZIP signé contenant JSON canonique;
+- CSV/Markdown lisibles;
+- inventaire des pièces jointes et hashes;
+- version des schémas et policies.
+
+Suppression :
+
+- révocation immédiate des sessions;
+- suppression des données actives et index;
+- propagation via outbox vers les sous-traitants;
+- reçu de traitement sans recopier les données supprimées;
+- données légalement conservées déplacées dans un périmètre restreint avec motif, base, durée et date de purge;
+- aucune conservation « au cas où ».
+
+## 13. Versions et intégrité des mises à jour
+
+### 13.1 États de support
+
+```
+supported
+deprecated
+unsupported
+security-blocked
+```
+
+Ils sont évalués séparément pour :
+
+```
+local application
+network services
+cloud services
+remote API
+```
+
+- `supported` : correctifs et compatibilité active.
+- `deprecated` : encore utilisable, avec date de fin publiée.
+- `unsupported` : aucun correctif promis; application locale non désactivée.
+- `security-blocked` : seulement les fonctions distantes affectées, avec raison et version corrective.
+
+Chaque release possède des dates explicites; l’alpha `0.3.0-alpha` reste une preview sans promesse de support stable.
+
+### 13.2 Release manifest
+
+```
+version
+channel
+component
+hash
+signature
+keyId
+SBOM hash
+release notes
+security classification
+minimum compatible version
+protocol range
+support status
+support dates
+artifacts
+registered migrations
+```
+
+Flux :
+
+```
+download staging
+→ HTTPS
+→ taille/hash
+→ signature Ed25519
+→ SBOM/provenance
+→ compatibilité et anti-downgrade
+→ sauvegarde
+→ applicateur interne allowlisté
+→ health check
+→ bascule atomique
+→ rollback
+```
+
+Aucun manifeste ne fournit une commande shell. Les migrations sont compilées, enregistrées et testées.
+
+Les correctifs de sécurité nécessaires sont identiques pour FREE et Premium. Premium peut ajouter SSO, audit avancé, policy management, monitoring ou configuration de rétention, jamais corriger une vulnérabilité fondamentale réservée aux payants.
+
+## 14. Registre des risques
+
+`security/RISK_REGISTER.md` contient :
+
+```
+ID
+component
+threat
+likelihood
+impact
+severity
+mitigation
+owner
+status
+evidence
+targetDate
+residualRisk
+```
+
+Notation :
+
+- likelihood : 1–5;
+- impact : 1–5;
+- score : produit des deux;
+- 20–25 `CRITICAL`;
+- 12–19 `HIGH`;
+- 6–11 `MEDIUM`;
+- 1–5 `LOW`.
+
+Gates :
+
+- `CRITICAL` ouvert : publication impossible.
+- `HIGH` exposé : publication impossible.
+- Un `HIGH` sur une fonction totalement désactivée peut être accepté temporairement par owner + security avec expiration et preuve d’inaccessibilité.
+- Les risques privacy/juridiques ne peuvent pas être acceptés par l’équipe technique seule.
+
+## 15. Gates CI et release
+
+Pipeline obligatoire :
+
+1. validation JSON Schema et catalogue;
+2. documentation completeness;
+3. lockfiles et builds reproductibles;
+4. scan vulnérabilités npm/Python/NuGet/Cargo/conteneurs;
+5. secret scan historique + diff;
+6. licence et provenance;
+7. SAST par langage;
+8. analyse de configuration/conteneur;
+9. diff des permissions;
+10. tests updater/signatures;
+11. tests entitlement/permission bypass;
+12. tests sandbox et réseau;
+13. tests privacy/sanitation/consent;
+14. tests export/suppression;
+15. génération SBOM/BOM;
+16. génération des notices;
+17. évaluation du registre de risques;
+18. génération de `PUBLIC_RELEASE_BLOCKERS.md`;
+19. signature de la release;
+20. preview Sites privée, puis promotion du même artefact sous `/docs`.
+
+Conditions d’échec :
+
+- secret détecté;
+- dépendance runtime critique ou connue exploitée;
+- composant distribué à licence inconnue;
+- package/image/modèle non verrouillé;
+- permission élargie sans approbation;
+- feature `BLOCKED` accessible;
+- signature/rollback invalide;
+- diagnostic envoyé sans consentement exact;
+- SBOM incomplet;
+- risque critique/high exposé;
+- template juridique publié sans revue.
+
+## 16. `PUBLIC_RELEASE_BLOCKERS.md`
+
+Le rapport est généré depuis des données structurées et possède ces classes :
+
+### P0 — Distribution impossible
+
+- licence propriétaire/open-source d’AIONE et FractalOS non décidée;
+- identité juridique, éditeur, contacts et hébergeur non renseignés;
+- classification AI Act non terminée;
+- préparation CRA non validée;
+- credits payants non qualifiés juridiquement/fiscalement;
+- composant public essentiel sans preuve de droit;
+- build non reproductible ou artefact non signé.
+
+### P1 — Sécurité
+
+- isolation OS indisponible pour une fonction exécutable exposée;
+- updater signé ou rollback absent;
+- image Docker mutable;
+- secret store absent;
+- permission côté serveur contournable;
+- rapport SECURITY non séparé;
+- vulnérabilité critique/high exposée;
+- absence de processus de vulnérabilité/incident.
+
+### P2 — Privacy/compliance
+
+- responsable de traitement, finalités ou bases non qualifiés;
+- absence d’inventaire/flux/rétention;
+- diagnostics sans preview/consentement;
+- export/suppression incomplets;
+- sous-traitants ou transferts inconnus;
+- cookies/analytics non conformes;
+- politique de violation de données absente.
+
+La CNIL impose la documentation des violations et, selon le risque, une notification dans les 72 heures. [CNIL](https://cnil.fr/fr/violations-de-donnees-personnelles-les-regles-suivre)
+
+### P3 — Licences
+
+- notices incomplètes;
+- modèles/custom nodes/workflows non revus;
+- assets ou polices sans provenance;
+- composants GitHub non épinglés;
+- incompatibilité copyleft;
+- conditions d’attribution non satisfaites.
+
+### P4 — Documentation
+
+- politiques draft non marquées;
+- version support non publiée;
+- permissions ou collecte non expliquées;
+- documentation juridique non reliée à la release.
+
+### P5 — Optimisation
+
+- automatisation partielle;
+- dashboards ou rapports améliorables;
+- scans facultatifs et performance CI.
+
+Chaque ligne comporte owner, preuve, action, statut et condition exacte de fermeture.
+
+## 17. Ordre exact d’implémentation
+
+1. Initialiser le dépôt autonome et capturer les snapshots hachés des sources.
+2. Créer les JSON Schemas compliance, legal status, risk, privacy et distribution manifest.
+3. Construire le scanner read-only et produire le premier inventaire sans corriger les conclusions inconnues.
+4. Définir le périmètre exact de chaque artefact distribué.
+5. Ajouter lockfiles, digests et registres de modèles/assets.
+6. Générer SBOM, BOM, audit licences et blockers initiaux.
+7. Ajouter `legal_status` au catalogue et l’intégrer au permission engine/server.
+8. Construire policies, consentements, acceptations versionnées et sources juridiques datées.
+9. Produire les dix templates juridiques en mode draft.
+10. Implémenter secrets, audit et séparation des rôles.
+11. Formaliser threat model, trust boundaries, requirements et risk register.
+12. Implémenter le broker d’exécution first-party et bloquer tout code tiers non isolé.
+13. Ajouter sanitation, preview, consentement et canal SECURITY séparé.
+14. Construire l’inventaire privacy, flux, rétention et droits export/suppression.
+15. Implémenter UpdateManager, signatures, SBOM lié et rollback.
+16. Implémenter la simulation closed-loop Credits avec toutes les fonctions financières désactivées.
+17. Ajouter les gates CI et les tests d’abus.
+18. Générer le site/docs offline et le rapport de blockers.
+19. Faire réaliser les revues humaine, juridique, fiscale, privacy et sécurité.
+20. Publier une preview privée; promotion publique seulement si P0/P1/P2/P3 sont fermés et les documents approuvés.
+
+## 18. Tests d’acceptation
+
+### Licences
+
+- licence absente/inconnue;
+- SPDX multiple et licence custom;
+- dépendance transitive;
+- code vendored;
+- modèle et custom node;
+- asset sans provenance;
+- Docker tag mutable;
+- composants exclus du bundle;
+- notices déterministes;
+- aucune conclusion commerciale sans preuve.
+
+### Legal status et permissions
+
+- `BLOCKED` refusé par UI, API et worker;
+- modification manuelle de l’interface sans effet;
+- restriction de juridiction;
+- expiration de revue;
+- plan Premium incapable d’élever un scope système;
+- sécurité identique FREE/Premium.
+
+### Agents
+
+- prompt injection;
+- traversal/symlink/reparse point;
+- commande hors allowlist;
+- timeout et kill-tree;
+- dépassement CPU/RAM;
+- réseau refusé;
+- tentative de lecture de secret;
+- absence de VM produisant un refus, pas un fallback host.
+
+### Privacy
+
+- consentement absent, refusé, retiré ou périmé;
+- payload modifié après preview;
+- redaction secrets/chemins/prompts;
+- export complet;
+- suppression active, index et sous-traitant;
+- données légalement conservées séparées;
+- aucune telemetry par défaut.
+
+### Updater
+
+- signature, hash, key rotation et révocation;
+- downgrade, replay, expiry et mauvais canal;
+- SBOM manquant;
+- migration inconnue;
+- rollback;
+- vieille application locale encore fonctionnelle offline;
+- seul le service affecté est security-blocked.
+
+### Credits
+
+- transfert, trading, redemption et valeur flottante refusés;
+- aucune valeur financière affichée;
+- double dépense/replay;
+- ledger append-only;
+- policy historique;
+- cycle reward positif bloqué;
+- achat réel impossible sans feature flag serveur juridiquement approuvé.
+
+## 19. Hypothèses et revues obligatoires
+
+- Juridictions initiales : France et Union européenne.
+- Langue initiale : français.
+- Site public V1 sans analytics ni cookies non essentiels.
+- Pas de marketplace, cloud public, paiement, abonnement ou Credits payants avant revue.
+- Pas de plugin exécutable tiers en V1.
+- Pas de modèle redistribué sans enregistrement et preuve exacts.
+- Aucune durée de conservation légale, clause contractuelle ou qualification réglementaire n’est inventée.
+- Toute activation paiement, marketplace, transfert de Credits, IA high-risk, cloud ou collecte distante exige une nouvelle évaluation.
+- Le plan prépare des preuves et contrôles; il ne prétend fournir ni certification juridique, ni conformité garantie, ni avis professionnel.
+
+\# PROMPT CODEX 3 — DOCUMENTATION DYNAMIQUE, SITE LOCAL, UPDATE ENGINE ET FEEDBA…
+
+# PROMPT CODEX 3 — DOCUMENTATION DYNAMIQUE, SITE LOCAL, UPDATE ENGINE ET FEEDBACK PIPELINE
+
+Objectif : créer une documentation extrêmement complète mais maintenable automatiquement pour toute la plateforme produit.
+
+La documentation doit fonctionner :
+
+1. localement sans Internet ;
+2. depuis l'application ;
+3. depuis un serveur web public ;
+4. en fonction des produits réellement installés ;
+5. en fonction de la version ;
+6. en fonction du plan/gamme ;
+7. en fonction des add-ons ;
+8. avec mise à jour contrôlée.
+
+## 1. Documentation as code
+
+Créer une source structurée unique.
+
+```
+docs-source/
+├── products/
+├── features/
+├── plans/
+├── addons/
+├── permissions/
+├── guides/
+├── tutorials/
+├── api/
+├── troubleshooting/
+├── security/
+├── legal/
+└── releases/
+```
+
+Les données produit doivent provenir autant que possible des mêmes manifestes que :
+
+- l'application,
+- le site pricing,
+- les entitlements,
+- l'installeur.
+
+## 2. Documentation par gamme
+
+Chaque page peut déclarer :
+
+```
+products:
+  - aione
+
+plans:
+  - free
+  - pro
+
+addons: []
+
+since: 0.1.0
+```
+
+Le moteur doit pouvoir afficher :
+
+```
+Available with your plan
+Requires Pro
+Requires Add-on X
+Unavailable on this platform
+Experimental
+Deprecated
+```
+
+## 3. Documentation locale
+
+Chaque installation doit embarquer les informations essentielles correspondant à sa version.
+
+Exemple :
+
+```
+http://127.0.0.1:<port>/docs
+```
+
+ou documentation intégrée directement dans l'application.
+
+Elle doit continuer de fonctionner offline.
+
+## 4. Documentation publique
+
+Créer une version web :
+
+```
+/docs
+```
+
+avec :
+
+- recherche,
+- navigation,
+- version selector,
+- product selector,
+- plan comparison,
+- architecture,
+- tutorials,
+- troubleshooting,
+- permissions,
+- security,
+- changelog.
+
+## 5. Versioning
+
+Les docs doivent être liées à une release.
+
+Exemple :
+
+```
+docs/v0.1
+docs/v0.2
+docs/latest
+```
+
+Ne pas remplacer silencieusement la documentation correspondant aux vieilles installations.
+
+## 6. Mise à jour dynamique
+
+Le client peut récupérer :
+
+```
+documentation manifest
+release metadata
+security notices
+feature catalog
+```
+
+mais doit vérifier :
+
+- HTTPS,
+- signature/hash lorsque pertinent,
+- version,
+- compatibilité.
+
+Aucun contenu documentaire distant ne doit pouvoir exécuter arbitrairement du code local.
+
+## 7. Gammes installées
+
+Si une installation possède :
+
+```
+AIONE Free
+FractalOS
+MDVWE Add-on
+```
+
+la documentation locale doit prioriser ces éléments.
+
+Elle peut néanmoins montrer les fonctions Premium en indiquant clairement qu'elles ne sont pas activées.
+
+## 8. Génération automatique
+
+Créer un générateur transformant les manifestes en :
+
+```
+feature matrix
+pricing matrix
+permission reference
+product pages
+upgrade descriptions
+API reference indexes
+```
+
+Un changement de Feature doit provoquer un test vérifiant que sa documentation existe.
+
+## 9. Changelog
+
+Créer un format structuré :
+
+```
+version:
+date:
+features:
+fixes:
+security:
+breaking_changes:
+deprecated:
+known_issues:
+```
+
+Générer :
+
+```
+CHANGELOG.md
+site changelog
+in-app changelog
+release notes
+```
+
+## 10. Update engine
+
+Créer un composant :
+
+```
+UpdateManager
+```
+
+capable de distinguer :
+
+```
+feature
+bugfix
+security
+critical_security
+compatibility
+```
+
+Canaux :
+
+```
+stable
+preview
+development
+```
+
+Ne jamais mélanger automatiquement development et stable.
+
+## 11. Security updates
+
+Une mise à jour critique peut être mise en avant très fortement.
+
+Lorsque certains services distants nécessitent une version sécurisée minimale, le client doit expliquer précisément :
+
+```
+quelle fonction est bloquée
+pourquoi
+quelle version corrige le problème
+comment mettre à jour
+```
+
+Éviter les messages vagues du type :
+
+```
+Update required.
+```
+
+## 12. Impossible de contourner certaines protections serveur
+
+Pour des services distants :
+
+- vérification version minimale,
+- protocole supporté,
+- entitlement,
+- signature/session,
+
+doivent être vérifiés côté serveur.
+
+Ne pas prétendre empêcher un propriétaire de modifier les fichiers présents sur sa propre machine.
+
+La sécurité doit reposer sur une architecture correcte, pas sur l'obscurcissement du client.
+
+## 13. Feedback Hub
+
+Remplacer les anciens concepts épars d'« error reporter » par :
+
+```
+Feedback Hub
+```
+
+Catégories :
+
+```
+BUG
+CRASH
+FEATURE_REQUEST
+DOCUMENTATION
+PERFORMANCE
+COMPATIBILITY
+SECURITY
+OTHER
+```
+
+## 14. Feature request automatique
+
+Lorsqu'un utilisateur transforme un problème ou une suggestion en proposition :
+
+```
+title
+description
+product
+version
+platform
+category
+optional diagnostics
+```
+
+sont produits.
+
+Avant upload, demander consentement pour les diagnostics.
+
+## 15. Pipeline
+
+Préparer :
+
+```
+Feedback Hub
+→ sanitizer
+→ local preview
+→ consent
+→ upload
+→ API
+→ database
+→ deduplication
+→ triage
+→ issue
+→ roadmap
+→ release
+```
+
+Si aucun serveur n'est disponible actuellement :
+
+construire un backend mock/local clairement identifié.
+
+## 16. Déduplication
+
+Préparer une logique permettant d'identifier des demandes similaires :
+
+```
+same feature
+same stack trace
+same product/version
+similar description
+```
+
+Ne jamais supprimer une demande simplement à cause d'une similarité approximative.
+
+## 17. Status utilisateur
+
+L'utilisateur doit éventuellement pouvoir voir :
+
+```
+RECEIVED
+CONFIRMED
+PLANNED
+IN_PROGRESS
+RELEASED
+DECLINED
+DUPLICATE
+```
+
+## 18. Feature lifecycle
+
+Une demande promue devient :
+
+```
+FeatureProposal
+```
+
+Puis éventuellement :
+
+```
+ApprovedFeature
+Implementation
+PreviewFeature
+StableFeature
+```
+
+Relier :
+
+```
+request
+→ issue
+→ commit/PR
+→ release
+→ documentation
+```
+
+lorsque les données existent.
+
+## 19. Ne jamais convertir automatiquement un bug en fonctionnalité
+
+Un rapport doit être classifié.
+
+Exemple :
+
+```
+bug
+security bug
+feature request
+product improvement
+documentation
+```
+
+La promotion vers une nouvelle fonctionnalité nécessite une décision de triage.
+
+## 20. Dashboard interne
+
+Créer une interface développeur montrant :
+
+- erreurs fréquentes,
+- demandes fréquentes,
+- versions affectées,
+- gammes concernées,
+- tendances,
+- features candidates,
+- security reports.
+
+Les rapports SECURITY doivent avoir un traitement séparé et ne pas être rendus publics automatiquement.
+
+## 21. Documentation des permissions
+
+Chaque capacité doit avoir une page expliquant :
+
+```
+What it does
+Why requested
+Scope
+Risk
+Example
+How to revoke
+Which plans use it
+```
+
+Exemple :
+
+```
+filesystem.write
+```
+
+ne doit jamais être présenté comme une simple option Premium.
+
+## 22. Documentation commerciale transparente
+
+Le pricing doit expliquer clairement :
+
+```
+ce qui est gratuit
+ce qui est payant
+ce qui consomme des crédits
+ce qui demande un add-on
+ce qui dépend de ressources externes
+```
+
+Aucun dark pattern.
+
+## 23. Simulateur de gamme
+
+Créer si raisonnablement possible un composant du site permettant à l'utilisateur de sélectionner :
+
+```
+usage personnel
+développeur
+créateur
+chercheur
+équipe
+entreprise
+```
+
+et afficher :
+
+- gamme recommandée,
+- fonctionnalités,
+- add-ons,
+- coûts structurels.
+
+Ne pas présenter un calcul approximatif comme une facture contractuelle.
+
+## 24. Tests
+
+Ajouter :
+
+```
+documentation completeness
+dead links
+version consistency
+plan consistency
+entitlement consistency
+pricing consistency
+permission docs coverage
+update manifest validation
+feedback sanitation tests
+```
+
+## 25. Objectif final
+
+À la fin, un utilisateur doit pouvoir comprendre sans lire le code :
+
+```
+Qu'est-ce qu'AIONE ?
+Quel produit me faut-il ?
+Qu'est-ce qui est gratuit ?
+Pourquoi cette permission est-elle demandée ?
+Qu'est-ce que mon abonnement ajoute ?
+Qu'est-ce qu'un crédit ?
+Puis-je fonctionner offline ?
+Que collecte le logiciel ?
+Comment signaler un bug ?
+Comment demander une fonctionnalité ?
+Quelle version utilise-je ?
+Pourquoi dois-je mettre à jour ?
+```
+
+Et le développeur doit pouvoir ajouter une fonctionnalité **une seule fois dans le catalogue** puis faire dériver automatiquement autant que raisonnablement possible :
+
+```
+entitlements
+pricing representation
+documentation
+feature matrix
+website
+release notes
+tests
+```
+
+Commence par auditer les systèmes de documentation/update/reporting existants avant de les remplacer.
+
+Afficher plus
+
+jeudi 19:48
+
+Je reprends ce Prompt 3 comme le lot d’implémentation prioritaire, en conservant les gates licences/privacy/sécurité définis précédemment. J’utilise le workflow Sites parce que le même artefact documentaire doit servir localement, en preview privée puis sous `/docs`; je vérifie aussi que la pièce jointe ne contient pas de variante non visible dans le message.
+
+Contexte compacté automatiquement
+
+Je termine le cadrage sur l’état réel du workspace et les contraintes du workflow Sites. Ensuite je vous rends un plan d’implémentation unique, centré sur ce Prompt 3 et compatible avec les blocages juridiques/sécurité déjà définis.
+
+Le cadrage confirme un site multi-route avec données persistantes et accès interne : le workflow Sites impose donc le chemin « capacité », avec stockage structuré et authentification pour le tableau de bord. J’intègre ces contraintes au plan, sans lancer de déploiement ni modifier le workspace à ce stade.
+
+Plan
+
+# Plan complet — Documentation dynamique, UpdateManager et Feedback Hub
+
+## Résumé
+
+Construire dans `S:\AIONE PRODUCT WORKSPACE` un monorepo autonome pour la version `0.3.0-alpha`, avec :
+
+- un catalogue produit unique pilotant documentation, disponibilité, entitlements, pricing descriptif et installateur ;
+- une documentation statique versionnée utilisable hors ligne, intégrée aux applications et publiée sous `/docs` ;
+- un `UpdateManager` à manifestes signés et installation vérifiée ;
+- un Feedback Hub avec sanitation locale, consentement, suivi, déduplication assistée et triage humain ;
+- un site Sites multi-route, d’abord privé, puis public uniquement après les gates juridiques, licences, privacy et sécurité.
+
+L’audit initial confirme que le workspace cible est vide et n’a pas son propre dépôt Git. Les systèmes historiques sont dispersés : générateur documentaire largement codé en dur, site statique sans versioning, Update Center principalement déclaratif/dry-run, et feedback sans sanitation, déduplication ni suivi complet. Ils seront importés par snapshots et adaptateurs, jamais remplacés aveuglément.
+
+## 1. Socle et source de vérité
+
+- Initialiser un dépôt Git autonome et un monorepo hybride : TypeScript pour catalogue/site/génération/API, .NET pour l’intégration AIONE Windows et l’updater, Python 3.12 pour les adaptateurs MDVWE/FractalOS.
+- Créer `catalog-source/` pour les manifestes `products`, `features`, `plans`, `addons`, `permissions`, `platforms`, `pricing`, `credits` et `recommendations`.
+- Créer exactement l’arborescence `docs-source/` demandée. Les manifestes contiennent les faits structurés ; Markdown contient les explications humaines et référence les identifiants du catalogue.
+- Importer les quelque 61 capacités du `FeatureRegistry.cs` historique, les métadonnées MDVWE/FractalOS et les documents existants dans une table de migration avec provenance, version et éventuels conflits.
+- Pendant la transition, générer simultanément les nouveaux artefacts web et une projection C# compatible avec l’ancien registre. Les dépôts historiques restent inchangés jusqu’à validation de la migration.
+- Conserver AIONE, FractalOS et MDVWE comme produits pairs ; un add-on doit posséder son propre identifiant explicite.
+
+### Interfaces publiques
+
+Chaque `FeatureManifest` exposera au minimum :
+
+```
+id:
+title:
+products:
+lifecycle: stable | preview | experimental | deprecated
+since:
+until:
+platforms:
+plan_availability:
+required_addons:
+credit_usage:
+entitlement_key:
+permission_ids:
+installer_components:
+documentation:
+legal_status: CLEAR | REVIEW_REQUIRED | RESTRICTED | BLOCKED
+```
+
+Chaque page documentaire exposera :
+
+```
+id:
+title:
+slug:
+products:
+plans:
+addons:
+features:
+permissions:
+platforms:
+since:
+until:
+status:
+catalog_version:
+last_reviewed:
+legal_status:
+```
+
+L’installation communiquera un `InstallationProfile` non sensible :
+
+```
+application version, catalogue version, plateforme, produits installés,
+plan actif, add-ons, entitlements, permissions accordées, canal de mise à jour
+```
+
+Le moteur calculera un résultat principal — disponible, plan requis, add-on requis, plateforme indisponible ou bloqué — accompagné des badges expérimental/déprécié. Une fonctionnalité `BLOCKED` restera impossible à activer par une simple modification d’interface.
+
+## 2. Moteur documentaire et site
+
+- Générer de façon déterministe : matrices de fonctionnalités et plans, pages produit, référence des permissions, descriptions d’upgrade, index API, index de recherche, changelog et notes de release.
+- Refuser la génération lorsqu’une fonctionnalité active n’a pas de page, lorsqu’un identifiant est orphelin ou lorsque plan, entitlement, pricing et documentation se contredisent.
+- Produire un snapshot immuable par version sous `/docs/versions/<version>/`; `/docs/latest/` sera un pointeur explicite, jamais un remplacement des anciennes versions.
+- Livrer le bundle exact de la version dans chaque installation. AIONE l’affichera via WebView2 ou un hôte loopback limité à `127.0.0.1`; MDVWE et FractalOS recevront des adaptateurs vers le même bundle statique.
+- Le bundle essentiel ne requerra aucun réseau. Les mises à jour documentaires optionnelles seront mises en cache côte à côte et ne remplaceront jamais la documentation embarquée.
+- Construire le site Sites par le chemin multi-route : `/docs`, `/feedback`, `/feedback/status` et `/internal/feedback`. Le contenu public sera statique autant que possible ; l’état durable du feedback utilisera D1.
+- Protéger `/internal/feedback` côté serveur avec l’identité Sites et une allowlist d’administrateurs. L’authentification seule ne vaudra pas autorisation.
+- Ajouter recherche locale, navigation, sélecteurs version/produit, filtres selon l’installation, comparaison des plans, permissions, sécurité, architecture, tutoriels, dépannage et changelog.
+- Le simulateur utilisera des règles versionnées par persona. Tant qu’aucun tarif n’est officiellement approuvé, il affichera seulement couverture fonctionnelle et catégories de coûts avec `priceState: UNDEFINED`, jamais une facture ou un total inventé.
+- Le pricing expliquera Free, Premium, crédits, add-ons et dépendances externes. Les Credits resteront décrits comme crédits prépayés en circuit fermé, avec les fonctions transférables/négociables/remboursables bloquées.
+
+## 3. Changelog, mises à jour et intégrité
+
+- Adopter un changelog YAML validé contenant version, date, fonctionnalités, corrections, sécurité, ruptures, dépréciations et problèmes connus.
+- Générer depuis cette source `CHANGELOG.md`, changelog web, changelog intégré et notes de release.
+- Définir un manifeste de release signé avec : version, canal, classification, compatibilité minimale, plage de protocole, plateforme, taille, URL HTTPS, SHA-256, signature Ed25519, `keyId`, SBOM et notes de release.
+- Canonicaliser les manifestes avant signature et embarquer uniquement les clés publiques de confiance. Les clés privées resteront hors dépôt, logs et CI non protégée.
+- Implémenter `UpdateManager.check`, `prepare`, `verify`, `apply` et `rollback` avec une machine d’état persistante et auditable.
+- Sélectionner exclusivement le canal configuré : stable, preview ou development. Aucun passage implicite entre development et stable.
+- Télécharger dans une zone isolée, limiter taille et chemins, vérifier manifeste, signature, hash, plateforme, compatibilité et SBOM, puis installer côte à côte et basculer atomiquement après smoke test.
+- Interdire scripts d’installation distants, HTML actif et code dans les bundles documentaires. Les mises à jour de contenu transporteront uniquement un AST/JSON conforme à un schéma allowlisté.
+- La V1 appliquera réellement les mises à jour côte à côte sur AIONE Windows. Les autres plateformes annonceront explicitement `UNSUPPORTED` tant que leur adaptateur n’est pas validé.
+- Une ancienne application locale continuera de fonctionner. Un service distant pourra bloquer uniquement la capacité vulnérable, côté serveur, avec une réponse structurée indiquant fonction, cause, version corrective et procédure de mise à jour.
+- Vérifier côté serveur version, protocole, entitlement et session/signature ; aucune sécurité ne reposera sur l’obscurcissement du client.
+
+## 4. Feedback Hub
+
+- Remplacer les concepts historiques par les catégories canoniques demandées et conserver la classification séparée du cycle de vie produit.
+- Construire le flux : saisie → sanitation locale → prévisualisation exacte → consentement distinct pour les diagnostics → outbox locale → API → D1 → rapprochement → triage.
+- Autoriser uniquement des diagnostics structurés et limités. Retirer secrets, tokens, chemins personnels, identifiants, prompts privés et contenu de fichiers ; afficher les champs supprimés avant envoi.
+- Ne rien transmettre si le consentement est annulé. Conserver l’empreinte de la prévisualisation consentie afin que l’upload ne puisse pas envoyer un payload différent.
+- Fournir un adaptateur `LOCAL_ONLY` lorsque le serveur est indisponible, clairement présenté comme file locale non envoyée.
+- Stocker soumissions, diagnostics sanitisés, événements de statut, rapprochements, décisions de triage, liens issue/PR/release/docs et outbox. Aucun fichier arbitraire en V1, donc pas de stockage R2.
+- Retourner un reçu opaque. Les utilisateurs anonymes consulteront leur statut avec un secret de reçu dont seul le hash est stocké ; les utilisateurs authentifiés pourront également retrouver leurs propres rapports.
+- Calculer des candidats similaires par empreinte exacte, produit/version, trace normalisée et similarité textuelle. Aucun rapport ne sera supprimé ni déclaré `DUPLICATE` sans décision de triage.
+- Interdire toute promotion automatique d’un bug. Seule une action humaine explicite créera `FeatureProposal`, puis les transitions approuvées vers implémentation, preview et stable.
+- Isoler les rapports `SECURITY` dans des vues, autorisations et notifications séparées ; ne jamais les inclure dans les agrégats publics.
+- Le tableau interne présentera fréquences, versions, produits, tendances, candidats, statuts et traçabilité request → issue → PR → release → documentation.
+
+## 5. Tests et critères d’acceptation
+
+- Valider schémas, identifiants, liens morts, couverture documentaire, permissions, versions, plans, pricing, entitlements et installateur.
+- Vérifier qu’une modification de fonctionnalité sans documentation ou avec projection générée obsolète bloque la CI.
+- Tester hors ligne la documentation embarquée et la priorité donnée aux produits réellement installés.
+- Vérifier l’immuabilité des anciennes versions et la résolution explicite de `/latest`.
+- Rejeter manifestes non signés, signatures ou hashes altérés, chemins traversants, bundles surdimensionnés et contenu documentaire exécutable.
+- Vérifier qu’un client stable ignore development et qu’un échec d’update conserve la version active avec rollback fonctionnel.
+- Tester les réponses détaillées de version minimale et confirmer qu’elles ne désactivent pas arbitrairement les fonctions locales.
+- Tester sanitation, consentement, prévisualisation, mode offline, reprise d’upload, autorisations, reçus et isolation SECURITY.
+- Vérifier qu’une similarité ne supprime rien et qu’un bug ne devient jamais automatiquement une fonctionnalité.
+- Tester le site au clavier, sur mobile, avec recherche sans réseau, et contrôler que les routes internes sont refusées aux visiteurs non autorisés.
+- Conserver les gates du lot juridique/sécurité : vulnérabilités, secrets, licences inconnues, analyse statique, changements de permissions, signatures, bypass d’entitlement, privacy et SBOM.
+
+## 6. Ordre de livraison et hypothèses verrouillées
+
+1. Créer le dépôt autonome et figer l’inventaire de migration.
+2. Mettre en place schémas, catalogue et générateurs.
+3. Livrer les docs versionnées et l’intégration locale AIONE.
+4. Construire le site public et le simulateur sans prix inventés.
+5. Implémenter UpdateManager et la chaîne de signature de test.
+6. Implémenter Feedback Hub, D1 et dashboard interne.
+7. Activer la double projection et les contrôles CI.
+8. Publier une preview Sites privée ; promouvoir `/docs` publiquement seulement après fermeture des bloqueurs P0/P1 et validation humaine des contenus juridiques/commerciaux.
+
+Valeurs par défaut : français comme langue initiale, enums techniques en anglais, version `0.3.0-alpha`, Node 24 LTS avec dépendances exactes et lockfile, Python 3.12, .NET 8, télémétrie et upload désactivés par défaut. Aucun prix, offre contractuelle, licence inconnue ou conclusion juridique ne sera inventé ; ces éléments resteront `LEGAL_REVIEW_REQUIRED` ou bloqués.
+
+\# PROMPT CODEX 3 — DOCUMENTATION DYNAMIQUE, SITE LOCAL, UPDATE ENGINE ET FEEDBA…
+
+# CODEX — EXECUTION APRÈS PLAN — MIGRATION ET INTÉGRATION PRODUCT PLATFORM
+
+Le `PLAN.md` et les audits précédemment demandés constituent maintenant la référence de migration.
+
+Passe du MODE PLAN au **MODE EXECUTION**, mais conserve une approche incrémentale, testée et réversible.
+
+## OBJECTIF
+
+Construire effectivement le nouveau workspace produit prévu dans le plan en réutilisant les projets existants :
+
+- AIONE / AIONE Core / Owner
+- Forge IA
+- FractalOS / Spatial OS
+- MDVWE
+- Research Lab / Qiskit
+- AgoraMirror
+- MODA
+- Perception
+- Cadroscope
+- autres composants explicitement retenus par le PLAN
+
+L'objectif n'est PAS de simplement copier tous les dossiers.
+
+L'objectif est d'obtenir une **plateforme globale cohérente, installable et progressivement publiable**, comprenant les gammes Free/Paid, add-ons et capacités recommandées par le PLAN.
+
+---
+
+# 1. LE PLAN EST LA SOURCE PRINCIPALE
+
+Commence par relire :
+
+- `PLAN.md`
+- `PROJECT_INVENTORY.md`
+- `DEPENDENCY_MAP.md`
+- `REUSABLE_COMPONENTS.md`
+- `MISSING_COMPONENTS.md`
+- `PRODUCT_READINESS.md`
+- `PUBLIC_RELEASE_BLOCKERS.md` si disponible
+
+Compare ensuite le PLAN à l'état actuel réel du filesystem.
+
+Si une hypothèse du PLAN est incorrecte :
+
+NE FORCE PAS L'IMPLEMENTATION.
+
+Documente :
+
+`PLAN_DEVIATION`
+
+avec :
+
+- hypothèse initiale ;
+- réalité observée ;
+- conséquence ;
+- correction proposée ;
+- décision appliquée.
+
+---
+
+# 2. PRÉSERVER ABSOLUMENT LES SOURCES
+
+Ne modifier ni supprimer les projets originaux.
+
+Créer/compléter uniquement le nouveau workspace produit.
+
+Pour chaque migration, conserver :
+
+`SOURCE → VERSION/HASH → DESTINATION → TRANSFORMATIONS`
+
+Créer :
+
+`MIGRATION_LEDGER.md`
+
+et un manifeste machine-readable correspondant.
+
+---
+
+# 3. NE PAS COPIER AVEUGLÉMENT
+
+Pour chaque composant source :
+
+1. inspecter ;
+2. déterminer s'il est réellement utilisé ;
+3. vérifier dépendances et licence ;
+4. vérifier tests ;
+5. identifier chemins absolus/secrets/configurations locales ;
+6. déterminer son niveau de maturité ;
+7. copier/importer seulement ce qui est justifié ;
+8. adapter au nouveau contrat architectural ;
+9. tester ;
+10. enregistrer la provenance.
+
+Classification :
+
+- `REUSE_AS_IS`
+- `REUSE_WITH_ADAPTER`
+- `REFACTOR`
+- `REIMPLEMENT`
+- `RESEARCH_ONLY`
+- `DO_NOT_MIGRATE`
+
+Éviter la duplication lorsque package/shared library/adaptor est préférable.
+
+---
+
+# 4. CONSTRUIRE D'ABORD LE SOCLE COMMUN
+
+Avant d'intégrer toutes les applications, terminer les contrats essentiels :
+
+- configuration ;
+- logging ;
+- identity ;
+- permissions ;
+- entitlement ;
+- feature catalog ;
+- plans ;
+- add-ons ;
+- local storage ;
+- secrets ;
+- updater abstractions ;
+- documentation metadata ;
+- error/feedback reporting ;
+- versioning.
+
+Les applications doivent consommer ces contrats communs au lieu d'implémenter chacune leur propre système.
+
+---
+
+# 5. FEATURE CATALOG UNIQUE
+
+Créer une source canonique permettant de décrire chaque fonctionnalité.
+
+Chaque feature doit pouvoir posséder :
+
+- ID stable ;
+- produit ;
+- description ;
+- état ;
+- gamme minimale ;
+- add-on éventuel ;
+- quota ;
+- permissions nécessaires ;
+- disponibilité offline ;
+- dépendances ;
+- niveau expérimental ;
+- contraintes juridiques ;
+- contraintes sécurité ;
+- documentation ;
+- version d'introduction.
+
+Exemple conceptuel :
+
+`feature.aione.agent.local`
+
+`feature.fractalos.workspace.spatial`
+
+`feature.mdvwe.scene.replay`
+
+`feature.research.campaign.batch`
+
+Ne pas disperser ces informations dans plusieurs fichiers contradictoires.
+
+---
+
+# 6. FREE DOIT ÊTRE UN VRAI PRODUIT
+
+Construire en priorité un parcours Free complet.
+
+Objectif :
+
+`INSTALL → START → CONFIGURE → CREATE WORKSPACE → RUN → RESULT → HISTORY → DOCS`
+
+FREE ne doit pas être une démo inutilisable.
+
+Les limitations commerciales doivent être distinctes des restrictions de sécurité.
+
+---
+
+# 7. IMPLÉMENTER LES GAMMES
+
+Implémenter ensuite les plans retenus par le PLAN.
+
+Ne pas supposer que tous les noms provisoires doivent être conservés.
+
+Utiliser :
+
+`EntitlementResolver`
+
+ou architecture équivalente.
+
+Une feature doit demander :
+
+`is feature X available in current entitlement context?`
+
+et non :
+
+`if user_is_pro`.
+
+Prévoir :
+
+- plans ;
+- quotas ;
+- add-ons ;
+- capacités ponctuelles ;
+- crédits internes si retenus ;
+- organisation/team lorsque prévu.
+
+---
+
+# 8. ADD-ONS RECOMMANDÉS PAR LE PLAN
+
+Implémenter l'architecture nécessaire aux add-ons retenus.
+
+Exemples possibles selon PLAN :
+
+- MDVWE rendering ;
+- Forge advanced tools ;
+- Research batch campaigns ;
+- stockage ;
+- compute ;
+- connecteurs ;
+- collaboration ;
+- administration.
+
+Ne pas implémenter un add-on uniquement parce qu'il est imaginable.
+
+Utiliser exclusivement ceux justifiés par :
+
+- fonctionnalité existante ;
+- besoin produit ;
+- architecture ;
+- coût réel ;
+- PLAN.
+
+---
+
+# 9. INTÉGRATION AIONE
+
+Transformer AIONE en backend/core cohérent pour la plateforme lorsque le PLAN le confirme.
+
+Priorités :
+
+- local-first ;
+- modèles locaux ;
+- workspace ;
+- agent execution ;
+- scoped permissions ;
+- human approval ;
+- history ;
+- receipts ;
+- recovery ;
+- configuration.
+
+Ne pas annoncer comme supportées les capacités seulement expérimentales.
+
+---
+
+# 10. INTÉGRATION FRACTALOS
+
+Faire de FractalOS une interface utilisable au-dessus des services disponibles.
+
+Le workspace spatial doit pouvoir représenter progressivement :
+
+- fichiers ;
+- agents ;
+- tâches ;
+- processus ;
+- résultats ;
+- relations ;
+- mémoire ;
+- modules.
+
+Éviter que l'interface dépende directement des implémentations internes d'AIONE.
+
+Utiliser API/contracts/adapters.
+
+---
+
+# 11. INTÉGRATION FORGE
+
+Réutiliser les composants Forge réellement opérationnels.
+
+Forge devient la couche orientée :
+
+- création ;
+- développement ;
+- modification ;
+- orchestration ;
+- inspection.
+
+Les fonctions autonomes ou puissantes doivent respecter exactement le même système de permissions que le reste de la plateforme.
+
+---
+
+# 12. INTÉGRATION MDVWE
+
+Préserver les fonctionnalités réellement testées.
+
+Séparer :
+
+- world model ;
+- replay ;
+- rendering ;
+- Blender ;
+- ComfyUI ;
+- video generation ;
+- perception ;
+- experimental capabilities.
+
+L'absence d'une dépendance lourde ne doit pas empêcher AIONE/FractalOS de fonctionner.
+
+Utiliser des capacités optionnelles détectables.
+
+---
+
+# 13. RESEARCH LAB
+
+Intégrer le système expérimental sans transformer les hypothèses scientifiques en affirmations produit.
+
+Préserver :
+
+- seeds ;
+- fingerprints ;
+- ledgers ;
+- campaigns ;
+- controls ;
+- statistics ;
+- exports ;
+- reproducibility metadata.
+
+Afficher clairement :
+
+`SIMULATION`
+
+`EXPERIMENTAL`
+
+`CONFIRMATION`
+
+`RESEARCH ONLY`
+
+selon les cas.
+
+---
+
+# 14. MODA / PERCEPTION / CADROSCOPE / AGORA
+
+Pour chacun :
+
+déterminer s'il doit devenir :
+
+- application ;
+- plugin ;
+- package ;
+- service ;
+- visualization ;
+- research module.
+
+Ne pas leur créer artificiellement une application indépendante si leur fonction est mieux intégrée à un produit principal.
+
+---
+
+# 15. DÉPENDANCES OPTIONNELLES
+
+Détecter dynamiquement :
+
+- Ollama ;
+- GPU ;
+- CUDA ;
+- Blender ;
+- FFmpeg ;
+- ComfyUI ;
+- Qiskit ;
+- autres runtimes.
+
+Produire :
+
+`AVAILABLE`
+
+`MISSING`
+
+`INCOMPATIBLE`
+
+`OPTIONAL`
+
+Une dépendance MDVWE manquante ne doit pas casser AIONE.
+
+---
+
+# 16. INSTALLATION
+
+Construire progressivement un parcours installation/configuration reproductible.
+
+Créer un :
+
+`EnvironmentDoctor`
+
+ou équivalent capable d'inspecter :
+
+- OS ;
+- Python/runtime ;
+- Node ;
+- GPU ;
+- drivers ;
+- Ollama ;
+- ports ;
+- dépendances ;
+- espace disque ;
+- permissions.
+
+Il doit diagnostiquer, pas modifier silencieusement la machine.
+
+---
+
+# 17. PREMIER DÉMARRAGE
+
+Créer un onboarding minimal :
+
+1. bienvenue ;
+2. fonctionnement local/cloud ;
+3. confidentialité ;
+4. détection environnement ;
+5. modèle IA ;
+6. workspace ;
+7. permissions ;
+8. première tâche ;
+9. résultat ;
+10. documentation.
+
+---
+
+# 18. SITE PUBLIC
+
+Connecter le site au catalogue produit.
+
+Le site doit pouvoir présenter automatiquement :
+
+- produits ;
+- fonctionnalités ;
+- gammes ;
+- comparaison ;
+- add-ons ;
+- documentation ;
+- téléchargement ;
+- sécurité ;
+- changelog.
+
+Ne jamais annoncer une feature `EXPERIMENTAL` comme `AVAILABLE`.
+
+---
+
+# 19. BILLING
+
+Construire d'abord l'abstraction.
+
+Ne connecter aucun prestataire de paiement réel sans décision explicite.
+
+Préparer :
+
+- plans ;
+- subscriptions ;
+- add-ons ;
+- invoices ;
+- internal credits ;
+- entitlement synchronization.
+
+Utiliser des mocks pour le développement.
+
+---
+
+# 20. SECURITY
+
+Avant chaque intégration, vérifier :
+
+- filesystem access ;
+- process execution ;
+- network ;
+- credentials ;
+- AI tools ;
+- updater ;
+- user data.
+
+Une migration qui introduit une escalade implicite de permissions doit échouer aux tests.
+
+---
+
+# 21. TESTS DE NON-RÉGRESSION
+
+Ne considère pas une copie réussie parce qu'elle compile.
+
+Pour chaque composant migré :
+
+`SOURCE TESTS → MIGRATION TESTS → INTEGRATION TESTS`
+
+Ajouter des smoke tests couvrant le parcours utilisateur complet.
+
+---
+
+# 22. OBSERVABILITÉ LOCALE
+
+Créer des diagnostics permettant de comprendre :
+
+- quel module fonctionne ;
+- quel module échoue ;
+- quelle dépendance manque ;
+- quelle permission est refusée ;
+- quelle feature est indisponible ;
+- pourquoi elle est indisponible.
+
+Pas seulement des stack traces.
+
+---
+
+# 23. PERFORMANCE
+
+Mesurer avant d'optimiser.
+
+Ajouter progressivement :
+
+- startup time ;
+- RAM ;
+- CPU ;
+- GPU ;
+- disk ;
+- model latency ;
+- task latency.
+
+Ne pas optimiser sur hypothèses.
+
+---
+
+# 24. RELEASE CHANNELS
+
+Préparer :
+
+- `dev`
+- `preview`
+- `stable`
+
+Une fonctionnalité expérimentale doit pouvoir être disponible en preview sans contaminer stable.
+
+---
+
+# 25. DEFINITION OF DONE PAR MODULE
+
+Un module n'est `DONE` que si :
+
+- intégré ;
+- configurable ;
+- permissions correctes ;
+- entitlement correct ;
+- testé ;
+- documenté ;
+- diagnostics disponibles ;
+- installation reproductible ;
+- provenance enregistrée ;
+- aucune dépendance critique inconnue.
+
+Sinon utiliser :
+
+- `PARTIAL`
+- `BLOCKED`
+- `EXPERIMENTAL`.
+
+---
+
+# 26. CHECKPOINTS
+
+Ne réalise pas toute la migration dans une seule modification gigantesque.
+
+Créer des checkpoints :
+
+### CHECKPOINT A
+
+Workspace + manifests + shared contracts.
+
+### CHECKPOINT B
+
+AIONE Core.
+
+### CHECKPOINT C
+
+FractalOS + AIONE vertical slice.
+
+### CHECKPOINT D
+
+Installer/onboarding/docs.
+
+### CHECKPOINT E
+
+Forge.
+
+### CHECKPOINT F
+
+MDVWE.
+
+### CHECKPOINT G
+
+Research Lab.
+
+### CHECKPOINT H
+
+Modules additionnels.
+
+### CHECKPOINT I
+
+Site/catalog/pricing.
+
+### CHECKPOINT J
+
+Release candidate.
+
+Après chaque checkpoint :
+
+- lancer tests ;
+- enregistrer résultats ;
+- mettre à jour migration ledger ;
+- enregistrer blockers ;
+- produire un résumé.
+
+---
+
+# 27. PREMIÈRE VERTICAL SLICE PUBLIQUE
+
+Avant de chercher la complétude, obtenir ceci :
+
+`INSTALL`
+
+↓
+
+`LAUNCH`
+
+↓
+
+`CREATE WORKSPACE`
+
+↓
+
+`SELECT LOCAL MODEL`
+
+↓
+
+`CREATE TASK`
+
+↓
+
+`PERMISSION REQUEST`
+
+↓
+
+`USER APPROVAL`
+
+↓
+
+`EXECUTION`
+
+↓
+
+`RESULT`
+
+↓
+
+`HISTORY`
+
+↓
+
+`DOCUMENTATION`
+
+↓
+
+`FEEDBACK`
+
+Si cette chaîne fonctionne réellement, elle devient le noyau de la Public Alpha.
+
+---
+
+# 28. NE PAS FAIRE
+
+Ne pas :
+
+- modifier les originaux ;
+- supprimer des recherches ;
+- inventer des fonctionnalités ;
+- déclarer production-ready sans preuve ;
+- connecter un paiement réel ;
+- créer une crypto/token échangeable ;
+- uploader des données privées ;
+- activer une télémétrie cachée ;
+- contourner les permissions ;
+- masquer des tests cassés ;
+- créer des dizaines de services inutiles ;
+- réécrire du code fonctionnel sans justification.
+
+---
+
+# 29. RAPPORT CONTINU
+
+Maintenir :
+
+`IMPLEMENTATION_STATUS.md`
+
+avec :
+
+| ComponentMigrationIntegrationTestsDocsSecurityPublic Ready |
+| ---------------------------------------------------------- |
+
+et :
+
+`BLOCKERS.md`
+
+`MIGRATION_LEDGER.md`
+
+`PLAN_DEVIATIONS.md`
+
+---
+
+# 30. EXÉCUTION
+
+Commence par CHECKPOINT A.
+
+Ensuite réalise CHECKPOINT B.
+
+Puis construis la première vertical slice AIONE → FractalOS.
+
+Ne poursuis vers les composants secondaires que lorsque le socle est suffisamment stable.
+
+Si une décision importante non couverte par le PLAN apparaît :
+
+ne choisis pas arbitrairement.
+
+Documente les options, recommande celle présentant le meilleur compromis entre :
+
+- simplicité ;
+- sécurité ;
+- maintenabilité ;
+- compatibilité ;
+- coût ;
+- expérience utilisateur.
+
+Priorité absolue :
+
+**un petit produit réellement installable et fonctionnel avant une plateforme immense mais inachevée.**
+
+Afficher plus
+
+jeudi 20:00
+
+Je ne peux pas basculer effectivement hors du mode Plan tant que ce mode est imposé par la session. Je vais néanmoins préparer l’exécution de CHECKPOINT A → B → première tranche verticale à partir des fichiers réels, et relever toute divergence avant qu’une mutation soit autorisée. Le volet site restera aligné sur le workflow Sites, mais il ne sera pas lancé avant le socle produit.
+
+Premier écart important : le workspace cible ne contient toujours aucun des fichiers de référence annoncés. Le disque contient de nombreux `PLAN.md` historiques et de workers, donc je ne vais pas en sélectionner un au hasard ; je resserre sur le candidat produit principal `S:\AIONE\Ecosystem` et sur les audits de premier niveau.
+
+La référence disponible est bien `S:\AIONE\Ecosystem\PLAN.md`, mais elle décrit surtout la vision et renvoie à `PRIORITY.md`/`TASK.md`; les six audits nommés dans la demande sont absents. C’est un `PLAN_DEVIATION` bloquant pour une migration automatique, pas pour la préparation du socle : je vais donc établir la matrice de sources et les preuves nécessaires avant tout futur import.
+
+Le point qui change réellement l’exécution est l’autorité documentaire : aucun `PROJECT_INVENTORY.md`, `DEPENDENCY_MAP.md`, `REUSABLE_COMPONENTS.md`, `MISSING_COMPONENTS.md`, `PRODUCT_READINESS.md` ou `PUBLIC_RELEASE_BLOCKERS.md` n’existe dans les emplacements produit inspectés. J’ai besoin de verrouiller si le plan court d’Ecosystem doit servir de référence et si les audits doivent être reconstruits.
+
+Référence verrouillée : `S:\AIONE PRODUCT WORKSPACE` deviendra l’autorité canonique ; `S:\AIONE\Ecosystem` sera une source optionnelle de preuves et de composants, jamais le dépôt à faire évoluer. Je poursuis par une cartographie bornée des racines réellement présentes afin de fixer les classifications de migration des checkpoints A à C.
+
+La cartographie révèle déjà trois catégories nettes : le socle AIONE/Forge possède des modules testés mais reste dans un dépôt très sale et sans licence finale ; MDVWE est le seul candidat clairement licencié Apache-2.0 ; AgoraMirror, Qiskit, FractalOS fusion et MODA nécessitent encore une décision de licence/provenance avant copie. Je vérifie maintenant uniquement les tests qui conditionnent AIONE Core et la tranche verticale.
+
+Plan
+
+# Plan d’exécution — Migration Product Platform, checkpoints A à C
+
+## État réel et déviations verrouillées
+
+`S:\AIONE PRODUCT WORKSPACE` devient l’unique workspace canonique. `S:\AIONE\Ecosystem` et les autres projets restent des sources en lecture seule.
+
+Les premières entrées de `PLAN_DEVIATIONS.md` seront :
+
+- Le workspace cible est vide, sans dépôt Git ni audits : initialiser un dépôt autonome et reconstruire les documents de référence avant tout import.
+- Seul `S:\AIONE\Ecosystem\PLAN.md` existe ; il décrit une vision, pas le plan complet annoncé. L’utiliser comme preuve secondaire, pas comme autorité canonique.
+- Le dépôt Ecosystem est fortement sale : HEAD `3dfe035…`, 62 changements suivis et 353 changements totaux observés. Chaque fichier retenu sera identifié par SHA-256, pas seulement par le commit.
+- Le HUD réel cible `net10.0-windows`, pas .NET 8. Conserver .NET 10 pour la compatibilité initiale.
+- « FractalOS » désigne deux systèmes différents : le HUD WPF d’Ecosystem et le système fusion/bare-metal sous `S:\FractalOS\03\FractalOS`. Le HUD sera la surface de la tranche publique ; le système fusion reste expérimental.
+- Les modules Owner contiennent une identité personnelle et des chemins `S:\` codés en dur. Ils devront être adaptés ; aucune donnée personnelle ne sera migrée.
+- AIONE Core/Forge a passé 24 tests ciblés ; le HUD compile sans avertissement. FractalOS fusion a passé 150 tests.
+- MDVWE annonce 65 tests réussis, mais l’environnement global actuel ne peut même pas les collecter faute d’installation isolée. Le statut reste `BLOCKED_ENVIRONMENT_VALIDATION`.
+- MDVWE est Apache-2.0. Les licences produit d’AIONE, FractalOS fusion, AgoraMirror, Qiskit et MODA ne sont pas établies : distribution publique bloquée tant qu’elles restent inconnues.
+- AgoraMirror et Qiskit existent ; MODA est principalement documentaire ; Perception appartient à MDVWE ; aucune source Cadroscope n’a été trouvée.
+
+## CHECKPOINT A — Workspace, audits et contrats communs
+
+### Fondation
+
+- Initialiser un dépôt Git imbriqué autonome sur une branche `codex/product-platform-migration`.
+- Fixer la version plateforme à `0.3.0-alpha`.
+- Utiliser npm workspaces/Node 24, .NET 10 et Python 3.12 ; épingler les versions et créer les lockfiles.
+- Créer les applications `platform-host` et `fractalos-desktop`, puis les packages `contracts`, `catalog`, `entitlements`, `permissions`, `storage`, `diagnostics`, `models` et `docs`.
+- Interdire dans Git les données runtime, modèles, environnements virtuels, secrets, logs, bases locales, builds et médias non audités.
+
+### Audits et provenance
+
+Créer dans le workspace :
+
+- `PLAN.md` comme synthèse exécutable de la présente décision ;
+- `PROJECT_INVENTORY.md`, `DEPENDENCY_MAP.md`, `REUSABLE_COMPONENTS.md`, `MISSING_COMPONENTS.md`, `PRODUCT_READINESS.md` ;
+- `PUBLIC_RELEASE_BLOCKERS.md`, `PLAN_DEVIATIONS.md`, `BLOCKERS.md`, `IMPLEMENTATION_STATUS.md` ;
+- `MIGRATION_LEDGER.md` généré depuis `migration/migration-ledger.jsonl`.
+
+Chaque enregistrement du ledger contiendra :
+
+```
+component, source path, Git HEAD, dirty state, SHA-256, destination,
+classification, transformations, licence, source tests,
+migration tests, integration tests, checkpoint, status
+```
+
+Aucun import ne pourra avoir lieu avec une provenance, une licence ou une classification absente. Une licence inconnue autorisera seulement une intégration locale privée explicitement marquée et bloquera tout artefact public.
+
+### Catalogue et contrats
+
+Créer un catalogue canonique par fonctionnalité avec :
+
+```
+id, product, description, lifecycle, minimum plan, add-on, quota,
+permissions, offline availability, dependencies, experimental level,
+legal_status, security constraints, documentation, introduced version
+```
+
+Créer les contrats partagés suivants :
+
+- `EntitlementContext` et `EntitlementResolver` ;
+- `PermissionRequest`, `PermissionDecision` et `PermissionGrant` ;
+- `Workspace`, `Task`, `TaskResult`, `ExecutionReceipt`, `HistoryEvent` ;
+- `DependencyProbeResult` avec `AVAILABLE`, `MISSING`, `INCOMPATIBLE`, `OPTIONAL` ;
+- `DiagnosticEvent`, `FeedbackDraft`, `InstallationProfile`, `ReleaseMetadata`.
+
+La disponibilité devra expliquer précisément :
+
+```
+AVAILABLE
+PLAN_REQUIRED
+ADDON_REQUIRED
+QUOTA_EXCEEDED
+PLATFORM_UNAVAILABLE
+DEPENDENCY_MISSING
+LEGAL_BLOCKED
+SECURITY_BLOCKED
+EXPERIMENTAL_DISABLED
+```
+
+`plan.free` sera le seul plan public actif. Un fixture interne `paid-preview` permettra de tester le résolveur, sans nom commercial, prix ni vente. Les add-ons et crédits resteront abstraits et désactivés.
+
+### Gate A
+
+Checkpoint A est terminé uniquement si les schémas valident, Free possède un parcours cohérent, les permissions ne dépendent jamais du paiement, le ledger couvre chaque source candidate et aucun chemin personnel ou secret n’apparaît dans les artefacts générés.
+
+Créer alors un commit/checkpoint Git A.
+
+## CHECKPOINT B — AIONE Core local
+
+### Architecture
+
+Construire un service local TypeScript sur `127.0.0.1` avec port éphémère, secret de session et refus des origines non autorisées. Il sera l’autorité sur :
+
+- workspaces ;
+- catalogue et entitlements ;
+- modèles locaux ;
+- tâches et permissions ;
+- résultats, historique et receipts ;
+- diagnostics, documentation et feedback local.
+
+API minimale :
+
+```
+GET  /v1/health
+GET  /v1/environment
+GET  /v1/catalog
+POST /v1/workspaces
+GET  /v1/models
+POST /v1/tasks
+POST /v1/permission-requests/{id}/decision
+GET  /v1/tasks/{id}
+GET  /v1/history
+GET  /v1/docs
+POST /v1/feedback
+```
+
+États de tâche :
+
+```
+DRAFT → PERMISSION_PENDING → APPROVED → RUNNING
+      → SUCCEEDED | FAILED | CANCELED
+```
+
+Chaque action sensible devra déclarer raison, action, scope, ressources, risque et durée. Le grant sera borné, à usage unique lorsque pertinent, révocable et non réutilisable.
+
+### Réutilisation sélective
+
+- `atomic-file` et les primitives pures de `case-autonomy` : `REUSE_WITH_ADAPTER`.
+- `owner-review` : `REFACTOR` pour retirer identité personnelle, chemins absolus et stockage imposé.
+- `ecosystem-fabric` : `REUSE_WITH_ADAPTER`, derrière une abstraction de stockage ; `node:sqlite` restera signalé expérimental.
+- Serveur Forge monolithique, MMR Python géant et automatisations 24/7 : non intégrés au noyau initial.
+- Le stockage utilisera SQLite local avec migrations, journal append-only et sauvegarde atomique. Aucun contenu de prompt ne sera journalisé par défaut.
+- `SecretStore` utilisera la protection Windows ; les tests emploieront uniquement un faux store mémoire.
+- `EnvironmentDoctor` inspectera OS, runtimes, Ollama, modèles, ports, espace disque et permissions sans modifier la machine.
+- L’adaptateur Ollama ne communiquera qu’en loopback. Les tests utiliseront un faux modèle déterministe ; le smoke test réel sera optionnel selon la disponibilité locale.
+
+### Gate B
+
+Tester reprise après crash, concurrence, refus, révocation, rejeu, dépassement de scope, entitlement bypass, redaction, migration SQLite et fonctionnement sans Ollama.
+
+La preuve minimale doit montrer :
+
+```
+create workspace → create task → permission pending → approval
+→ model invocation → result → receipt → history
+```
+
+Créer le checkpoint Git B seulement si tous les tests du nouveau noyau passent. Les tests historiques verts ne suffisent pas.
+
+## CHECKPOINT C — Tranche verticale FractalOS → AIONE
+
+- Créer un petit shell WPF neuf et maintenable plutôt que recopier les 166 fichiers et l’énorme `App.xaml.cs`.
+- Consommer exclusivement l’API et les contrats AIONE ; aucune lecture directe de sa base ou de ses implémentations.
+- Réutiliser avec adaptation les identifiants de `FeatureRegistry`, la compatibilité du format `workspace.fractal` et les principes HUD/SpatialWorld.
+- Fournir un importeur en lecture seule des workspaces historiques. L’import produit une copie nouvelle et un rapport ; il ne modifie jamais l’original.
+- Représenter initialement workspace, tâche, modèle, permission, résultat et historique comme entités spatiales simples. Le moteur 3D avancé reste différé.
+- Implémenter le parcours Free complet :
+
+```
+LAUNCH
+→ CREATE WORKSPACE
+→ SELECT DISCOVERED LOCAL MODEL
+→ CREATE TASK
+→ REVIEW PERMISSION
+→ APPROVE OR REFUSE
+→ EXECUTE
+→ VIEW RESULT
+→ VIEW HISTORY/RECEIPT
+→ OPEN OFFLINE DOCS
+→ PREVIEW/SEND FEEDBACK
+```
+
+- Si Ollama ou un modèle manque, rester utilisable et expliquer le diagnostic ; ne pas présenter le faux provider de test comme une IA réelle.
+- Les diagnostics doivent expliquer module, dépendance, permission, feature et raison d’indisponibilité.
+- Aucun agent ne pourra silencieusement augmenter son scope, exécuter une commande libre ou sortir du workspace.
+
+### Gate C
+
+Ajouter des tests de contrat API, tests WPF sur faux backend, tests d’import sans mutation et smoke test réel AIONE → FractalOS. Vérifier aussi :
+
+- parcours refusé sans approbation ;
+- résultat absent si l’exécution échoue ;
+- historique persistant après redémarrage ;
+- Free utilisable sans mock commercial ;
+- documentation hors ligne ;
+- feedback non envoyé sans consentement ;
+- source historique et hashes inchangés.
+
+Créer le checkpoint Git C, mettre à jour les rapports continus et arrêter l’expansion produit si une partie du parcours n’est pas réellement fonctionnelle.
+
+## Checkpoints ultérieurs, après stabilité de C
+
+- **D — Installation/onboarding/docs** : installer Windows reproductible, EnvironmentDoctor, onboarding, bundles documentaires versionnés et updater vérifié.
+- **E — Forge** : intégrer seulement les capacités testées de création, inspection et orchestration, avec le Permission Broker commun.
+- **F — MDVWE** : environnement Python isolé, reproduction des 65 tests, puis world model/replay comme package optionnel ; Blender, FFmpeg, ComfyUI, génération et Perception comme capacités détectables.
+- **G — Research Lab** : Qiskit et Controlled Research Lab en modules `RESEARCH_ONLY`, avec seeds, fingerprints, campagnes, ledgers et labels scientifiques explicites.
+- **H — Autres modules** : AgoraMirror en service séparé après audit privacy/licence ; MODA comme corpus de recherche ; Cadroscope `DO_NOT_MIGRATE` tant que sa source reste introuvable.
+- **I — Site** : initialiser le site Sites uniquement à ce checkpoint, par le chemin multi-route. Catalogue public en lecture seule, Feedback Hub dans D1, dashboard protégé par identité et allowlist, preview privée avant toute publication.
+- **J — Release candidate** : installateur propre, signatures, SBOM, canaux dev/preview/stable, tests machine fraîche et fermeture des bloqueurs P0/P1.
+
+Aucun paiement réel, télémétrie cachée, upload privé, token échangeable, plugin exécutable tiers ou publication publique ne sera activé dans les checkpoints A à C. Cette spécification est prête à exécuter dès que le mode Plan imposé à la session est levé.
+
+Oui, exécutez ce plan
+
+jeudi 20:29
+
+Exécution durant 30m 8s
+
+Les checkpoints A à C sont livrés sur `codex/product-platform-migration`. Le dépôt est propre et les sources historiques sont inchangées.
+
+Résultats principaux :
+
+- Checkpoint A : catalogue canonique, contrats, entitlements, permissions, audits et ledger de provenance.
+- Checkpoint B : noyau AIONE local sécurisé, SQLite, permissions bornées, historique, receipts, diagnostics, documentation et feedback local.
+- Checkpoint C : shell WPF .NET 10 et parcours Free complet FractalOS → AIONE.
+- 27 tests automatisés réussis : A `7/7`, B `16/16`, Desktop `4/4`.
+- Builds TypeScript et WPF réussis sans erreur ni avertissement.
+- Smoke test réel réussi avec Ollama et `qwen2.5-coder:7b`, suivant les [API officielles Ollama](https://docs.ollama.com/api/generate).
+- 11 sources historiques revérifiées par SHA-256 : aucune mutation.
+- Aucun paiement, upload distant, télémétrie cachée ou add-on commercial activé.
+
+Commits :
+
+- `9d6a0c1` — Checkpoint A
+- `7b046d1` — Checkpoint B
+- `116cbd0` — Checkpoint C
+
+Points d’entrée :
+
+- [README et commandes]\(S:/AIONE PRODUCT WORKSPACE/README.md)
+- [État d’implémentation]\(S:/AIONE PRODUCT WORKSPACE/IMPLEMENTATION\_STATUS.md)
+- [Ledger de migration]\(S:/AIONE PRODUCT WORKSPACE/MIGRATION\_LEDGER.md)
+- [Rapport Checkpoint C]\(S:/AIONE PRODUCT WORKSPACE/checkpoints/CHECKPOINT\_C.md)
+- [Bloqueurs de publication]\(S:/AIONE PRODUCT WORKSPACE/PUBLIC\_RELEASE\_BLOCKERS.md)
+- [Projet FractalOS Desktop]\(S:/AIONE PRODUCT WORKSPACE/apps/fractalos-desktop/FractalOS.Desktop.csproj)
+
+L’application est exécutable depuis les sources :
+
+```
+dotnet run --project apps/fractalos-desktop/FractalOS.Desktop.csproj -c Release
+```
+
+Ce n’est pas encore un produit distribuable publiquement : les licences inconnues restent des bloqueurs P0, et l’installateur signé, l’updater, le SBOM et la validation machine fraîche appartiennent aux checkpoints D/J. Aucune conclusion ne constitue une validation juridique.
+
+103 fichiers modifiés+3 318-69Voir les modifications
+
+AnnulerExaminer
+
+.gitattributes.gitattributes+5-0
+
+.gitignore.gitignore+42-0
+
+.nvmrc.nvmrc+2-0
+
+Afficher 100 autres fichiers
+
+jeudi 20:59
+
+EXECUTION MODE — BUILD THE ACTUAL PRODUCT ECOSYSTEM. The objective is NOT to cr…
+
+Exécution durant 1h 42m 29s
+
+L’écosystème produit local est intégré et checkpointé dans le commit `01ad377`.
+
+- Démarrage unique : `npm run start:ecosystem`
+- Portail AIONE + core local authentifié
+- FractalOS Spatial HUD avancé
+- Forge AI, MDVWE, Quantum Research Lab et AgoraMirror réellement lançables
+- LayerOS v33 et FractalOS Fusion préservés/testés, mais volontairement bloqués pour raisons de sécurité
+- Free actif ; Premium/Professional/Enterprise restent `DESIGN_ONLY`
+- Kredits fermés, non transférables, non échangeables et commercialement désactivés
+- 32/32 familles découvertes disposent d’une décision de migration
+- 18 preuves sources vérifiées inchangées
+
+Validation complète réussie : 26 tests plateforme, 5 tests desktop, smokes applicatifs, 64 tests MDVWE, 145 Quantum, 159 LayerOS, 150 Fusion, 3 AgoraMirror, audit Forge sans vulnérabilité, ainsi qu’une tâche réelle AIONE → permission → Ollama → résultat.
+
+Points d’entrée :
+
+- [README et démarrage]\(S:/AIONE PRODUCT WORKSPACE/README.md)
+- [Checkpoint et preuves]\(S:/AIONE PRODUCT WORKSPACE/checkpoints/CHECKPOINT\_ECOSYSTEM.md)
+- [État d’intégration]\(S:/AIONE PRODUCT WORKSPACE/INTEGRATION\_STATUS.md)
+- [Matrice des capacités]\(S:/AIONE PRODUCT WORKSPACE/docs/PRODUCT\_CAPABILITY\_MATRIX.md)
+- [Bloqueurs de publication]\(S:/AIONE PRODUCT WORKSPACE/PUBLIC\_RELEASE\_BLOCKERS.md)
+
+La plateforme reste privée : licences inconnues, installateur signé, SBOM, updater sécurisé et validation sur machine fraîche bloquent encore toute publication publique.
+
+AgoraMirrorSite webOuvrir dans le navigateur par défautOuvrir dans
+
+102 fichiers modifiés+3 089-223Voir les modifications
+
+AnnulerExaminer
+
+catalog-source/applications.jsoncatalog-source/applications.json+181-22
+
+packages/contracts/src/index.tspackages/contracts/src/index.ts+55-0
+
+packages/project-registry/package.jsonpackages/project-registry/package.json+1-0
+
+Afficher 99 autres fichiers
+
+vendredi 17:36
+
+Accès complet
+
+
+
+5.6 TerraTrès élevé5.6 SolTrès élevé
+
+AIONE PRODUCT WORKSPACE
+
+Modifications
+
+Local
+
+codex/product-platform-migration
+
+Valider ou envoyer
+
+S:
+
+Plan
+
+Plan d’exécution — Migration Product Platform, checkpoints A à C
+
+Sources
+
+EXECUTION MODE — BUILD THE ACTUAL PRODUCT ECOSYSTEM. The objective is NOT to cr…
+
+\# PROMPT CODEX 3 — DOCUMENTATION DYNAMIQUE, SITE LOCAL, UPDATE ENGINE ET FEEDBA…
+
+\# PROMPT CODEX 3 — DOCUMENTATION DYNAMIQUE, SITE LOCAL, UPDATE ENGINE ET FEEDBA…
+
+Tout afficher
+
+README.md
+
+LOCAL\_SETUP.md
+
+1. AIONE PRODUCT WORKSPACE
+2. docs
+3. LOCAL\_SETUP.md
+
+Afficher la source
+
+Ouvrir
