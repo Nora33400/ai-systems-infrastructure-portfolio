@@ -71,7 +71,7 @@ Les composants principaux sont:
 - `AutoTuningPolicy`: choix automatique du mode runtime selon cout, latence et warnings.
 - `RealUserTaskBenchmark`: evaluation v30 sur sept taches agent/developpeur sourcees.
 
-Documentation detaillee: [docs/ARCHITECTURE_AIONE_MMR.md](C:/Users/Noran/Documents/AIONE/docs/ARCHITECTURE_AIONE_MMR.md)
+Documentation detaillee: `docs/ARCHITECTURE_AIONE_MMR.md`
 
 ## Resultats v16 a v30
 
@@ -128,7 +128,7 @@ Le projet utilise actuellement la bibliotheque standard Python pour le runtime p
 Validation complète AIONE + FractalOS :
 
 ```powershell
-& C:\Users\Noran\Documents\AIONE\scripts\validate_all.ps1
+& <AIONE_ROOT>\scripts\validate_all.ps1
 ```
 
 Cette commande compile le HUD, exécute ses auto-tests technique et UX, puis lance les tests Python. Les validations peuvent aussi être lancées séparément avec `scripts/validate_hud.ps1` et `scripts/validate_python.ps1`.
@@ -162,13 +162,13 @@ python -m aione_forge.cli api --host 127.0.0.1 --port 8765
 Les rapports runtime sont produits dans:
 
 ```text
-C:\Users\Noran\AppData\Local\Temp\aione_forge_runtime\reports
+<LOCAL_TEMP>\aione_forge_runtime\reports
 ```
 
 Les artefacts JSON sont produits dans:
 
 ```text
-C:\Users\Noran\AppData\Local\Temp\aione_forge_runtime\kernel
+<LOCAL_TEMP>\aione_forge_runtime\kernel
 ```
 
 La release experimentale copie les rapports majeurs dans:
@@ -188,12 +188,12 @@ release/
 
 ## Points D'entree
 
-- [QUICKSTART.md](C:/Users/Noran/Documents/AIONE/QUICKSTART.md)
-- [docs/LOCAL_API_ARCHITECTURE.md](C:/Users/Noran/Documents/AIONE/docs/LOCAL_API_ARCHITECTURE.md)
-- [RELEASE_NOTES_v30.md](C:/Users/Noran/Documents/AIONE/RELEASE_NOTES_v30.md)
-- [docs/ARCHITECTURE_AIONE_MMR.md](C:/Users/Noran/Documents/AIONE/docs/ARCHITECTURE_AIONE_MMR.md)
-- [cahier_des_charges/MMR_minimum_materialization_runtime/MMR_CDC_v0.md](C:/Users/Noran/Documents/AIONE/cahier_des_charges/MMR_minimum_materialization_runtime/MMR_CDC_v0.md)
-- [recherche/forge_aione_v30_resultats.md](C:/Users/Noran/Documents/AIONE/recherche/forge_aione_v30_resultats.md)
+- `QUICKSTART.md`
+- `docs/LOCAL_API_ARCHITECTURE.md`
+- `RELEASE_NOTES_v30.md`
+- `docs/ARCHITECTURE_AIONE_MMR.md`
+- `cahier_des_charges/MMR_minimum_materialization_runtime/MMR_CDC_v0.md`
+- `recherche/forge_aione_v30_resultats.md`
 
 
 ---
