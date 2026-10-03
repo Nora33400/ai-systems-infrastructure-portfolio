@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "principle": "one central core, replaceable capability adapters",
+  "capability_contract": ["capability_id","version","provider","interface","inputs","outputs","cost","risk","requires_approval","fallback"],
+  "promotion": ["reference","candidate","adapter","tested","trusted","core-compatible"],
+  "rule": "Upstream source is never core by default; only bounded interfaces are promoted."
+}
