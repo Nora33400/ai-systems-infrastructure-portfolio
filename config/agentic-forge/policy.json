@@ -1,0 +1,46 @@
+{
+  "default": {
+    "network": "deny",
+    "external_mcp": "deny",
+    "oauth": "deny",
+    "self_escalation": "deny",
+    "human_approval_for": [
+      "filesystem.write",
+      "terminal.execute",
+      "git.push",
+      "github.write",
+      "permission.change"
+    ]
+  },
+  "ranks": {
+    "R0": [
+      "read"
+    ],
+    "R1": [
+      "read",
+      "non_destructive"
+    ],
+    "R2": [
+      "workspace.write",
+      "git.diff"
+    ],
+    "R3": [
+      "approved.execute"
+    ],
+    "R4": [
+      "delegate"
+    ],
+    "R5": [
+      "orchestrate"
+    ],
+    "R6": [
+      "manage_roles",
+      "manage_skills",
+      "manage_tools"
+    ],
+    "R7": [
+      "system_admin"
+    ]
+  },
+  "rule": "rank never overrides explicit deny"
+}
