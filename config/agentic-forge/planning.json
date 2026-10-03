@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "model": "long_horizon_task_reference",
   "principles": {
     "source_of_truth": "root_task",
@@ -103,5 +103,81 @@
       "final_merge"
     ],
     "agents_cannot_self_approve": true
+  },
+  "context_locality": {
+    "enabled": true,
+    "purpose": "Select the smallest useful contextual unit before expanding outward, preserving meaning while limiting context load.",
+    "levels": [
+      {
+        "id": "L0",
+        "name": "letter",
+        "unit": "single character",
+        "expand_to": "word"
+      },
+      {
+        "id": "L1",
+        "name": "word",
+        "unit": "single token/word",
+        "expand_to": "sentence"
+      },
+      {
+        "id": "L2",
+        "name": "sentence",
+        "unit": "single sentence",
+        "expand_to": "paragraph"
+      },
+      {
+        "id": "L3",
+        "name": "paragraph",
+        "unit": "single paragraph",
+        "expand_to": "paragraph_series"
+      },
+      {
+        "id": "L4",
+        "name": "paragraph_series",
+        "unit": "2, 4, or more contiguous/referenced paragraphs",
+        "expand_to": "short_file"
+      },
+      {
+        "id": "L5",
+        "name": "short_file",
+        "unit": "short file",
+        "expand_to": "medium_file"
+      },
+      {
+        "id": "L6",
+        "name": "medium_file",
+        "unit": "medium file",
+        "expand_to": "long_file"
+      },
+      {
+        "id": "L7",
+        "name": "long_file",
+        "unit": "long file",
+        "expand_to": "repository_scope"
+      }
+    ],
+    "selection_rule": "Start at the smallest locality that can answer or execute the current subtask; expand only when acceptance criteria, references, dependencies, or ambiguity require additional context.",
+    "reference_strategy": {
+      "default": "reference_by_id_and_span",
+      "preserve_location": "file_id + section/paragraph/sentence/offset when available",
+      "avoid_full_history": true,
+      "cross_locality": "child context may reference a narrower span inside a broader parent artifact"
+    },
+    "expansion_triggers": [
+      "insufficient semantic context",
+      "cross_sentence dependency",
+      "cross_paragraph dependency",
+      "definition/reference outside current span",
+      "acceptance criterion requires broader artifact",
+      "verification needs neighboring or whole-file structure"
+    ],
+    "contraction_rule": "After expansion, return to the smallest sufficient locality for the next action.",
+    "integrity_rules": [
+      "do not silently merge unrelated spans",
+      "preserve source offsets or stable anchors when possible",
+      "record expanded locality in the iteration checkpoint",
+      "locality never overrides explicit security or human-approval gates"
+    ]
   }
 }
