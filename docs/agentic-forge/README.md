@@ -124,3 +124,11 @@ Examples include:
 - `snyk/agent-scan` — agent security scanning reference
 
 The fusion rule remains **capability composition, not source-code accumulation**: Forge owns policy, planning and approvals; adapters expose bounded capabilities; TileMindFS owns durable addressable context; workers remain isolated.
+
+## Project rooms and cycle superposition
+
+Forge now models projects as a canonical `project_id` projected into multiple contextual rooms rather than duplicated into separate project copies. Strategy, research, architecture, build, verification, operations and review can therefore coexist while retaining one source identity.
+
+Cycles may overlap in wall-clock time. Execution order is determined by causal dependencies and verification gates. Room handoffs use stable checkpoint references instead of replaying complete histories. GitHub repositories, branches, issues, pull requests and commits are linked artifacts of the project rather than separate project identities.
+
+See `config/agentic-forge/project_rooms.json` and `docs/agentic-forge/PROJECT_ROOMS_AND_CYCLES.md`.
