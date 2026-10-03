@@ -179,5 +179,61 @@
       "record expanded locality in the iteration checkpoint",
       "locality never overrides explicit security or human-approval gates"
     ]
+  },
+  "decomposition": {
+    "enabled": true,
+    "target_children": "N is dynamically determined by global complexity and required contextual locality; 5 is only a default heuristic.",
+    "hard_rule": "Every leaf iteration must remain independently realizable within exactly one execution iteration/sprint.",
+    "causal_temporal_logic": {
+      "enabled": true,
+      "rule": "Decompose the global task into causally ordered localities so each child produces the necessary state/output for the next dependent child.",
+      "preserve_causality": true,
+      "preserve_temporal_order_when_required": true,
+      "allow_parallelism": "Only for branches with no causal dependency and no shared mutable state."
+    },
+    "locality_aware_sizing": {
+      "inputs": [
+        "global_task_complexity",
+        "context_locality_required",
+        "dependency_depth",
+        "expected_outputs",
+        "verification_scope",
+        "uncertainty"
+      ],
+      "rule": "Increase or decrease N according to the complexity of the global task and the locality required to make each leaf executable.",
+      "minimum": "N >= 1",
+      "five_is_not_fixed": true
+    },
+    "leaf_contract": {
+      "one_iteration_only": true,
+      "single_bounded_objective": true,
+      "bounded_inputs": true,
+      "defined_output": true,
+      "explicit_dependencies": true,
+      "acceptance_criteria": true,
+      "verification_in_same_iteration": true,
+      "no_hidden_multi_iteration_work": true
+    },
+    "decomposition_algorithm": [
+      "model_global_task",
+      "estimate_complexity_and_required_locality",
+      "test_if_global_task_is_realizable_in_one_iteration",
+      "if_realizable_create_one_leaf_iteration",
+      "if_not_realizable_choose N from complexity/locality/dependency structure",
+      "construct causally coherent child localities",
+      "validate coverage_and_no_unresolved_overlap",
+      "validate every leaf is realizable in one iteration",
+      "execute leaves respecting causal dependencies",
+      "verify each leaf",
+      "compose verified outputs into parent result",
+      "replan only the unfinished frontier when conditions change"
+    ],
+    "invariants": [
+      "No child exists solely to satisfy an arbitrary numeric target.",
+      "N may be 1, 2, 3, 5, 8, or another justified value.",
+      "Increasing N must reduce leaf complexity rather than merely split text.",
+      "The parent is complete only when all required causal leaves are accepted and their outputs compose into the parent acceptance criteria.",
+      "Completed iterations remain immutable and addressable."
+    ]
   }
 }
