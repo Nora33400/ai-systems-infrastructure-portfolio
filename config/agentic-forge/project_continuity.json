@@ -1,0 +1,130 @@
+{
+  "name": "Project Continuity and Stable Boundary Contract",
+  "version": "1.0.0",
+  "purpose": "Preserve coherent continuity across the complete project, branches, modules, workers and interfaces without destructive fusion.",
+  "principles": [
+    "local_first",
+    "non_destructive_continuity",
+    "stable_input_output_points",
+    "provenance_preservation",
+    "explicit_branch_identity",
+    "reversible_transitions",
+    "verification_before_promotion",
+    "deny_by_default_security"
+  ],
+  "stable_in_points": [
+    "project_manifest",
+    "branch_ref",
+    "commit_sha",
+    "checkpoint",
+    "provenance_record",
+    "validated_artifact",
+    "human_approved_request"
+  ],
+  "stable_out_points": [
+    "verified_artifact",
+    "test_receipt",
+    "coherence_report",
+    "archived_checkpoint",
+    "promotion_proposal",
+    "rollback_target",
+    "human_review_request"
+  ],
+  "continuity_contract": {
+    "every_branch_has": [
+      "identity",
+      "parent_or_origin",
+      "purpose",
+      "provenance",
+      "entry_contract",
+      "exit_contract",
+      "verification_state"
+    ],
+    "every_transition_has": [
+      "source_state",
+      "candidate_state",
+      "coherence_check",
+      "security_check",
+      "resource_check",
+      "verification_result",
+      "rollback_reference"
+    ],
+    "branch_connection": "connect_only_through_verified_contracts",
+    "merge_policy": "no_silent_overwrite",
+    "conflict_policy": "preserve_both_states_then_quarantine_and_resolve",
+    "rollback_policy": "rollback_to_archived_checkpoint_without_deleting_history"
+  },
+  "continuity_graph": {
+    "nodes": [
+      "project",
+      "branch",
+      "worktree",
+      "module",
+      "capability",
+      "reference",
+      "checkpoint",
+      "worker",
+      "interface"
+    ],
+    "edges": [
+      "derived_from",
+      "depends_on",
+      "verified_by",
+      "compatible_with",
+      "branches_from",
+      "merges_into",
+      "exposes",
+      "consumes",
+      "archived_as"
+    ]
+  },
+  "runtime_boundaries": {
+    "local_core": "authoritative_execution_boundary",
+    "interfaces": "non_authoritative_clients",
+    "external_workers": "untrusted_until_verified",
+    "external_references": "provenance_bound_non_authoritative_objects"
+  },
+  "failure_handling": {
+    "missing_input": "stop_at_boundary",
+    "invalid_contract": "quarantine",
+    "coherence_failure": "branch_and_preserve",
+    "verification_failure": "reject_promotion",
+    "resource_pressure": "checkpoint_then_degrade_or_stop",
+    "unexpected_state_change": "temporal_immunity_and_rollback",
+    "network_loss": "continue_local_if_safe"
+  },
+  "promotion": {
+    "states": [
+      "observed",
+      "normalized",
+      "candidate",
+      "isolated",
+      "tested",
+      "verified",
+      "trusted",
+      "core_compatible"
+    ],
+    "requires": [
+      "provenance",
+      "coherence_closure",
+      "verification",
+      "security_policy",
+      "rollback_target"
+    ],
+    "human_approval_for": [
+      "core_promotion",
+      "permission_change",
+      "git_push",
+      "github_write",
+      "external_network_enablement"
+    ]
+  },
+  "local_first": {
+    "network_default": "deny",
+    "external_mcp_default": "deny",
+    "oauth_default": "deny",
+    "cloud_role": "optional_worker_only",
+    "cloud_authority": false,
+    "offline_continuity": true
+  }
+}
