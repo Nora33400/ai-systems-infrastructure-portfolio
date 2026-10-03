@@ -41,3 +41,7 @@ RANK → ROLE → SKILL → TOOL → RESOURCE → ACTION → CONTEXT → APPROVA
 Ranks: R0 observer, R1 worker, R2 coder, R3 executor, R4 delegator, R5 orchestrator, R6 admin, R7 root.
 
 A higher rank never bypasses an explicit deny rule.
+
+## Long-horizon planning
+
+The Forge now has a persistent planning contract for long missions: ROOT → PHASE → ITERATION → SUBTASK → VERIFICATION. Iterations are referenceable records, not disposable prompt text. Replanning changes the unfinished frontier while preserving completed iteration history. See `docs/agentic-forge/LONG_HORIZON_PLANNING.md` and `config/agentic-forge/planning.json`.
