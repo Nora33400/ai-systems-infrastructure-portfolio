@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "engine": "CoherenceEngine",
+  "checks": ["identity","dependency","version","temporal","semantic_conflict","resource","policy","verification"],
+  "states": ["coherent","partially_coherent","conflict","stale_context","unverified","blocked"],
+  "resolution": ["preserve_canonical_project_id","compare_provenance","merge_verified_outputs_only","record_conflicts","never_silent_overwrite"],
+  "rule": "No room, cycle, agent or adapter may silently replace newer verified state."
+}
