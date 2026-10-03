@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "pipeline": ["discover","interface_match","capability_match","license_check","security_check","resource_check","coherence_check","isolated_adapter","verification","promotion"],
+  "states": ["reference","candidate","adapter","tested","trusted","core-compatible"],
+  "network_default": "deny",
+  "external_code_default": "reference-only",
+  "rule": "Fusion means capability composition through bounded adapters, not uncontrolled source accumulation."
+}
