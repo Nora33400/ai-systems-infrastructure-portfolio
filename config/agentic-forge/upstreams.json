@@ -3,6 +3,39 @@
   "mode": "external-adapters",
   "repositories": [
     {
+      "id": "agentic-memory",
+      "repo": "agentralabs/agentic-memory",
+      "ref": "main",
+      "enabled": false,
+      "role": "multi-axis-cognitive-memory-reference",
+      "license_status": "mit",
+      "source_mode": "reference-only",
+      "integration_targets": [
+        "TileMindFS",
+        "SuggestionMatrix",
+        "TemporalImmunity",
+        "TimeWarp",
+        "Provenance"
+      ],
+      "notes": "Reference for persistent graph memory, temporal/semantic/causal/entity/procedural indexes, supersession chains, drift detection, hybrid retrieval, and MCP exposure. Do not vendor or execute automatically."
+    },
+    {
+      "id": "agentralabs-tech",
+      "repo": "agentralabs/agentralabs-tech",
+      "ref": "main",
+      "enabled": false,
+      "role": "multi-capability-agent-ecosystem-reference",
+      "license_status": "license-to-review",
+      "source_mode": "reference-only",
+      "integration_targets": [
+        "SuggestionMatrix",
+        "CreatorSelector",
+        "TemporalImmunity",
+        "AgenticForge"
+      ],
+      "notes": "Reference only for modular capability separation across memory, identity, time, contracts, planning, forge, verification, and evolution."
+    },
+    {
       "id": "forge-agents-forge",
       "repo": "forge-agents/forge",
       "ref": "dev",

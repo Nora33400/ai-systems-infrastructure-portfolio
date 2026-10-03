@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "name": "Suggestion Matrix / Reference Fusion Engine",
+  "mode": "reference-fusion",
+  "security": {"network": "deny", "external_mcp": "deny", "self_escalation": "deny", "automatic_execution": "deny"},
+  "axes": ["temporal", "semantic", "structural", "causal", "resource", "economic", "security", "provenance", "coherence", "creator", "context", "lifecycle"],
+  "reference_types": ["project", "checkpoint", "iteration", "tile", "capability", "verification", "provenance", "timewarp_event", "alternative_branch"],
+  "projection": {"rule": "A suggestion is a multi-axis projection over independently addressable references.", "preserve_provenance": true, "preserve_conflicts": true, "no_silent_overwrite": true, "reference_by_id": true},
+  "candidate_generation": {"multiple_candidates": true, "premature_selection": false, "human_selection_required": true},
+  "pipeline": ["NEW_SUGGESTION", "REFERENCE_RESOLUTION", "MULTI_AXIS_PROJECTION", "TEMPORAL_IMMUNITY", "COHERENCE_CHECK", "PROVENANCE_CHECK", "RESOURCE_ECONOMIC_ANALYSIS", "CANDIDATE_SUGGESTIONS", "HUMAN_SELECTION", "TIMEWARP_CHECKPOINT", "EXECUTION", "VERIFICATION", "ARCHIVOR"],
+  "integration": {"tilemindfs": "context_and_reference_storage", "timewarp": "branch_checkpoint_replay", "creator_selector": "authorship_and_provenance_binding", "archivor": "immutable_accepted_state", "coherence": "cross_axis_consistency", "orchestrator": "execution_control"}
+}
