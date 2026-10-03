@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0",
+  "name": "Ultimate Coherence / Non-Destructive Expansion Pipeline",
+  "purpose": "Continuously expand and refine the project from internal and external references without allowing external references to overwrite internal invariants.",
+  "epistemic_model": {
+    "internal_reference_frame": "The canonical project state, policies, verified invariants, provenance, accepted checkpoints and current timeline.",
+    "external_reference_frame": "Any source observed from outside the canonical state, represented internally as an untrusted reference object.",
+    "boundary_rule": "An external reference becomes an internal object only after ingestion and provenance binding; it never becomes an internal authority merely by ingestion.",
+    "perspective_rule": "All comparisons are evaluated from the current canonical internal state while preserving the source perspective of the reference.",
+    "no_authority_transmutation": true
+  },
+  "invariants": [
+    "non_destructive_external_ingestion",
+    "verified_state_monotonicity",
+    "provenance_preservation",
+    "no_silent_overwrite",
+    "no_silent_delete",
+    "no_self_escalation",
+    "security_policy_precedence",
+    "human_control_for_protected_actions",
+    "rollback_without_archive_deletion"
+  ],
+  "expansion": {
+    "enabled": true,
+    "bounded_by": "policy_and_resources",
+    "growth_unit": "capability_or_reference_adapter",
+    "recursive_discovery": true,
+    "recursive_refinement": true,
+    "arbitrary_numeric_target": false,
+    "stop_conditions": [
+      "coherence_saturated",
+      "resource_budget_exhausted",
+      "no_unresolved_frontier",
+      "human_stop",
+      "policy_block"
+    ]
+  },
+  "pipeline": [
+    "OBSERVE",
+    "NORMALIZE_REFERENCE",
+    "BIND_PROVENANCE",
+    "CLASSIFY_INTERNAL_OR_EXTERNAL",
+    "PROJECT_MULTI_AXIS",
+    "CHECK_INTERNAL_INVARIANTS",
+    "CHECK_EXTERNAL_COMPATIBILITY",
+    "GENERATE_NON_DESTRUCTIVE_CANDIDATES",
+    "SCORE_BY_EVIDENCE_AND_COST",
+    "QUARANTINE_CONFLICTS",
+    "CREATE_TIMEWARP_BRANCH",
+    "EXECUTE_ISOLATED",
+    "VERIFY",
+    "COHERENCE_CLOSURE",
+    "ARCHIVE",
+    "PROMOTE_IF_ACCEPTED",
+    "DISCOVER_NEXT_FRONTIER",
+    "REPEAT_OR_STOP"
+  ],
+  "coherence_closure": {
+    "definition": "A candidate is coherent only when its required dependencies, provenance, policy, temporal state, resources and verification obligations are all satisfied.",
+    "conflict_policy": "Preserve both states, identify the conflict, quarantine the candidate, and require resolution; never erase the canonical state.",
+    "refinement_rule": "A refinement may replace an implementation only through a verified transition that preserves all protected invariants."
+  },
+  "internalization": {
+    "stages": [
+      "external_reference",
+      "observed_reference",
+      "normalized_reference",
+      "verified_reference",
+      "candidate_capability",
+      "isolated_adapter",
+      "tested_capability",
+      "trusted_capability",
+      "core_compatible"
+    ],
+    "rule": "Promotion is explicit and reversible; reference presence never implies execution permission."
+  },
+  "self_expansion": {
+    "frontier_definition": "The set of unresolved dependencies, missing capabilities, unverified hypotheses and useful references.",
+    "selection_rule": "Select frontier work by evidence, coherence impact, expected value, resource cost and risk, subject to policy.",
+    "recursion_rule": "If a frontier item is too complex for one iteration, causally decompose it until each leaf is independently verifiable.",
+    "memory_rule": "Persist checkpoints and references; never require full history replay.",
+    "timewarp_rule": "Every mutation capable of changing canonical state must be branchable and reversible."
+  },
+  "security": {
+    "network": "deny",
+    "external_mcp": "deny",
+    "oauth": "deny",
+    "self_escalation": "deny",
+    "destructive_actions": "deny_by_default",
+    "protected_actions_require_human": [
+      "permission.change",
+      "git.push",
+      "github.write",
+      "destructive_restore",
+      "external_network_enablement",
+      "core_promotion"
+    ]
+  },
+  "integrations": {
+    "suggestion_matrix": "candidate_generation_and_multi_axis_projection",
+    "tilemindfs": "context_memory_and_reference_addressing",
+    "timewarp": "branching_replay_and_rollback",
+    "temporal_immunity": "regression_detection_and_quarantine",
+    "creator_selector": "provenance_binding",
+    "archivor": "immutable_accepted_history",
+    "coherence": "closure_and_conflict_resolution",
+    "economics": "resource_aware_frontier_selection",
+    "orchestrator": "controlled_execution"
+  }
+}
