@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "name": "creator-selector",
+  "purpose": "resolve project authorship/origin without conflating authorship with execution authority",
+  "identity_model": {
+    "canonical_project_id": "required",
+    "creator_binding": "explicit-or-verified",
+    "provenance_required": true
+  },
+  "resolution": {
+    "priority": [
+      "explicit_project_creator",
+      "signed_or_verified_provenance",
+      "human_confirmation"
+    ],
+    "conflict": "quarantine_until_resolved",
+    "no_silent_reassignment": true
+  },
+  "separation_of_concerns": {
+    "creator": "origin/authorship",
+    "owner": "governance authority",
+    "executor": "current agent or worker",
+    "reviewer": "verification role",
+    "archivor": "temporal preservation role"
+  },
+  "security": {
+    "creator_does_not_auto_grant_permissions": true,
+    "selector_cannot_self_promote": true,
+    "network": "deny"
+  }
+}
