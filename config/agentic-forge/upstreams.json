@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "mode": "external-adapters",
   "repositories": [
     {
@@ -168,6 +168,87 @@
       "enabled": false,
       "role": "long-horizon-execution-reference",
       "license_status": "opensource_or_terms_to_review",
+      "source_mode": "reference-only"
+    },
+    {
+      "id": "mcp-reference-perplexity",
+      "repo": "perplexityai/modelcontextprotocol",
+      "ref": "main",
+      "enabled": false,
+      "role": "mcp-reference-server-ecosystem",
+      "license_status": "license-to-review",
+      "source_mode": "reference-only"
+    },
+    {
+      "id": "mcp-ext-apps",
+      "repo": "modelcontextprotocol/ext-apps",
+      "ref": "main",
+      "enabled": false,
+      "role": "mcp-app-ui-and-extension-reference",
+      "license_status": "license-to-review",
+      "source_mode": "reference-only"
+    },
+    {
+      "id": "aws-mcp",
+      "repo": "awslabs/mcp",
+      "ref": "main",
+      "enabled": false,
+      "role": "mcp-tool-server-collection-reference",
+      "license_status": "license-to-review",
+      "source_mode": "reference-only"
+    },
+    {
+      "id": "coding-agents-mcp",
+      "repo": "funkyfunc/coding-agents-mcp",
+      "ref": "main",
+      "enabled": false,
+      "role": "coding-agent-mcp-reference",
+      "license_status": "license-to-review",
+      "source_mode": "reference-only"
+    },
+    {
+      "id": "web-mcp",
+      "repo": "web-mcp/web-mcp",
+      "ref": "main",
+      "enabled": false,
+      "role": "web-tooling-mcp-reference",
+      "license_status": "license-to-review",
+      "source_mode": "reference-only"
+    },
+    {
+      "id": "goodai-ltm",
+      "repo": "GoodAI/goodai-ltm",
+      "ref": "main",
+      "enabled": false,
+      "role": "long-term-memory-reference",
+      "license_status": "license-to-review",
+      "source_mode": "reference-only"
+    },
+    {
+      "id": "pi-subagents",
+      "repo": "edxeth/pi-subagents",
+      "ref": "main",
+      "enabled": false,
+      "role": "subagent-runtime-reference",
+      "license_status": "license-to-review",
+      "source_mode": "reference-only"
+    },
+    {
+      "id": "subagents-pydantic-ai",
+      "repo": "vstorm-co/subagents-pydantic-ai",
+      "ref": "main",
+      "enabled": false,
+      "role": "typed-subagent-reference",
+      "license_status": "license-to-review",
+      "source_mode": "reference-only"
+    },
+    {
+      "id": "agent-scan",
+      "repo": "snyk/agent-scan",
+      "ref": "main",
+      "enabled": false,
+      "role": "agent-security-scan-reference",
+      "license_status": "license-to-review",
       "source_mode": "reference-only"
     }
   ],

@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "model": "project-room-superposition",
+  "principles": {
+    "one_source_of_truth": true,
+    "project_can_be_visible_in_multiple_rooms": true,
+    "room_is_contextual_view_not_a_copy": true,
+    "cycles_can_overlap": true,
+    "completed_cycle_records_immutable": true,
+    "current_cycle_is_explicit": true
+  },
+  "room_types": [
+    {
+      "id": "strategy",
+      "purpose": "global objectives, priorities, constraints"
+    },
+    {
+      "id": "research",
+      "purpose": "hypotheses, references, experiments"
+    },
+    {
+      "id": "architecture",
+      "purpose": "system design, interfaces, dependencies"
+    },
+    {
+      "id": "build",
+      "purpose": "implementation, coding, integration"
+    },
+    {
+      "id": "verification",
+      "purpose": "tests, audits, acceptance criteria"
+    },
+    {
+      "id": "operations",
+      "purpose": "runtime, resources, monitoring, maintenance"
+    },
+    {
+      "id": "review",
+      "purpose": "human review, decisions, merge gates"
+    }
+  ],
+  "project_projection": {
+    "rule": "A project may be projected into several rooms simultaneously when each room owns a distinct contextual view.",
+    "canonical_identity": "project_id",
+    "no_duplicate_source_state": true,
+    "room_state_fields": [
+      "project_id",
+      "room_id",
+      "cycle_id",
+      "objective",
+      "active_refs",
+      "open_dependencies",
+      "next_action",
+      "approval_state",
+      "last_checkpoint"
+    ]
+  },
+  "cycles": {
+    "model": "superposed-overlapping-cycles",
+    "levels": [
+      "macro_cycle",
+      "project_cycle",
+      "iteration",
+      "micro_iteration"
+    ],
+    "rule": "Cycles may overlap in time, but causal dependencies define execution order.",
+    "transition": "checkpoint → verify → update frontier → open next eligible cycle/iteration"
+  },
+  "project_github_mapping": {
+    "source_of_truth": "project_id",
+    "github_refs": [
+      "repository",
+      "branch",
+      "pull_request",
+      "issue",
+      "commit"
+    ],
+    "rule": "GitHub artifacts are linked references to the project state, not separate project identities.",
+    "merge_gate": "verification + required human approval"
+  },
+  "room_handoff": {
+    "allowed": "reference_by_id",
+    "required": [
+      "source_room",
+      "target_room",
+      "project_id",
+      "cycle_id",
+      "checkpoint_ref",
+      "handoff_reason"
+    ],
+    "avoid_full_history_replay": true
+  },
+  "superposition_resolution": {
+    "when_same_project_has_multiple_active_rooms": [
+      "keep one canonical project_id",
+      "maintain room-local context",
+      "merge only verified outputs",
+      "record conflicts explicitly",
+      "never silently overwrite a newer verified state"
+    ]
+  }
+}

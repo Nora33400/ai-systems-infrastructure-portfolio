@@ -100,3 +100,35 @@ The central fusion does **not** mean copying all projects into one codebase. It 
 ```
 
 The objective is a **central fusion architecture**, not a forced merger of unrelated upstream implementations.
+
+## TileMindFS memory fusion
+
+The central memory layer is now specified as **Forge/AIONE → MemoryManager → TileMindFS**. The manager separates ACTIVE/HOT/WARM/COLD memory, uses context locality to keep hydration bounded, deduplicates repeated payloads through canonical content hashes, and checkpoints before eviction. See `config/agentic-forge/memory.json` and `docs/agentic-forge/TILEMINDFS_MEMORY_INTEGRATION.md`.
+
+The **memory aspirator** releases inactive hydrated context after a recoverable checkpoint. The **emergency compactor** performs checkpoint → compact/externalize → release → restore-on-demand under memory pressure. These are recoverable cache-management mechanisms, not silent deletion mechanisms.
+
+### Expanded capability pool
+
+The upstream registry now also tracks reference candidates for MCP ecosystems, MCP apps, coding-agent MCP, web tooling, long-term memory, subagents and agent security scanning. They remain disabled and reference-only until compatibility, license/terms, security and local-first constraints are reviewed.
+
+Examples include:
+
+- `perplexityai/modelcontextprotocol` — MCP ecosystem reference
+- `modelcontextprotocol/ext-apps` — MCP app/extension reference
+- `awslabs/mcp` — MCP tool-server collection reference
+- `funkyfunc/coding-agents-mcp` — coding-agent MCP reference
+- `web-mcp/web-mcp` — web-tooling MCP reference
+- `GoodAI/goodai-ltm` — long-term-memory reference
+- `edxeth/pi-subagents` — subagent runtime reference
+- `vstorm-co/subagents-pydantic-ai` — typed subagent reference
+- `snyk/agent-scan` — agent security scanning reference
+
+The fusion rule remains **capability composition, not source-code accumulation**: Forge owns policy, planning and approvals; adapters expose bounded capabilities; TileMindFS owns durable addressable context; workers remain isolated.
+
+## Project rooms and cycle superposition
+
+Forge now models projects as a canonical `project_id` projected into multiple contextual rooms rather than duplicated into separate project copies. Strategy, research, architecture, build, verification, operations and review can therefore coexist while retaining one source identity.
+
+Cycles may overlap in wall-clock time. Execution order is determined by causal dependencies and verification gates. Room handoffs use stable checkpoint references instead of replaying complete histories. GitHub repositories, branches, issues, pull requests and commits are linked artifacts of the project rather than separate project identities.
+
+See `config/agentic-forge/project_rooms.json` and `docs/agentic-forge/PROJECT_ROOMS_AND_CYCLES.md`.

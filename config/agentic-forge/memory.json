@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "architecture": {
+    "central": "Forge/AIONE",
+    "persistence": "TileMindFS",
+    "manager": "MemoryManager",
+    "flow": "Context Locality ↔ TileMindFS ↔ MemoryManager ↔ Forge",
+    "principle": "RAM/VRAM are execution caches; TileMindFS is persistent addressable context."
+  },
+  "tiers": [
+    {
+      "id": "active",
+      "purpose": "currently hydrated context",
+      "storage": "RAM",
+      "policy": "smallest sufficient locality"
+    },
+    {
+      "id": "hot",
+      "purpose": "recent reusable context",
+      "storage": "RAM/cache",
+      "policy": "reference-first, bounded retention"
+    },
+    {
+      "id": "warm",
+      "purpose": "compressed reusable context",
+      "storage": "local persistent cache",
+      "policy": "summary + indexed references"
+    },
+    {
+      "id": "cold",
+      "purpose": "durable source/checkpoint",
+      "storage": "TileMindFS",
+      "policy": "immutable or versioned records"
+    }
+  ],
+  "locality_map": {
+    "L0": "letter",
+    "L1": "word",
+    "L2": "sentence",
+    "L3": "paragraph",
+    "L4": "paragraph_series",
+    "L5": "short_file",
+    "L6": "medium_file",
+    "L7": "long_file"
+  },
+  "interfaces": {
+    "resolve": "resolve(ref) -> metadata/content locator",
+    "hydrate": "hydrate(ref, locality) -> bounded context",
+    "checkpoint": "checkpoint(task_id, iteration_id) -> durable snapshot",
+    "dedup": "dedup(content_hash) -> canonical reference",
+    "evict": "evict(ref, policy) -> checkpointed eviction record",
+    "restore": "restore(ref) -> rehydrated context",
+    "summarize": "summarize(ref, target_locality) -> compressed derived record"
+  },
+  "token_memory": {
+    "representation": "canonical content hash + stable TileMindFS reference",
+    "deduplicate_identical_payloads": true,
+    "reference_counting": true,
+    "avoid_full_history_replay": true,
+    "token_cache_is_not_source_of_truth": true,
+    "restore_from_persistent_reference": true
+  },
+  "memory_aspirator": {
+    "enabled": true,
+    "goal": "remove inactive hydrated context without losing recoverability",
+    "sequence": [
+      "detect_inactive_or_low_value_context",
+      "checkpoint_if_dirty",
+      "deduplicate",
+      "summarize_or_index_when_lossless_reference_is_insufficient",
+      "persist_to_tilemindfs",
+      "release_active_cache",
+      "retain_stable_reference"
+    ],
+    "note": "Aspirator is non-destructive by default; eviction requires a recoverable checkpoint."
+  },
+  "emergency_compactor": {
+    "enabled": true,
+    "goal": "recover memory pressure while preserving task continuity",
+    "sequence": [
+      "checkpoint_current_iteration",
+      "freeze_mutating_context",
+      "compact_or_externalize",
+      "release_reconstructible_cache",
+      "restore_on_demand"
+    ],
+    "safety": [
+      "never silently delete source-of-truth artifacts",
+      "never bypass approval policy",
+      "record every eviction and restoration"
+    ]
+  },
+  "pressure_policy": {
+    "mode": "configurable",
+    "example_defaults_only": {
+      "normal_below_percent": 60,
+      "preventive_from_percent": 60,
+      "aggressive_from_percent": 75,
+      "emergency_from_percent": 90
+    },
+    "rule": "Thresholds are tunable operational defaults, not hardware guarantees."
+  },
+  "gpu_ram_boundary": {
+    "cpu_ram": "active context, orchestration state, local caches",
+    "gpu_vram": "model inference state and runtime cache",
+    "persistent_memory": "TileMindFS",
+    "rule": "Do not assume RTX 4060 and RTX 3060 VRAM are automatically pooled."
+  },
+  "integrity": {
+    "completed_iterations_immutable": true,
+    "provenance_required": true,
+    "stable_refs_required": true,
+    "locality_expansion_logged": true,
+    "upstream_code_reference_only_by_default": true
+  }
+}
