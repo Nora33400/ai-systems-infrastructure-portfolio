@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "mode": "external-adapters",
+  "repositories": [
+    {
+      "id": "forge-agents-forge",
+      "repo": "forge-agents/forge",
+      "ref": "dev",
+      "enabled": false,
+      "role": "agentic-forge"
+    },
+    {
+      "id": "jconradon-agentforge",
+      "repo": "JConradoN/agentforge",
+      "ref": "master",
+      "enabled": false,
+      "role": "agent-framework-reference"
+    },
+    {
+      "id": "forgeailab-forge",
+      "repo": "ForgeAILab/forge",
+      "ref": "main",
+      "enabled": false,
+      "role": "forge-reference"
+    },
+    {
+      "id": "agenticforge",
+      "repo": "LittleBlacky/AgenticFORGE",
+      "ref": "main",
+      "enabled": false,
+      "role": "agentic-workflows"
+    },
+    {
+      "id": "mcp-ollama-agent",
+      "repo": "adrien-morel/mcp-ollama-agent",
+      "ref": "main",
+      "enabled": false,
+      "role": "ollama-mcp"
+    },
+    {
+      "id": "ollama-code-mcp",
+      "repo": "darthzen/ollama-code-mcp",
+      "ref": "main",
+      "enabled": false,
+      "role": "coding-mcp"
+    },
+    {
+      "id": "mcp-context-forge",
+      "repo": "niklasmeixner-langdock/mcp-context-forge",
+      "ref": "main",
+      "enabled": false,
+      "role": "mcp-gateway-context"
+    },
+    {
+      "id": "microsoft-agent-forge",
+      "repo": "microsoft/agent-forge",
+      "ref": "main",
+      "enabled": false,
+      "role": "orchestration-reference"
+    },
+    {
+      "id": "teragrid-forge",
+      "repo": "teragrid/forge",
+      "ref": "main",
+      "enabled": false,
+      "role": "forge-reference"
+    },
+    {
+      "id": "samhu1-openagent",
+      "repo": "samhu1/openagent",
+      "ref": "master",
+      "enabled": false,
+      "role": "open-agent-reference"
+    },
+    {
+      "id": "pvnc228-local-coding-agent",
+      "repo": "pvnc228/local-coding-agent",
+      "ref": "main",
+      "enabled": false,
+      "role": "local-coding"
+    }
+  ]
+}
