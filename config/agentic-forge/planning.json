@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0",
+  "model": "long_horizon_task_reference",
+  "principles": {
+    "source_of_truth": "root_task",
+    "iterations_are_subtasks": true,
+    "subtasks_reference_parent": true,
+    "completed_iterations_remain_addressable": true,
+    "replan_preserves_history": true,
+    "network_default": "deny"
+  },
+  "task_types": [
+    "task",
+    "planning_task",
+    "iteration",
+    "sub_task",
+    "discovery",
+    "verification"
+  ],
+  "states": [
+    "planned",
+    "ready",
+    "running",
+    "blocked",
+    "needs_replan",
+    "review",
+    "verified",
+    "completed",
+    "cancelled"
+  ],
+  "hierarchy": {
+    "root": "Long reference / mission",
+    "level_1": "phase",
+    "level_2": "iteration",
+    "level_3": "subtask",
+    "level_4": "verification",
+    "rule": "Every child stores parent_task_id and source_iteration_id when applicable."
+  },
+  "iteration_contract": {
+    "id": "stable immutable id",
+    "parent_task_id": "root or phase owner",
+    "source_plan_version": "plan revision that created it",
+    "objective": "bounded outcome",
+    "inputs": [
+      "context refs",
+      "artifacts",
+      "constraints"
+    ],
+    "outputs": [
+      "artifact refs",
+      "decision refs",
+      "test refs"
+    ],
+    "dependencies": [
+      "task ids"
+    ],
+    "acceptance": [
+      "machine-checkable or human-approved criteria"
+    ],
+    "checkpoint": "persist before handoff",
+    "replan_on": [
+      "failure",
+      "new constraint",
+      "stale context",
+      "dependency change"
+    ]
+  },
+  "execution_loop": [
+    "load_root_reference",
+    "select_next_ready_subtask",
+    "hydrate_context_from_parent_and_dependencies",
+    "execute_in_isolated_workspace",
+    "verify_outputs",
+    "persist_iteration_checkpoint",
+    "update_parent_progress",
+    "replan_remaining_subtasks_if_needed",
+    "continue_until_acceptance_or_human_stop"
+  ],
+  "context_policy": {
+    "pass_full_history": false,
+    "default": "reference_by_id",
+    "hydrate": [
+      "parent_summary",
+      "active_constraints",
+      "dependency_outputs",
+      "latest_checkpoint",
+      "relevant_artifacts"
+    ],
+    "archive": "immutable_iteration_record"
+  },
+  "parallelism": {
+    "allowed": true,
+    "only_when": "subtasks have no unresolved dependency edge and do not share mutable workspace state",
+    "merge": "verification gate before parent progress"
+  },
+  "human_gates": {
+    "required_for": [
+      "permission.change",
+      "external_network",
+      "git.push",
+      "github.write",
+      "destructive_action",
+      "final_merge"
+    ],
+    "agents_cannot_self_approve": true
+  }
+}
