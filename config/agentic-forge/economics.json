@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "objective": "optimize value under compute, latency, memory and risk constraints",
+  "value_factors": ["result_value","reusability","time_saved","token_saved","human_leverage"],
+  "cost_factors": ["cpu","ram","vram","tokens","latency","storage","risk"],
+  "scheduler_inputs": ["expected_value","compute_cost","latency","risk","reusability","parallelism","causal_dependencies"],
+  "resource_policy": {"cpu":"orchestration_and_fallback","gpu":"explicit_worker_placement","multi_gpu":"parallel_workers_by_default","vrAM_pooling":false},
+  "rule": "Economic scores guide execution; they never override security, policy, verification or human approval."
+}
