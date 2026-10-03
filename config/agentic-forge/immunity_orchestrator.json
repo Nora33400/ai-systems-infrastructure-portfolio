@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "name": "forge-immunity-orchestrator",
+  "principle": "preserve verified project identity and capabilities across time without freezing evolution",
+  "components": {
+    "orchestrator": {
+      "role": "central temporal coordination",
+      "inputs": ["project_state", "creator_selection", "archive_records", "timewarp_events", "coherence_state"],
+      "outputs": ["approved_transition", "rollback_checkpoint", "quarantine_state", "recovery_plan"]
+    },
+    "creator_selector": {
+      "role": "select the canonical creator/origin authority for a project transition",
+      "selection_order": [
+        "explicit_creator_binding",
+        "verified_project_identity",
+        "human_approval",
+        "provenance_chain"
+      ],
+      "never": [
+        "infer authority from model confidence alone",
+        "replace creator identity silently",
+        "grant permission through authorship"
+      ]
+    },
+    "archivor": {
+      "role": "immutable temporal preservation",
+      "stores": [
+        "canonical_project_state",
+        "accepted_checkpoints",
+        "creator_binding",
+        "capability_versions",
+        "policy_versions",
+        "coherence_reports",
+        "timewarp_transition_records"
+      ],
+      "write_policy": "append-only-after-acceptance",
+      "restore_policy": "reference-first, bounded hydration"
+    },
+    "temporal_immunity": {
+      "role": "detect and contain regressions across project time",
+      "checks": [
+        "identity_regression",
+        "permission_regression",
+        "policy_regression",
+        "provenance_break",
+        "capability_drift",
+        "coherence_regression",
+        "unexpected_state_rewrite",
+        "resource_safety_regression"
+      ],
+      "responses": [
+        "continue",
+        "checkpoint",
+        "quarantine",
+        "rollback",
+        "human_review"
+      ],
+      "rule": "immunity protects verified invariants, not every historical implementation"
+    }
+  },
+  "timewarp": {
+    "enabled": true,
+    "integration_mode": "event_and_checkpoint_adapter",
+    "events": [
+      "before_transition",
+      "after_transition",
+      "before_restore",
+      "after_restore",
+      "timeline_branch",
+      "timeline_merge",
+      "rollback",
+      "replay"
+    ],
+    "contract": {
+      "every_transition_has_parent": true,
+      "every_restore_has_source_checkpoint": true,
+      "branching_preserves_creator_binding": true,
+      "merge_requires_coherence_verification": true,
+      "rollback_never_deletes_archive": true
+    }
+  },
+  "state_machine": [
+    "OBSERVE",
+    "SELECT_CREATOR",
+    "VERIFY_BASELINE",
+    "CHECK_TEMPORAL_IMMUNITY",
+    "EXECUTE_ISOLATED_TRANSITION",
+    "VERIFY",
+    "ARCHIVE",
+    "COMMIT_TIMELINE",
+    "QUARANTINE_OR_RECOVER"
+  ],
+  "safety": {
+    "network": "deny",
+    "external_mcp": "deny",
+    "self_escalation": "deny",
+    "destructive_restore": "deny",
+    "permission_change_requires_human": true,
+    "git_push_requires_human": true,
+    "github_write_requires_human": true
+  }
+}
