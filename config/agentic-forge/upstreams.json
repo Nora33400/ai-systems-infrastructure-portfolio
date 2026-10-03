@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "mode": "external-adapters",
   "repositories": [
     {
@@ -78,6 +78,34 @@
       "ref": "main",
       "enabled": false,
       "role": "local-coding"
+    },
+    {
+      "id": "agentic-planning",
+      "repo": "agentralabs/agentic-planning",
+      "ref": "main",
+      "enabled": false,
+      "role": "persistent-intention-planning"
+    },
+    {
+      "id": "longrunning-mcp-tools",
+      "repo": "anevjes/longrunning_mcp_tools",
+      "ref": "main",
+      "enabled": false,
+      "role": "async-long-running-reference"
+    },
+    {
+      "id": "agentic-control-framework",
+      "repo": "FutureAtoms/agentic-control-framework",
+      "ref": "main",
+      "enabled": false,
+      "role": "task-context-control-reference"
+    },
+    {
+      "id": "zenith",
+      "repo": "Intelligent-Internet/zenith",
+      "ref": "main",
+      "enabled": false,
+      "role": "continuous-long-horizon-reference"
     }
   ]
 }
